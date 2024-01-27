@@ -4,7 +4,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { useFonts } from 'expo-font';
 import SignInScreen from './SignInScreen';
-import SignUpScreen from './SignInScreen'; 
+import Questionaire from './CreateAccount/Questionaire'; 
+import WelcomePage from './CreateAccount/WelcomePage';
+import Dashboard from './Dashboard/Dashboard';
 
 
 const Stack = createStackNavigator();
@@ -25,10 +27,10 @@ function LandingPage({ navigation }) {
         <Text style={styles.buttonText}>Sign in</Text>
       </TouchableOpacity>
       
-      <Text style={styles.noAcc}>Don't actually have an account? Get started!</Text>
+      <Text style={styles.noAcc}>Don't have an account? Get started!</Text>
       
       {/* sign in screen */}
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SignUp')}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Welcome')}>
         <Text style={styles.buttonText}>Create account</Text>
       </TouchableOpacity>
     
@@ -43,7 +45,9 @@ export default function App() {
       <Stack.Navigator initialRouteName="Landing">
         <Stack.Screen name="Landing" component={LandingPage} />
         <Stack.Screen name="SignIn" component={SignInScreen} /> 
-        <Stack.Screen name="SignUp" component={SignInScreen} /> 
+        <Stack.Screen name="Welcome" component={WelcomePage} /> 
+        <Stack.Screen name="Questionaire" component={Questionaire} />
+        <Stack.Screen name="DashBoard" component={Dashboard} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -88,20 +92,3 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-Bold',
   },
 });
-
-
-// export default function App() {
-//   return (
-//     <View style={styles.container}>
-//       <Image source={require('./assets/figureBig.png')} style={styles.logo} />
-//       <Text style={styles.title}>MyFitnessFriend</Text>
-//       <TouchableOpacity style={styles.button}>
-//         <Text style={styles.buttonText}>Sign in</Text>
-//       </TouchableOpacity>
-//       <Text style={styles.noAcc}>Don't actually have an account? Get started!</Text>
-//       <TouchableOpacity style={styles.button}>
-//         <Text style={styles.buttonText}>Create account</Text>
-//       </TouchableOpacity>
-//     </View>
-//   );
-// }
