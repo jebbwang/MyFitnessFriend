@@ -6,6 +6,7 @@ import { useFonts } from 'expo-font';
 import SignInScreen from './SignInScreen';
 import Questionaire from './CreateAccount/Questionaire'; 
 import WelcomePage from './CreateAccount/WelcomePage';
+import ExerciseFrequencyQuestion from './CreateAccount/ExerciseFrequency';
 import Dashboard from './Dashboard/Dashboard';
 
 
@@ -46,7 +47,9 @@ export default function App() {
         <Stack.Screen name="Landing" component={LandingPage} />
         <Stack.Screen name="SignIn" component={SignInScreen} /> 
         <Stack.Screen name="Welcome" component={WelcomePage} /> 
-        <Stack.Screen name="Questionaire" component={Questionaire} />
+        <Stack.Screen name="Questionaire1" component={Questionaire} />
+        <Stack.Screen name="ExerciseFrequency" component={ExerciseFrequencyQuestion} />
+
         <Stack.Screen name="DashBoard" component={Dashboard} />
       </Stack.Navigator>
     </NavigationContainer>

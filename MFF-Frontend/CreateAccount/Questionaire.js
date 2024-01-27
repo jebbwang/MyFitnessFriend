@@ -93,6 +93,12 @@ const Questionnaire = ({navigation}) => {
 
       };
   
+      /*
+        Will have different variations of POST requests (one for each question page):
+          - submit userData
+          - submit exerciseFreqData
+          - etc.
+      */
       const response = await fetch('http://localhost:3000/submit-questionnaire', {
         method: 'POST',
         headers: {
@@ -111,55 +117,103 @@ const Questionnaire = ({navigation}) => {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.title}>Tell us about yourself</Text>
+    <View style={styles.container}>
+      {/* <View style={styles.titleContainer}>
+        <Text style={styles.title}>Tell us about yourself!</Text>
+      </View> */}
 
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Date of Birth</Text>
-        {showDatePicker && (
-          <DateTimePicker
-            value={dateOfBirth}
-            mode="date"
-            display="default"
-            onChange={onDateChange}
+      <View style={styles.card}>
+      <Text style={styles.title}>Tell us about yourself!</Text>
+
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Date of Birth</Text>
+          {showDatePicker && (
+            <DateTimePicker
+              value={dateOfBirth}
+              mode="date"
+              display="default"
+              onChange={onDateChange}
+              placeholderText='Select Date'
+              textColor='white'
+            />
+          )}
+          {!showDatePicker && (
+            <Button title="Select Date" textColor='white' onPress={() => setShowDatePicker(true)} />
+          )}
+          {/* <Text style={styles.valueText}>{dateOfBirth.toDateString()}</Text> */}
+        </View>
+
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Name </Text>
+          <View style={styles.inputNameContainer}>
+            <TextInput
+              style={styles.nameInput}
+              value={height}
+              onChangeText={setHeight}
+              // keyboardType="numeric"
+              placeholder='First'
+              textColor='white'
+              // placeholderTextColor={'white'}
+            />
+            <Text>  </Text>
+            <TextInput
+              style={styles.nameInput}
+              value={height}
+              onChangeText={setHeight}
+              // keyboardType="numeric"
+              placeholder='Last'
+              textColor='white'
+              // placeholderTextColor={'white'}
+            />
+          </View>
+          
+          
+        </View>
+
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Height </Text>
+          <TextInput
+            style={styles.input}
+            value={height}
+            onChangeText={setHeight}
+            keyboardType="numeric"
+            placeholder='Enter your height'
+            textColor='white'
+            // width='20'
+            // placeholderTextColor={'white'}
           />
-        )}
-        {!showDatePicker && (
-          <Button title="Select Date" onPress={() => setShowDatePicker(true)} />
-        )}
-        <Text style={styles.valueText}>{dateOfBirth.toDateString()}</Text>
-      </View>
+        </View>
 
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Height </Text>
-        <TextInput
-          style={styles.input}
-          value={height}
-          onChangeText={setHeight}
-          keyboardType="numeric"
-          placeholder="Enter your height"
-        />
-      </View>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Weight</Text>
+          <TextInput
+            style={styles.input}
+            value={weight}
+            onChangeText={setWeight}
+            keyboardType="numeric"
+            placeholder="Enter your weight"
 
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Weight</Text>
-        <TextInput
-          style={styles.input}
-          value={weight}
-          onChangeText={setWeight}
-          keyboardType="numeric"
-          placeholder="Enter your weight"
-        />
-      </View>
+          />
+        </View>
+       
+       
 
-      <ExerciseFrequencyQuestion onSelect={setExerciseFrequency} />
-      <FitnessGoalQuestion onSelect={setFitnessGoal} />
-      <SleepQuestion />
+      </View>
       <View style={styles.buttonContainer}>
-        <Button title="Submit" onPress={handleSubmit} />
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ExerciseFrequency')}>
+          <Text style={styles.buttonText}>→</Text>
+        </TouchableOpacity>
       </View>
 
-    </ScrollView>
+     
+      {/* <ExerciseFrequencyQuestion onSelect={setExerciseFrequency} />
+      <FitnessGoalQuestion onSelect={setFitnessGoal} />
+      <SleepQuestion /> */}
+      {/* <View style={styles.buttonContainer}>
+        <Button title="Submit" onPress={handleSubmit} />
+      </View> */}
+
+    </View>
   );
 };
 
@@ -167,22 +221,58 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#aebed1",
+    backgroundColor: "#014EAA",
+    // paddingTop: 60,
+    justifyContent: 'center',
+    // alignItems: 'center'
+
+  },
+  titleContainer: {
+    backgroundColor: '#fcc777',
+    // marginRight: 30,
+    height: 60,
+    // paddingLeft: ,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: '20'
 
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 20,
+    fontSize: 40,
+    fontWeight: '800',
+    color: 'white',
+    marginBottom: 40,
+    // marginTop: 10
   },
   inputContainer: {
+    width: 300,
+    // flex: 1,
     marginBottom: 15,
+    // justifyContent: 'flex-start'
+  },
+  inputNameContainer: {
+    width: 300,
+    // flex: 1,
+    marginBottom: 15,
+    // rowGap: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row'
+
   },
   label: {
     fontSize: 18,
-    color: '#333',
+    color: 'white',
     marginBottom: 5,
+  },
+  
+  nameInput: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    padding: 10,
+    width: 146,
+    borderRadius: 5,
+    fontSize: 16,
   },
   input: {
     borderWidth: 1,
@@ -193,21 +283,22 @@ const styles = StyleSheet.create({
   },
   valueText: {
     fontSize: 16,
-    color: '#333',
+    color: 'white',
     marginTop: 5,
   },
   card: {
-    backgroundColor: '#ffffff',
-    borderRadius: 10,
+    backgroundColor: '#3E89E1',
+    borderRadius: 20,
+    height: 520,
     padding: 20,
-    marginBottom: 20,
-    marginTop: 40,
+    marginBottom: 50,
+    // marginTop: 40,
     alignItems: 'center',
   },
   questionTitle: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#333',
+    color: 'white',
     marginBottom: 15,
   },
   optionButton: {
@@ -219,7 +310,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   optionText: {
-    color: '#ffffff',
+    color: 'white',
     textAlign: 'center',
     fontSize: 18,
   },
@@ -234,10 +325,24 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 40,
   },
-
+  button: {
+    // marginTop: 40,
+    backgroundColor: "#fcc777",
+    paddingHorizontal: 30,
+    paddingVertical: 10,
+    borderRadius: 30,
+  },
+  buttonText: {
+    fontSize: 28,
+    color: 'white', 
+  },
   buttonContainer: {
-    marginVertical: 20,
-    backgroundColor: "#434c57",
+    // marginVertical: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    // paddingBottom: 20,
+    // marginBottom: 20
+    // backgroundColor: "#434c57",
     color: "white"
   },
 });

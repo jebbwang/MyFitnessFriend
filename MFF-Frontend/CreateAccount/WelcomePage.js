@@ -11,8 +11,8 @@ const WelcomePage = ({ navigation }) => {
         </View>
         <Text style={styles.subtext}>Welcome to MyFitnessFriend!</Text>
         <Text style={styles.description}>Personalize your experience by answering a few quick, fun questions. Let's make your time here uniquely yours!</Text>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Questionaire')}>
-          <Text style={styles.buttonText}>→</Text>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Questionaire1')}>
+          <Text style={styles.buttonText}>Let's do this!</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -65,7 +65,8 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
   buttonText: {
-    fontSize: 24,
+    fontSize: 20,
+    fontWeight: 'bold',
     color: 'white', 
   }
 });
