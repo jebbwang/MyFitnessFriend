@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
-const SignUpScreen = () => {
+const Questionaire = () => {
   const [age, setAge] = useState('');
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
@@ -18,6 +18,7 @@ const SignUpScreen = () => {
                 style={styles.input}
                 onChangeText={setAge}
                 value={age}
+
                 keyboardType="numeric"
             />
 
@@ -83,9 +84,9 @@ const styles = StyleSheet.create({
     headerText: {
         fontSize: 30,
         fontWeight: 'bold',
-        // Adjust textAlign if you want the text to be aligned differently
+   
         textAlign: 'left',
-        marginLeft: 10, // Adjust the margin as needed
+        marginLeft: 10, 
         
       },
     label: {
@@ -127,7 +128,7 @@ const styles = StyleSheet.create({
         color: 'black',
       },
       nextButton: {
-        backgroundColor: '#FFA500', // Orange background
+        backgroundColor: '#FFA500', 
         borderTopLeftRadius: 30,
         borderBottomLeftRadius: 30,
         padding: 15,
@@ -146,4 +147,4 @@ const styles = StyleSheet.create({
   
 
 
-export default SignUpScreen;
+export default Questionaire;

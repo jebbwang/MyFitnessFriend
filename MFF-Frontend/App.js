@@ -4,7 +4,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { useFonts } from 'expo-font';
 import SignInScreen from './SignInScreen';
-import SignUpScreen from './CreateAccount/SignUpScreen'; 
+import Questionaire from './CreateAccount/Questionaire'; 
+import WelcomePage from './CreateAccount/WelcomePage';
 
 
 const Stack = createStackNavigator();
@@ -28,7 +29,7 @@ function LandingPage({ navigation }) {
       <Text style={styles.noAcc}>Don't have an account? Get started!</Text>
       
       {/* sign in screen */}
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SignUp')}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Welcome')}>
         <Text style={styles.buttonText}>Create account</Text>
       </TouchableOpacity>
     
@@ -43,7 +44,8 @@ export default function App() {
       <Stack.Navigator initialRouteName="Landing">
         <Stack.Screen name="Landing" component={LandingPage} />
         <Stack.Screen name="SignIn" component={SignInScreen} /> 
-        <Stack.Screen name="SignUp" component={SignUpScreen} /> 
+        <Stack.Screen name="Welcome" component={WelcomePage} /> 
+        <Stack.Screen name="Questionaire" component={Questionaire} />
       </Stack.Navigator>
     </NavigationContainer>
   );
