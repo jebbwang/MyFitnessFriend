@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   card: {
-    backgroundColor: "#f2a838",
+    backgroundColor: '#3E89E1',
     borderRadius: 20,
     padding: 20,
     margin: 20,
@@ -33,19 +33,20 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 40,
-    fontWeight: 'bold',
-    color: '#000', 
+    fontWeight: '800',
+    color: 'white', 
     marginBottom: 50,
+    width: 300
   },
   subtext: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#000',
+    color: 'white',
     marginBottom: 20,
   },
   description: {
     fontSize: 16,
-    color: '#000', 
+    color: 'white', 
     textAlign: 'center',
     marginBottom: 50,
   },
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 24,
-    color: '#000', 
+    color: 'white', 
   }
 });
 
