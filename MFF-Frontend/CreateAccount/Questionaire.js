@@ -1,150 +1,225 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
-const Questionaire = () => {
-  const [age, setAge] = useState('');
-  const [height, setHeight] = useState('');
-  const [weight, setWeight] = useState('');
-  const [gender, setGender] = useState(null);
+import { ScrollView,
+   View, Text,
+    TextInput, Button, StyleSheet,
+     Platform, TouchableOpacity} 
+  from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import Slider from "@react-native-community/slider"
+
+
+
+
+const ExerciseFrequencyQuestion = ({ onSelect }) => {
+  const options = ['Rarely', 'Sometimes', 'Frequently', 'Everyday'];
+  return (
+    <View style={styles.card}>
+      <Text style={styles.questionTitle}>How often do you exercise?</Text>
+      {options.map((option) => (
+        <TouchableOpacity
+          key={option}
+          style={styles.optionButton}
+          onPress={() => onSelect(option)}
+        >
+          <Text style={styles.optionText}>{option}</Text>
+        </TouchableOpacity>
+      ))}
+    </View>
+  );
+};
+
+
+const FitnessGoalQuestion = ({ onSelect }) => {
+  const options = ['Lose weight', 'Maintain weight', 'Build muscle'];
+  return (
+    <View style={styles.card}>
+      <Text style={styles.questionTitle}>What is your fitness goal?</Text>
+      {options.map((option) => (
+        <TouchableOpacity
+          key={option}
+          style={styles.optionButton}
+          onPress={() => onSelect(option)}
+        >
+          <Text style={styles.optionText}>{option}</Text>
+        </TouchableOpacity>
+      ))}
+    </View>
+  );
+};
+
+
+const SleepQuestion = () => {
+  const [hoursOfSleep, setHoursOfSleep] = useState(8);
 
   return (
-    <View style={{backgroundColor: "#3E89E1"}}>
-        <View style={styles.header}>
-            <Text style={styles.headerText}>Let's get started</Text>
-        </View>
-        <View style={styles.inputContainer}>
-
-            <Text style={styles.label}>Age:</Text>
-            <TextInput
-                style={styles.input}
-                onChangeText={setAge}
-                value={age}
-
-                keyboardType="numeric"
-            />
-
-            <Text style={styles.label}>Weight:</Text>
-            <TextInput
-                style={styles.input}
-                onChangeText={setWeight}
-                value={weight}
-                keyboardType="numeric"
-            />
-
-            <Text style={styles.label}>Height:</Text>
-            <TextInput
-                style={styles.input}
-                onChangeText={setHeight}
-                value={height}
-                keyboardType="numeric"
-            />
-            <Text style={styles.label}>Gender:</Text>
-            <View style={styles.genderContainer}>
-            <TouchableOpacity
-                style={[styles.genderButton, gender === 'male' && styles.selectedGenderButton]}
-                onPress={() => setGender('male')}
-            >
-                <Text style={styles.genderButtonText}>Male</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={[styles.genderButton, gender === 'female' && styles.selectedGenderButton]}
-                onPress={() => setGender('female')}
-            >
-                <Text style={styles.genderButtonText}>Female</Text>
-            </TouchableOpacity>
-
-
-            </View>
-        </View>
-        <View style={{backgroundColor: "#3E89E1", height:"30%"}}>
-            <TouchableOpacity style={styles.nextButton}>
-                <Text style={styles.nextButtonText}>→</Text>
-            </TouchableOpacity>
-        </View>
-  
+    <View style={styles.card}>
+      <Text style={styles.questionTitle}>How many hours of sleep do you get a day?</Text>
+      <Text style={styles.sleepAmount}>{`${hoursOfSleep} hours`}</Text>
+      <Slider
+        style={styles.slider}
+        minimumValue={0}
+        maximumValue={16}
+        step={1}
+        value={hoursOfSleep}
+        onValueChange={setHoursOfSleep}
+        minimumTrackTintColor="#1fb28a"
+        maximumTrackTintColor="#d3d3d3"
+        thumbTintColor="#b9e4c9"
+      />
     </View>
-
-
   );
-}
+};
+
+
+const Questionnaire = ({navigation}) => {
+  const [dateOfBirth, setDateOfBirth] = useState(new Date());
+  const [height, setHeight] = useState('');
+  const [weight, setWeight] = useState('');
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [exerciseFrequency, setExerciseFrequency] = useState('');
+  const [fitnessGoal, setFitnessGoal] = useState('');
+  const [hoursOfSleep, setHoursOfSleep] = useState(8);
+
+  const onDateChange = (event, selectedDate) => {
+    const currentDate = selectedDate || dateOfBirth;
+    setShowDatePicker(Platform.OS === 'ios'); 
+    setDateOfBirth(currentDate);
+  };
+
+  const handleSubmit = () => {
+    navigation.navigate('Dashboard');
+  };
+
+  return (
+    <ScrollView style={styles.container}>
+      <Text style={styles.title}>Tell us about yourself</Text>
+
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Date of Birth</Text>
+        {showDatePicker && (
+          <DateTimePicker
+            value={dateOfBirth}
+            mode="date"
+            display="default"
+            onChange={onDateChange}
+          />
+        )}
+        {!showDatePicker && (
+          <Button title="Select Date" onPress={() => setShowDatePicker(true)} />
+        )}
+        <Text style={styles.valueText}>{dateOfBirth.toDateString()}</Text>
+      </View>
+
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Height </Text>
+        <TextInput
+          style={styles.input}
+          value={height}
+          onChangeText={setHeight}
+          keyboardType="numeric"
+          placeholder="Enter your height"
+        />
+      </View>
+
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Weight</Text>
+        <TextInput
+          style={styles.input}
+          value={weight}
+          onChangeText={setWeight}
+          keyboardType="numeric"
+          placeholder="Enter your weight"
+        />
+      </View>
+
+      <ExerciseFrequencyQuestion onSelect={setExerciseFrequency} />
+      <FitnessGoalQuestion onSelect={setFitnessGoal} />
+      <SleepQuestion />
+      <View style={styles.buttonContainer}>
+        <Button title="Submit" onPress={handleSubmit} />
+      </View>
+
+    </ScrollView>
+  );
+};
 
 const styles = StyleSheet.create({
-    inputContainer: {
-      padding: 20,
-      backgroundColor: '#3E89E1',
-      height: "60%",
-    },
-    header: {
-        backgroundColor: "#FFA337",
-        marginTop: 20,
-        marginRight: 40,
-        padding: 10,
-        borderBottomRightRadius: "10%",
-       
-      },
-    headerText: {
-        fontSize: 30,
-        fontWeight: 'bold',
-   
-        textAlign: 'left',
-        marginLeft: 10, 
-        
-      },
-    label: {
-      marginBottom: 5,
-      fontSize: 18,
-      fontWeight: 'bold',
-      color: '#333'
-    },
-    input: {
-      marginBottom: 15,
-      paddingHorizontal: 10,
-      paddingVertical: 10,
-      borderColor: '#ccc',
-      borderWidth: 1,
-      borderRadius: 5,
-      fontSize: 16
-    }, 
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: "#aebed1",
 
-      genderContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        width: '100%',
-        marginBottom: 20,
-      },
-      genderButton: {
-        backgroundColor: '#e7e7e7',
-        paddingVertical: 10,
-        paddingHorizontal: 30,
-        borderRadius: 5,
-        flexGrow: 1,
-        marginHorizontal: 5,
-      },
-      selectedGenderButton: {
-        backgroundColor: '#014EAA',
-      },
-      genderButtonText: {
-        textAlign: 'center',
-        fontSize: 16,
-        color: 'black',
-      },
-      nextButton: {
-        backgroundColor: '#FFA500', 
-        borderTopLeftRadius: 30,
-        borderBottomLeftRadius: 30,
-        padding: 15,
-        alignSelf: 'flex-end',
-        width: "40%",
-        marginRight: 0,
-      },
-      nextButtonText: {
-        color: 'white',
-        fontSize: 24,
-        fontWeight: 'bold',
-        alignSelf: "center"
-      },
-      
-  });
-  
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 20,
+  },
+  inputContainer: {
+    marginBottom: 15,
+  },
+  label: {
+    fontSize: 18,
+    color: '#333',
+    marginBottom: 5,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    padding: 10,
+    borderRadius: 5,
+    fontSize: 16,
+  },
+  valueText: {
+    fontSize: 16,
+    color: '#333',
+    marginTop: 5,
+  },
+  card: {
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+    padding: 20,
+    marginBottom: 20,
+    marginTop: 40,
+    alignItems: 'center',
+  },
+  questionTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 15,
+  },
+  optionButton: {
+    backgroundColor: '#627D98',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    marginVertical: 5,
+    width: '100%',
+  },
+  optionText: {
+    color: '#ffffff',
+    textAlign: 'center',
+    fontSize: 18,
+  },
+  sleepAmount: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#333',
+    textAlign: 'center',
+    marginVertical: 20,
+  },
+  slider: {
+    width: '100%',
+    height: 40,
+  },
 
+  buttonContainer: {
+    marginVertical: 20,
+    backgroundColor: "#434c57",
+    color: "white"
+  },
+});
 
-export default Questionaire;
+export default Questionnaire;
