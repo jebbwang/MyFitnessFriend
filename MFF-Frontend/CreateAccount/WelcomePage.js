@@ -5,7 +5,10 @@ const WelcomePage = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        <Text style={styles.header}>Let's get started!</Text>
+        <View style={styles.headerContainer}>
+          <Text style={styles.header}>Let's get started!</Text>
+
+        </View>
         <Text style={styles.subtext}>Welcome to MyFitnessFriend!</Text>
         <Text style={styles.description}>Personalize your experience by answering a few quick, fun questions. Let's make your time here uniquely yours!</Text>
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Questionaire')}>
@@ -36,13 +39,18 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: 'white', 
     marginBottom: 50,
-    width: 300
+    // width: 300
+  },
+  headerContainer: {
+    // width: 350,
+    // backgroundColor: '#FFA500'
   },
   subtext: {
     fontSize: 24,
     fontWeight: 'bold',
     color: 'white',
-    marginBottom: 20,
+    marginBottom: 30,
+    textAlign: 'center'
   },
   description: {
     fontSize: 16,
