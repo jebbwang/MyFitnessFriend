@@ -86,8 +86,28 @@ const Questionnaire = ({navigation}) => {
     setDateOfBirth(currentDate);
   };
 
-  const handleSubmit = () => {
-    navigation.navigate('Dashboard');
+  const handleSubmit = async () => {
+
+    try {
+      const questionnaireData = {
+
+      };
+  
+      const response = await fetch('http://localhost:3000/submit-questionnaire', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(questionnaireData),
+      });
+  
+      const jsonResponse = await response.json();
+      console.log(jsonResponse);
+
+    } catch (error) {
+      console.error(error);
+    }
+   // navigation.navigate('Dashboard');
   };
 
   return (
