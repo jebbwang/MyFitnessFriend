@@ -122,14 +122,6 @@ const Questionnaire = ({navigation}) => {
   const [weight, setWeight] = useState('');
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  // const [toggleHeightValue, setToggleHeightValue] = useState(false);
-  // const [toggleWeightValue, setToggleWeightValue] = useState(false);
-
-
-  // const [cmEnabled, setCmEnabled] = useState(false);
-  // const [inchesEnabled, setInchesEnabled] = useState(false);
-  // const [kgEnabled, setKgEnabled] = useState(false);
-  // const [lbsEnabled, setLbsEnabled] = useState(false);
 
   const [selectedHeightUnit, setSelectedHeightUnit] = useState('cm');
   const [selectedWeightUnit, setSelectedWeightUnit] = useState('kg');
@@ -140,12 +132,9 @@ const Questionnaire = ({navigation}) => {
   };
 
   const selectWeightUnit = (unit) => {
-    setSelectedHeightUnit(unit);
+    setSelectedWeightUnit(unit);
   };
 
-
-
-  // const toggleSwitch = () => setCmEnabled(previousState => !previousState);
 
 
   const onDateChange = (event, selectedDate) => {
@@ -226,9 +215,8 @@ const Questionnaire = ({navigation}) => {
               placeholder='First'
               textColor='#ffffff'
               backgroundColor='white'
-
-              // placeholderTextColor={'white'}
             />
+
             <Text>  </Text>
             <TextInput
               style={styles.nameInput}
@@ -238,7 +226,6 @@ const Questionnaire = ({navigation}) => {
               placeholder='Last'
               textColor='white'
               backgroundColor='white'
-              // placeholderTextColor={'white'}
             />
           </View>
           
@@ -256,9 +243,6 @@ const Questionnaire = ({navigation}) => {
               placeholder='Enter your height'
               textColor='white'
               backgroundColor='white'
-
-              // width='20'
-              // placeholderTextColor={'white'}
             />
             
             <UnitSelecter selectUnit={selectHeightUnit} selectedUnit={selectedHeightUnit} firstUnit={'cm'} secondUnit={'in'}/> 
@@ -295,10 +279,7 @@ const Questionnaire = ({navigation}) => {
         </TouchableOpacity>
       </View>
 
-     
-      {/* <ExerciseFrequencyQuestion onSelect={setExerciseFrequency} />
-      <FitnessGoalQuestion onSelect={setFitnessGoal} />
-      <SleepQuestion /> */}
+
       {/* <View style={styles.buttonContainer}>
         <Button title="Submit" onPress={handleSubmit} />
       </View> */}

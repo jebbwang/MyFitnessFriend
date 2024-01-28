@@ -6,10 +6,11 @@ const WelcomePage = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.card}>
         <View style={styles.headerContainer}>
-          <Text style={styles.header}>Let's get started!</Text>
+          <Text style={styles.header}>Welcome to {'\n'} My Fitness Friend!</Text>
+          
 
         </View>
-        <Text style={styles.subtext}>Welcome to MyFitnessFriend!</Text>
+        <Text style={styles.subtext}>Fitness just got easier!</Text>
         <Text style={styles.description}>Personalize your experience by answering a few quick, fun questions. Let's make your time here uniquely yours!</Text>
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Questionaire1')}>
           <Text style={styles.buttonText}>Let's do this!</Text>
@@ -39,6 +40,7 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: 'white', 
     marginBottom: 50,
+    textAlign: 'center'
     // width: 300
   },
   headerContainer: {

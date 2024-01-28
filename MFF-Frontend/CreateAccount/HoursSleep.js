@@ -4,48 +4,9 @@ import { ScrollView,
     TextInput, Button, StyleSheet,
      Platform, TouchableOpacity} 
   from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import Slider from "@react-native-community/slider"
 
 
-
-
-// const ExerciseFreq = ({ onSelect }) => {
-//   const options = ['Rarely', 'Sometimes', 'Frequently', 'Everyday'];
-//   return (
-//     <View >
-//       {/* <Text style={styles.questionTitle}>How often do you exercise?</Text> */}
-//       {options.map((option) => (
-//         <TouchableOpacity
-//           key={option}
-//           style={styles.optionButton}
-//           onPress={() => onSelect(option)}
-//         >
-//           <Text style={styles.optionText}>{option}</Text>
-//         </TouchableOpacity>
-//       ))}
-//     </View>
-//   );
-// };
-
-
-// const FitnessGoalQuestion = ({ onSelect }) => {
-//   const options = ['Lose weight', 'Maintain weight', 'Build muscle'];
-//   return (
-//     <View style={styles.card}>
-//       <Text style={styles.questionTitle}>What is your fitness goal?</Text>
-//       {options.map((option) => (
-//         <TouchableOpacity
-//           key={option}
-//           style={styles.optionButton}
-//           onPress={() => onSelect(option)}
-//         >
-//           <Text style={styles.optionText}>{option}</Text>
-//         </TouchableOpacity>
-//       ))}
-//     </View>
-//   );
-// };
 
 
 const SleepQuestion = ({sleepHours, setSleepHours}) => {
@@ -74,21 +35,7 @@ const SleepQuestion = ({sleepHours, setSleepHours}) => {
 
 
 const HoursSleep = ({navigation }) => {
-  const options = ['Rarely', 'Sometimes', 'Frequently', 'Everyday'];
-
-  // const [dateOfBirth, setDateOfBirth] = useState(new Date());
-  // const [height, setHeight] = useState('');
-  // const [weight, setWeight] = useState('');
-  // const [showDatePicker, setShowDatePicker] = useState(false);
-//   const [exerciseFrequency, setExerciseFrequency] = useState('');
-  // const [fitnessGoal, setFitnessGoal] = useState('');
   const [hoursOfSleep, setHoursOfSleep] = useState(8);
-
-  // const onDateChange = (event, selectedDate) => {
-  //   const currentDate = selectedDate || dateOfBirth;
-  //   setShowDatePicker(Platform.OS === 'ios'); 
-  //   setDateOfBirth(currentDate);
-  // };
 
   const handleSubmit = async () => {
 
@@ -136,9 +83,7 @@ const HoursSleep = ({navigation }) => {
       </View>
      
 
-     
-      {/* <FitnessGoalQuestion onSelect={setFitnessGoal} /> */}
-      
+           
       {/* <View style={styles.buttonContainer}>
         <Button title="Submit" onPress={handleSubmit} />
       </View> */}

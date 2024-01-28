@@ -34,19 +34,7 @@ const ExerciseFreq = ({ onSelect }) => {
 const ExerciseFrequencyQuestion = ({navigation, onSelect}) => {
   const options = ['Rarely', 'Sometimes', 'Frequently', 'Everyday'];
 
-  // const [dateOfBirth, setDateOfBirth] = useState(new Date());
-  // const [height, setHeight] = useState('');
-  // const [weight, setWeight] = useState('');
-  // const [showDatePicker, setShowDatePicker] = useState(false);
   const [exerciseFrequency, setExerciseFrequency] = useState('');
-  // const [fitnessGoal, setFitnessGoal] = useState('');
-  // const [hoursOfSleep, setHoursOfSleep] = useState(8);
-
-  // const onDateChange = (event, selectedDate) => {
-  //   const currentDate = selectedDate || dateOfBirth;
-  //   setShowDatePicker(Platform.OS === 'ios'); 
-  //   setDateOfBirth(currentDate);
-  // };
 
   const handleSubmit = async () => {
 
@@ -94,9 +82,6 @@ const ExerciseFrequencyQuestion = ({navigation, onSelect}) => {
       </View>
      
 
-     
-      {/* <FitnessGoalQuestion onSelect={setFitnessGoal} />
-      <SleepQuestion /> */}
       {/* <View style={styles.buttonContainer}>
         <Button title="Submit" onPress={handleSubmit} />
       </View> */}
