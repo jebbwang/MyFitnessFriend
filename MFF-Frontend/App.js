@@ -6,7 +6,10 @@ import { useFonts } from 'expo-font';
 import SignInScreen from './SignInScreen';
 import Questionaire from './CreateAccount/Questionaire'; 
 import WelcomePage from './CreateAccount/WelcomePage';
+import ExerciseFrequencyQuestion from './CreateAccount/ExerciseFrequency';
 import Dashboard from './Dashboard/Dashboard';
+import HoursSleep from './CreateAccount/HoursSleep';
+import FitnessGoal from './CreateAccount/FitnessGoal';
 
 
 const Stack = createStackNavigator();
@@ -46,7 +49,12 @@ export default function App() {
         <Stack.Screen name="Landing" component={LandingPage} />
         <Stack.Screen name="SignIn" component={SignInScreen} /> 
         <Stack.Screen name="Welcome" component={WelcomePage} /> 
-        <Stack.Screen name="Questionaire" component={Questionaire} />
+        <Stack.Screen name="Questionaire1" component={Questionaire} />
+        <Stack.Screen name="ExerciseFrequency" component={ExerciseFrequencyQuestion} />
+        <Stack.Screen name="HoursOfSleep" component={HoursSleep} />
+        <Stack.Screen name="FitnessGoal" component={FitnessGoal} />
+
+
         <Stack.Screen name="DashBoard" component={Dashboard} />
       </Stack.Navigator>
     </NavigationContainer>

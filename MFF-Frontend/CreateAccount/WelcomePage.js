@@ -5,11 +5,15 @@ const WelcomePage = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        <Text style={styles.header}>Let's get started!</Text>
-        <Text style={styles.subtext}>Welcome to MyFitnessFriend!</Text>
+        <View style={styles.headerContainer}>
+          <Text style={styles.header}>Welcome to {'\n'} My Fitness Friend!</Text>
+          
+
+        </View>
+        <Text style={styles.subtext}>Fitness just got easier!</Text>
         <Text style={styles.description}>Personalize your experience by answering a few quick, fun questions. Let's make your time here uniquely yours!</Text>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Questionaire')}>
-          <Text style={styles.buttonText}>→</Text>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Questionaire1')}>
+          <Text style={styles.buttonText}>Let's do this!</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -24,7 +28,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   card: {
-    backgroundColor: "#f2a838",
+    backgroundColor: '#3E89E1',
     borderRadius: 20,
     padding: 20,
     margin: 20,
@@ -33,19 +37,26 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 40,
-    fontWeight: 'bold',
-    color: '#000', 
+    fontWeight: '800',
+    color: 'white', 
     marginBottom: 50,
+    textAlign: 'center'
+    // width: 300
+  },
+  headerContainer: {
+    // width: 350,
+    // backgroundColor: '#FFA500'
   },
   subtext: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#000',
-    marginBottom: 20,
+    color: 'white',
+    marginBottom: 30,
+    textAlign: 'center'
   },
   description: {
     fontSize: 16,
-    color: '#000', 
+    color: 'white', 
     textAlign: 'center',
     marginBottom: 50,
   },
@@ -56,8 +67,9 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
   buttonText: {
-    fontSize: 24,
-    color: '#000', 
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'white', 
   }
 });
 
