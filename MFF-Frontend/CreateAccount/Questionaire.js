@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { ScrollView,
-   View, Text,
+   View, Text, Switch,
     TextInput, Button, StyleSheet,
      Platform, TouchableOpacity} 
   from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Slider from "@react-native-community/slider"
+// import Toggle from "react-native-toggle-element";
+
 
 
 
@@ -24,6 +26,47 @@ const ExerciseFrequencyQuestion = ({ onSelect }) => {
           <Text style={styles.optionText}>{option}</Text>
         </TouchableOpacity>
       ))}
+    </View>
+  );
+};
+
+const UnitSelecter = ({ selectUnit, selectedUnit, firstUnit, secondUnit }) => {
+  return (
+    <View style={styles.heightWeightTypeContainer}>
+      <TouchableOpacity
+        style={[
+          styles.button,
+          selectedUnit === firstUnit ? styles.selectedButton : styles.button ,
+        ]}
+        onPress={() => selectUnit(firstUnit)}
+      >
+        <Text
+          style={[
+            styles.buttonText,
+            selectedUnit === firstUnit ? styles.selectedButtonText : styles.buttonText,
+          ]}
+        >
+          {firstUnit}
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={[
+          styles.button,
+          selectedUnit === secondUnit ? styles.selectedButton : styles.button,
+        ]}
+        onPress={() => selectUnit(secondUnit)}
+      >
+        <Text
+          style={[
+            styles.buttonText,
+            selectedUnit === secondUnit ? styles.selectedButtonText : styles.buttonText,
+          ]}
+        >
+          {secondUnit}
+        </Text>
+      </TouchableOpacity>
+
     </View>
   );
 };
@@ -74,11 +117,36 @@ const SleepQuestion = () => {
 const Questionnaire = ({navigation}) => {
   const [dateOfBirth, setDateOfBirth] = useState(new Date());
   const [height, setHeight] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [weight, setWeight] = useState('');
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [exerciseFrequency, setExerciseFrequency] = useState('');
-  const [fitnessGoal, setFitnessGoal] = useState('');
-  const [hoursOfSleep, setHoursOfSleep] = useState(8);
+
+  // const [toggleHeightValue, setToggleHeightValue] = useState(false);
+  // const [toggleWeightValue, setToggleWeightValue] = useState(false);
+
+
+  // const [cmEnabled, setCmEnabled] = useState(false);
+  // const [inchesEnabled, setInchesEnabled] = useState(false);
+  // const [kgEnabled, setKgEnabled] = useState(false);
+  // const [lbsEnabled, setLbsEnabled] = useState(false);
+
+  const [selectedHeightUnit, setSelectedHeightUnit] = useState('cm');
+  const [selectedWeightUnit, setSelectedWeightUnit] = useState('kg');
+
+
+  const selectHeightUnit = (unit) => {
+    setSelectedHeightUnit(unit);
+  };
+
+  const selectWeightUnit = (unit) => {
+    setSelectedHeightUnit(unit);
+  };
+
+
+
+  // const toggleSwitch = () => setCmEnabled(previousState => !previousState);
+
 
   const onDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || dateOfBirth;
@@ -125,44 +193,51 @@ const Questionnaire = ({navigation}) => {
       <View style={styles.card}>
       <Text style={styles.title}>Tell us about yourself!</Text>
 
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Date of Birth</Text>
+        <View style={styles.inputNameContainer}>
+          <Text style={styles.label}>Date of Birth:</Text>
           {showDatePicker && (
             <DateTimePicker
+              style={styles.datePicker}
               value={dateOfBirth}
               mode="date"
               display="default"
               onChange={onDateChange}
               placeholderText='Select Date'
-              textColor='white'
-            />
+              textColor='#ffffff'
+            >
+            </DateTimePicker>
           )}
           {!showDatePicker && (
-            <Button title="Select Date" textColor='white' onPress={() => setShowDatePicker(true)} />
+            <TouchableOpacity style={styles.dateButton} onPress={() => setShowDatePicker(true)}>
+              <Text style={styles.dateText}>Select Date</Text>
+            </TouchableOpacity>
           )}
           {/* <Text style={styles.valueText}>{dateOfBirth.toDateString()}</Text> */}
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={styles.label}>Name </Text>
+          <Text style={styles.label}>Name:</Text>
           <View style={styles.inputNameContainer}>
             <TextInput
               style={styles.nameInput}
-              value={height}
-              onChangeText={setHeight}
+              value={firstName}
+              onChangeText={setFirstName}
               // keyboardType="numeric"
               placeholder='First'
-              textColor='white'
+              textColor='#ffffff'
+              backgroundColor='white'
+
               // placeholderTextColor={'white'}
             />
             <Text>  </Text>
             <TextInput
               style={styles.nameInput}
-              value={height}
-              onChangeText={setHeight}
+              value={lastName}
+              onChangeText={setLastName}
               // keyboardType="numeric"
               placeholder='Last'
               textColor='white'
+              backgroundColor='white'
               // placeholderTextColor={'white'}
             />
           </View>
@@ -171,37 +246,52 @@ const Questionnaire = ({navigation}) => {
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={styles.label}>Height </Text>
-          <TextInput
-            style={styles.input}
-            value={height}
-            onChangeText={setHeight}
-            keyboardType="numeric"
-            placeholder='Enter your height'
-            textColor='white'
-            // width='20'
-            // placeholderTextColor={'white'}
-          />
-        </View>
+          <Text style={styles.label}>Height:</Text>
+          <View style={styles.inputNameContainer}>
+            <TextInput
+              style={styles.input}
+              value={height}
+              onChangeText={setHeight}
+              keyboardType="numeric"
+              placeholder='Enter your height'
+              textColor='white'
+              backgroundColor='white'
+
+              // width='20'
+              // placeholderTextColor={'white'}
+            />
+            
+            <UnitSelecter selectUnit={selectHeightUnit} selectedUnit={selectedHeightUnit} firstUnit={'cm'} secondUnit={'in'}/> 
+
+
+            </View>
+            
+          </View>
 
         <View style={styles.inputContainer}>
-          <Text style={styles.label}>Weight</Text>
-          <TextInput
-            style={styles.input}
-            value={weight}
-            onChangeText={setWeight}
-            keyboardType="numeric"
-            placeholder="Enter your weight"
+          <Text style={styles.label}>Weight:</Text>
+          <View style={styles.inputNameContainer}>
+            <TextInput
+              style={styles.input}
+              value={weight}
+              onChangeText={setWeight}
+              keyboardType="numeric"
+              placeholder="Enter your weight"
+              backgroundColor='white'
+            />
 
-          />
+          <UnitSelecter selectUnit={selectWeightUnit} selectedUnit={selectedWeightUnit} firstUnit={'kg'} secondUnit={'lbs'}/> 
+
+          </View>
+        
         </View>
        
        
 
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ExerciseFrequency')}>
-          <Text style={styles.buttonText}>→</Text>
+        <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('ExerciseFrequency')}>
+          <Text style={styles.nextButtonText}>→</Text>
         </TouchableOpacity>
       </View>
 
@@ -244,6 +334,25 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     // marginTop: 10
   },
+  dateText: {
+    textAlign: 'center',
+    fontSize: 18,
+    color: 'white'
+  },
+  dateButton: {
+    borderWidth: 2,
+    borderColor: 'white',
+    width: 150,
+    justifyContent: 'center',
+    marginLeft: 35,
+    borderRadius: '10',
+    height: 40,
+
+  },
+  datePicker: {
+    marginLeft: 55,
+    fontWeight: 'bold'
+  },
   inputContainer: {
     width: 300,
     // flex: 1,
@@ -255,17 +364,25 @@ const styles = StyleSheet.create({
     // flex: 1,
     marginBottom: 15,
     // rowGap: 40,
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row'
-
+  },
+  heightWeightTypeContainer: {
+    width: 300,
+    alignItems: 'center',
+    flexDirection: 'row'
   },
   label: {
     fontSize: 18,
     color: 'white',
+    fontWeight: 'bold',
     marginBottom: 5,
   },
-  
+  heightSwitch: {
+    // width: 100,
+    // height: 50
+  },
   nameInput: {
     borderWidth: 1,
     borderColor: '#ddd',
@@ -278,6 +395,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ddd',
     padding: 10,
+    width: 175,
     borderRadius: 5,
     fontSize: 16,
   },
@@ -325,16 +443,41 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 40,
   },
-  button: {
+  nextButton: {
     // marginTop: 40,
     backgroundColor: "#fcc777",
+    
     paddingHorizontal: 30,
     paddingVertical: 10,
     borderRadius: 30,
   },
+  button: {
+    // marginTop: 40,
+    backgroundColor: "#3E89E1",
+    color: 'white',
+    marginLeft: 2,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    // borderRadius: 10,
+    borderWidth: 2,
+    borderColor: 'white'
+  },
   buttonText: {
+    fontSize: 14,
+    color: 'white', 
+    fontWeight: 'bold'
+  },
+  nextButtonText: {
     fontSize: 28,
     color: 'white', 
+  },
+  selectedButton: {
+    backgroundColor: '#fcc777',
+  },
+  selectedButtonText: {
+    color: 'white',
+    fontWeight: 'bold'
+
   },
   buttonContainer: {
     // marginVertical: 20,

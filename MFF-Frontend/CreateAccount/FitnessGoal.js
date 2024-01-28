@@ -4,17 +4,13 @@ import { ScrollView,
     TextInput, Button, StyleSheet,
      Platform, TouchableOpacity} 
   from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import Slider from "@react-native-community/slider"
 
 
-
-
-const ExerciseFreq = ({ onSelect }) => {
-  const options = ['Rarely', 'Sometimes', 'Frequently', 'Everyday'];
+const FitnessGoalQuestion = ({ onSelect }) => {
+  const options = ['Lose weight', 'Maintain weight', 'Build muscle'];
   return (
     <View >
-      {/* <Text style={styles.questionTitle}>How often do you exercise?</Text> */}
+      {/* <Text style={styles.questionTitle}>What is your fitness goal?</Text> */}
       {options.map((option) => (
         <TouchableOpacity
           key={option}
@@ -29,29 +25,16 @@ const ExerciseFreq = ({ onSelect }) => {
 };
 
 
-
-
-const ExerciseFrequencyQuestion = ({navigation, onSelect}) => {
+const FitnessGoal = ({navigation }) => {
   const options = ['Rarely', 'Sometimes', 'Frequently', 'Everyday'];
 
-  // const [dateOfBirth, setDateOfBirth] = useState(new Date());
-  // const [height, setHeight] = useState('');
-  // const [weight, setWeight] = useState('');
-  // const [showDatePicker, setShowDatePicker] = useState(false);
-  const [exerciseFrequency, setExerciseFrequency] = useState('');
-  // const [fitnessGoal, setFitnessGoal] = useState('');
-  // const [hoursOfSleep, setHoursOfSleep] = useState(8);
+  const [fitnessGoal, setFitnessGoal] = useState('');
 
-  // const onDateChange = (event, selectedDate) => {
-  //   const currentDate = selectedDate || dateOfBirth;
-  //   setShowDatePicker(Platform.OS === 'ios'); 
-  //   setDateOfBirth(currentDate);
-  // };
 
   const handleSubmit = async () => {
 
     try {
-      const exerciseFreqData = {
+      const fitnessData = {
 
       };
   
@@ -66,7 +49,7 @@ const ExerciseFrequencyQuestion = ({navigation, onSelect}) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(exerciseFreqData),
+        body: JSON.stringify(fitnessData),
       });
   
       const jsonResponse = await response.json();
@@ -82,21 +65,21 @@ const ExerciseFrequencyQuestion = ({navigation, onSelect}) => {
     <View style={styles.container}>
 
       <View style={styles.card}>
-      <Text style={styles.title}>How often do you exercise?</Text>
+        <Text style={styles.title}>What is your fitness goal?</Text>
       
-        <ExerciseFreq onSelect={setExerciseFrequency} />
+        <FitnessGoalQuestion onSelect={setFitnessGoal} />
+
 
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('HoursOfSleep')}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('')}>
           <Text style={styles.buttonText}>→</Text>
         </TouchableOpacity>
       </View>
      
 
      
-      {/* <FitnessGoalQuestion onSelect={setFitnessGoal} />
-      <SleepQuestion /> */}
+      
       {/* <View style={styles.buttonContainer}>
         <Button title="Submit" onPress={handleSubmit} />
       </View> */}
@@ -212,12 +195,12 @@ const styles = StyleSheet.create({
   sleepAmount: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#333',
+    color: 'white',
     textAlign: 'center',
     marginVertical: 20,
   },
   slider: {
-    width: '100%',
+    width: 300,
     height: 40,
   },
   button: {
@@ -247,4 +230,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ExerciseFrequencyQuestion;
+export default FitnessGoal;
