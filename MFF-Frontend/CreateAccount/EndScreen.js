@@ -1,22 +1,23 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-const EndScreen = ({ route, navigation }) => {
+const EndScreen = ({ route }) => {
     const { handleUserCompletion } = route.params;
 
     const handleNext = () => {
-        // Handle any necessary logic when clicking "Next" on the FitnessGoal page
-        // For example, you can save user preferences or perform any other actions
-
 
         // Update the state to indicate that the user has completed the initial pages
-        // You can use a context, Redux, or any other state management solution for a more global state
         if (handleUserCompletion) {
             handleUserCompletion();
           }
 
+        /* 
+            Don't need this in order naviate to Dashboard since handleUserCompletion is set to 'true'.
+            Automatically redirects to screen that is supposed to appear when handleUserCompletion is set to 'true'. 
+
+        */
          // Navigate to the Dashboard screen
-         navigation.navigate('Dashboard');
+        //  navigation.navigate('Dashboard');
     };
 
   return (

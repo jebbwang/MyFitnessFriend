@@ -5,7 +5,6 @@ import { ScrollView,
      Platform, TouchableOpacity} 
   from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import Slider from "@react-native-community/slider"
 
 
 
