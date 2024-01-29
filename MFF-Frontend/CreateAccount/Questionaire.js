@@ -6,29 +6,28 @@ import { ScrollView,
   from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Slider from "@react-native-community/slider"
-// import Toggle from "react-native-toggle-element";
 
 
 
 
-
-const ExerciseFrequencyQuestion = ({ onSelect }) => {
-  const options = ['Rarely', 'Sometimes', 'Frequently', 'Everyday'];
-  return (
-    <View style={styles.card}>
-      <Text style={styles.questionTitle}>How often do you exercise?</Text>
-      {options.map((option) => (
-        <TouchableOpacity
-          key={option}
-          style={styles.optionButton}
-          onPress={() => onSelect(option)}
-        >
-          <Text style={styles.optionText}>{option}</Text>
-        </TouchableOpacity>
-      ))}
-    </View>
-  );
-};
+// ------- TRANSFERRED TO NEW PAGE --------
+// const ExerciseFrequencyQuestion = ({ onSelect }) => {
+//   const options = ['Rarely', 'Sometimes', 'Frequently', 'Everyday'];
+//   return (
+//     <View style={styles.card}>
+//       <Text style={styles.questionTitle}>How often do you exercise?</Text>
+//       {options.map((option) => (
+//         <TouchableOpacity
+//           key={option}
+//           style={styles.optionButton}
+//           onPress={() => onSelect(option)}
+//         >
+//           <Text style={styles.optionText}>{option}</Text>
+//         </TouchableOpacity>
+//       ))}
+//     </View>
+//   );
+// };
 
 const UnitSelecter = ({ selectUnit, selectedUnit, firstUnit, secondUnit }) => {
   return (
@@ -71,47 +70,47 @@ const UnitSelecter = ({ selectUnit, selectedUnit, firstUnit, secondUnit }) => {
   );
 };
 
+// ------- TRANSFERRED TO NEW PAGE --------
+// const FitnessGoalQuestion = ({ onSelect }) => {
+//   const options = ['Lose weight', 'Maintain weight', 'Build muscle'];
+//   return (
+//     <View style={styles.card}>
+//       <Text style={styles.questionTitle}>What is your fitness goal?</Text>
+//       {options.map((option) => (
+//         <TouchableOpacity
+//           key={option}
+//           style={styles.optionButton}
+//           onPress={() => onSelect(option)}
+//         >
+//           <Text style={styles.optionText}>{option}</Text>
+//         </TouchableOpacity>
+//       ))}
+//     </View>
+//   );
+// };
 
-const FitnessGoalQuestion = ({ onSelect }) => {
-  const options = ['Lose weight', 'Maintain weight', 'Build muscle'];
-  return (
-    <View style={styles.card}>
-      <Text style={styles.questionTitle}>What is your fitness goal?</Text>
-      {options.map((option) => (
-        <TouchableOpacity
-          key={option}
-          style={styles.optionButton}
-          onPress={() => onSelect(option)}
-        >
-          <Text style={styles.optionText}>{option}</Text>
-        </TouchableOpacity>
-      ))}
-    </View>
-  );
-};
+// ------- TRANSFERRED TO NEW PAGE --------
+// const SleepQuestion = () => {
+//   const [hoursOfSleep, setHoursOfSleep] = useState(8);
 
-
-const SleepQuestion = () => {
-  const [hoursOfSleep, setHoursOfSleep] = useState(8);
-
-  return (
-    <View style={styles.card}>
-      <Text style={styles.questionTitle}>How many hours of sleep do you get a day?</Text>
-      <Text style={styles.sleepAmount}>{`${hoursOfSleep} hours`}</Text>
-      <Slider
-        style={styles.slider}
-        minimumValue={0}
-        maximumValue={16}
-        step={1}
-        value={hoursOfSleep}
-        onValueChange={setHoursOfSleep}
-        minimumTrackTintColor="#1fb28a"
-        maximumTrackTintColor="#d3d3d3"
-        thumbTintColor="#b9e4c9"
-      />
-    </View>
-  );
-};
+//   return (
+//     <View style={styles.card}>
+//       <Text style={styles.questionTitle}>How many hours of sleep do you get a day?</Text>
+//       <Text style={styles.sleepAmount}>{`${hoursOfSleep} hours`}</Text>
+//       <Slider
+//         style={styles.slider}
+//         minimumValue={0}
+//         maximumValue={16}
+//         step={1}
+//         value={hoursOfSleep}
+//         onValueChange={setHoursOfSleep}
+//         minimumTrackTintColor="#1fb28a"
+//         maximumTrackTintColor="#d3d3d3"
+//         thumbTintColor="#b9e4c9"
+//       />
+//     </View>
+//   );
+// };
 
 
 const Questionnaire = ({navigation}) => {

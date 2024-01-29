@@ -72,7 +72,7 @@ const FitnessGoal = ({navigation }) => {
 
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('')}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('EndScreen')}>
           <Text style={styles.buttonText}>→</Text>
         </TouchableOpacity>
       </View>
