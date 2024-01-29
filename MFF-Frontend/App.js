@@ -1,15 +1,22 @@
 import React from 'react';
+import { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { useFonts } from 'expo-font';
+import { UserProvider } from './components/UserContext/UserContext';
+
 import SignInScreen from './SignInScreen';
 import Questionaire from './CreateAccount/Questionaire'; 
 import WelcomePage from './CreateAccount/WelcomePage';
 import ExerciseFrequencyQuestion from './CreateAccount/ExerciseFrequency';
-import Dashboard from './Dashboard/Dashboard';
+import Dashboard from './Screens/Dashboard/Dashboard';
 import HoursSleep from './CreateAccount/HoursSleep';
 import FitnessGoal from './CreateAccount/FitnessGoal';
+import EndScreen from './CreateAccount/EndScreen';
+import Home from './Screens/Profile/Profile';
+import Profile from './Screens/Profile/Profile';
 
 
 const Stack = createStackNavigator();
@@ -41,23 +48,61 @@ function LandingPage({ navigation }) {
   );
 }
 
+const Tab = createBottomTabNavigator();
+
 export default function App() {
+  const [userCompletedInitialPages, setUserCompletedInitialPages] = useState(false);
+
+  const handleUserCompletion = () => {
+    // Logic to determine whether the user has completed the initial pages
+    setUserCompletedInitialPages(true);
+  };
+
   return (
-    // nav stack is here
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Landing">
-        <Stack.Screen name="Landing" component={LandingPage} />
-        <Stack.Screen name="SignIn" component={SignInScreen} /> 
-        <Stack.Screen name="Welcome" component={WelcomePage} /> 
-        <Stack.Screen name="Questionaire1" component={Questionaire} />
-        <Stack.Screen name="ExerciseFrequency" component={ExerciseFrequencyQuestion} />
-        <Stack.Screen name="HoursOfSleep" component={HoursSleep} />
-        <Stack.Screen name="FitnessGoal" component={FitnessGoal} />
+    /*
+    User Provider allows all of the following pages to access useState variables listed here in
+    App.js. 
+    
+    This is used for EndScreen.js in the following way:
+
+      - It requires the 'userCompletedInitialPages' variable to keep track of when the user 
+        completed the initial questionarre/setup. Upon completing it, the user is redirected 
+        to main dashboard.
+
+    This may not be necessary (app still functions without it), though future issues may come up
+    in terms of storing/fetching user questionarre data. Need to ensure all the data the user inputs
+    from the questionarre is uploaded to backend database after clicking 'Next' on every page.
+      - Upon 'Next' button click, it fires a POST request to the server to store data in database.
+        (ensures no potential data loss)
+      
+    */
+    <UserProvider>
+      {/* Nav stack below */}
+    <NavigationContainer> 
+      {!userCompletedInitialPages ? (
+        <Stack.Navigator initialRouteName="Landing">
+          <Stack.Screen name="Landing" component={LandingPage} />
+          <Stack.Screen name="SignIn" component={SignInScreen} /> 
+          <Stack.Screen name="Welcome" component={WelcomePage} /> 
+          <Stack.Screen name="Questionaire1" component={Questionaire} />
+          <Stack.Screen name="ExerciseFrequency" component={ExerciseFrequencyQuestion} />
+          <Stack.Screen name="HoursOfSleep" component={HoursSleep} />
+          <Stack.Screen name="FitnessGoal" component={FitnessGoal} />
+          
+          <Stack.Screen name="EndScreen" component={EndScreen} initialParams={{ handleUserCompletion }}/>
 
 
-        <Stack.Screen name="DashBoard" component={Dashboard} />
-      </Stack.Navigator>
+          {/* <Stack.Screen name="DashBoard" component={Dashboard} /> */}
+        </Stack.Navigator>
+      ) : (
+        <Tab.Navigator>
+          
+          <Tab.Screen name="Dashboard" component={Dashboard} />
+          <Tab.Screen name="Profile" component={Profile} />
+        </Tab.Navigator>
+      )}
     </NavigationContainer>
+    </UserProvider>
   );
 }
 
