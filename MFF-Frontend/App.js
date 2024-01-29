@@ -17,6 +17,7 @@ import FitnessGoal from './CreateAccount/FitnessGoal';
 import EndScreen from './CreateAccount/EndScreen';
 import Home from './Screens/Profile/Profile';
 import Profile from './Screens/Profile/Profile';
+import Recommendations from './Screens/Recommendations/RecommendationsPage';
 
 
 const Stack = createStackNavigator();
@@ -95,8 +96,9 @@ export default function App() {
           {/* <Stack.Screen name="DashBoard" component={Dashboard} /> */}
         </Stack.Navigator>
       ) : (
+        // Tab Navigator is what controls the tabs for bottom navigation bar
         <Tab.Navigator>
-          
+          <Tab.Screen name="Recommendations" component={Recommendations} />
           <Tab.Screen name="Dashboard" component={Dashboard} />
           <Tab.Screen name="Profile" component={Profile} />
         </Tab.Navigator>
