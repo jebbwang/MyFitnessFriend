@@ -90,6 +90,7 @@ export default function App() {
           <Stack.Screen name="HoursOfSleep" component={HoursSleep} />
           <Stack.Screen name="FitnessGoal" component={FitnessGoal} />
           
+          {/* Passing in the 'handleUserCompletion' function is causing warning for non-serializable data */}
           <Stack.Screen name="EndScreen" component={EndScreen} initialParams={{ handleUserCompletion }}/>
 
 
