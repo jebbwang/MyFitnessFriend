@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "react-native-toggle-element": "^2.0.1"
+    "react-native-toggle-element": "^2.0.1",
+    "react-native-vector-icons": "^10.0.3"
   }
 }
