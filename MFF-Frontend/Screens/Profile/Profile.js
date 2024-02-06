@@ -1,18 +1,18 @@
 import React, { useState, useRef } from 'react';
-import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TextInput, TouchableOpacity, StyleSheet, Text } from 'react-native';
 
 const Profile = () => {
   const [userInfo, setUserInfo] = useState({
-    firstName: 'Test',
+    firstName: 'Henry',
     lastName: 'User',
     email: 'user1@gmail.com',
     weight: '145',
     height: '170',
     fitnessGoal: 'maintain',
-    dateOfBirth: '1990-01-01', // This field will be display-only
+    dateOfBirth: '1990-01-01', 
   });
 
-  // Create a ref for each TextInput
+
   const inputRefs = {
     firstName: useRef(null),
     lastName: useRef(null),
@@ -32,12 +32,11 @@ const Profile = () => {
     }));
   };
 
-  // Function to focus the TextInput when its TouchableOpacity is pressed
   const focusField = (fieldName) => {
     inputRefs[fieldName].current.focus();
   };
 
-  const renderInputField = (fieldName, placeholder, keyboardType = 'default') => {
+  const renderInputField = (fieldName, placeholder) => {
     return (
       <TouchableOpacity
         style={styles.inputWrapper}
@@ -60,17 +59,46 @@ const Profile = () => {
 
   return (
     <View style={styles.mainContainer}>
+      <View style={styles.header} >
+        <Text style={styles.header}>Fitness Profile Settings</Text>
+
+      </View>
+      <View style={styles.subheader} >
+        <Text style={styles.subheader}>Tap on a field to edit information</Text>
+
+      </View>
       <View style={styles.infoContainer} >
+      <View style={styles.labelrow}>
+        <View style={styles.label}>
+          <Text>First Name </Text>
+        </View>
+        <Text> Last Name</Text>
+      </View>
       <View style={styles.row}>
-        {renderInputField('firstName', 'First Name')}
+        {renderInputField('firstName', 'First Name')}   
         {renderInputField('lastName', 'Last Name')}
+      </View>
+      <View style={styles.labelrow}>
+        <Text>Email</Text>
       </View>
       <View style={styles.row}>
         {renderInputField('email', 'Email', 'email-address')}
       </View>
+      <View style={styles.labelrow}>
+        <View style={styles.label}>
+          <Text>Weight         </Text>
+        </View>
+        <Text>Height</Text>
+      </View>
       <View style={styles.row}>
         {renderInputField('weight', 'Weight', 'numeric')}
         {renderInputField('height', 'Height', 'numeric')}
+      </View>
+      <View style={styles.labelrow}>
+        <View style={styles.label}>
+          <Text>Fitness Goal</Text>
+        </View>
+        <Text>DOB</Text>
       </View>
       <View style={styles.row}>
         {renderInputField('fitnessGoal', 'Fitness Goal')}
@@ -79,10 +107,17 @@ const Profile = () => {
             placeholder="Date of Birth"
             value={userInfo.dateOfBirth}
             style={styles.input}
-            editable={false} // This field is not editable
+            editable={false} 
           />
         </View>
       </View>
+      <TouchableOpacity style={styles.button} >
+        <Text style={styles.buttonText}>Update</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.backHome} >
+        <Text style={styles.buttonText}>←</Text>
+      </TouchableOpacity>
         
       </View>
 
@@ -94,23 +129,45 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     padding: 16,
+
     backgroundColor: '#014EAA',
     justifyContent: 'center',
+  },
+  header: {
+    color: "white",
+    fontSize: 28,
+    fontWeight: 'bold',
+  },
+  subheader: {
+    color: "rgba(120, 173, 252, 1)",
+    marginBottom: 8,
+    marginTop: 4,
+    fontSize: 14,
   },
   infoContainer: {
     backgroundColor: "rgba(120, 173, 252, 1)",
     padding: 50,
     borderRadius: 20,
     height: 500,
+    marginTop: 40,
   },
   row: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 10,
+    justifyContent: 'space-between', 
+    marginBottom: 5,
+  },
+  labelrow: {
+    flexDirection: "row",
+    marginBottom: 5,
+  },
+  label: {
+    color: "white",
+    marginRight: 70,
+    fontWeight: "bold"
   },
   inputWrapper: {
-    flex: 1,
-    marginRight: 5,
+    flex: 1, 
+    marginRight: 15, 
   },
   input: {
     height: 40,
@@ -121,9 +178,39 @@ const styles = StyleSheet.create({
     color: "white",
   },
   inputFocused: {
-    backgroundColor: '#e0e0e0', // background color when input is focused
+    backgroundColor: '#e0e0e0', 
     color: "black",
   },
+  button: {
+    backgroundColor: '#014EAA',  
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 25,  
+    shadowColor: 'rgba(0, 0, 0, 0.1)',  
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 3,
+    justifyContent: "center",
+    marginTop: 10,
+    alignItems: "center"
+  },
+  buttonText: {
+    color: '#FFFFFF', 
+    fontSize: 16,  
+    fontWeight: 'bold',  
+  
+  },
+  backHome: {
+    backgroundColor: '#014EAA',  
+    paddingVertical: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 25,  
+    shadowColor: 'rgba(0, 0, 0, 0.1)',  
+    shadowOffset: { width: 0, height: 4 },
+    width: 60,
+    marginTop: 90,
+  }
 });
 
 export default Profile;
