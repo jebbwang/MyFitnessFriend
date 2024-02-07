@@ -4,7 +4,7 @@ import { View, TextInput, TouchableOpacity, StyleSheet, Text } from 'react-nativ
 const Profile = () => {
   const [userInfo, setUserInfo] = useState({
     firstName: 'Henry',
-    lastName: 'User',
+    lastName: 'Reyes',
     email: 'user1@gmail.com',
     weight: '145',
     height: '170',
