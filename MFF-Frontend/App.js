@@ -20,6 +20,7 @@ import Profile from './Screens/Profile/Profile';
 import Recommendations from './Screens/Recommendations/RecommendationsPage';
 
 
+
 const Stack = createStackNavigator();
 
 function LandingPage({ navigation }) {
