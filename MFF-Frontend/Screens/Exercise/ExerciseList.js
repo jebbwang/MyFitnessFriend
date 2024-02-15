@@ -55,17 +55,16 @@ const ExerciseList = () => {
 
 const WorkoutItem = ({ workout }) => {
     const { workoutTitle, workoutType, instructions } = workout;
-    const [status, setStatus] = useState("add");
+    const [status, setStatus] = useState('add'); 
+    const buttonBackgroundColor = status === 'add' ? '#9C9C9C' : 'green'; 
 
-    const handleTouchWorkout =  () => {
-        setStatus((cur) => (cur === "add" ? 'check' : 'add'))
-    }
+
     const handleAdd = () => {
-        setStatus('add')
-    }
+        setStatus((currentStatus) => (currentStatus === 'add' ? 'check' : 'add'));
+      };
     return (
         <View style={styles.listFormat}>
-        <TouchableOpacity style={styles.workoutItem} onPress={handleTouchWorkout}>
+        <TouchableOpacity style={styles.workoutItem}>
           <View style={styles.workoutInfo}>
             <Text style={styles.title}>{workoutTitle}</Text>
             <Text style={styles.type}>{workoutType}</Text>
@@ -76,9 +75,17 @@ const WorkoutItem = ({ workout }) => {
           </View>
 
         </TouchableOpacity>
-        <View style={styles.status}>
-                  <Text>Add exercise</Text>
-        </View>
+        <TouchableOpacity
+            style={[styles.actionButton, { backgroundColor: buttonBackgroundColor }]}
+            onPress={handleAdd}
+        >
+            <Icon
+            name={status === 'check' ? 'check' : 'add'}
+            size={24}
+            color="#FFF" 
+            />
+        </TouchableOpacity>
+
         </View>
       );
   };
@@ -108,30 +115,30 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     color: '#000',
   },
-  status: {
-    backgroundColor: "green",
-    width: "25%",
-    padding: 10,
-    marginLeft: 70,
-    borderRadius: 30,
-    height: 40,
-    marginTop: 45,
-  },
-  exerciseContainer: {
-    backgroundColor: "red",
+  listFormat: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center', 
+    marginBottom: 30, 
   },
   workoutItem: {
+    flex: 0.8, 
     backgroundColor: '#475E78',
-    marginBottom: 30,
     padding: 20,
-    borderRadius: 10,
-    flexDirection: 'row',
+    borderRadius: 15,
+    marginRight: 10,
   },
-  listFormat: {
-    flexDirection: "row",
-    width: "100%",
-    alignContent: "center",
-    justifyContent: "center"
+  status: {
+    flex: 0.2,
+    backgroundColor: "green",
+    padding: 10,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  exerciseContainer: {
+    //backgroundColor: "red",
+    flex: "row",
 
   },
   title: {
@@ -150,6 +157,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 10,
     borderColor: "#fff",
+    width: "70%"
   },
   add: {
     backgroundColor: "#fff",
@@ -158,8 +166,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  addButtonIcon: {
+    backgroundColor: "#fff",
+    padding: 5,
+    borderRadius: 20,
+  },
   actionButton: {
-    marginHorizontal: 10,
+    width: 40, 
+    height: 40, 
+    borderRadius: 20, 
+    backgroundColor: '#514D4D', 
+    justifyContent: 'center',
+    alignItems: 'center', 
   },
 });
 
