@@ -5,6 +5,7 @@ import { ScrollView,
      Platform, TouchableOpacity} 
   from 'react-native';
 import Slider from "@react-native-community/slider"
+import { supabase } from '../supabase.js';
 
 
 
@@ -34,37 +35,61 @@ const SleepQuestion = ({sleepHours, setSleepHours}) => {
 };
 
 
-const HoursSleep = ({navigation }) => {
+const HoursSleep = ({route, navigation }) => {
+  const { userId } = route.params;
+
   const [hoursOfSleep, setHoursOfSleep] = useState(8);
 
-  const handleSubmit = async () => {
+  // const handleSubmit = async () => {
 
+  //   try {
+  //     const hoursOfSleepData = {
+
+  //     };
+  
+  //     /*
+  //       Will have different variations of POST requests (one for each question page):
+  //         - submit userData
+  //         - submit exerciseFreqData
+  //         - etc.
+  //     */
+  //     const response = await fetch('http://localhost:3000/submit-questionnaire', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(hoursOfSleepData),
+  //     });
+  
+  //     const jsonResponse = await response.json();
+  //     console.log(jsonResponse);
+
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  //  // navigation.navigate('Dashboard');
+  // };
+
+  const handlePress = async () => {
     try {
-      const hoursOfSleepData = {
-
-      };
+      const { data, error } = await supabase
+        .from('User')
+        .update({
+          sleepAmount: hoursOfSleep
+        })
+        .match({ id: userId }) //update the userID that matches the current user
+        .select();
   
-      /*
-        Will have different variations of POST requests (one for each question page):
-          - submit userData
-          - submit exerciseFreqData
-          - etc.
-      */
-      const response = await fetch('http://localhost:3000/submit-questionnaire', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(hoursOfSleepData),
-      });
+      if (error) {
+        console.error('Error updating:', error);
+        return;
+      }
   
-      const jsonResponse = await response.json();
-      console.log(jsonResponse);
-
+      console.log('Success:', data);
+      navigation.navigate('FitnessGoal', { userId: userId });
     } catch (error) {
-      console.error(error);
+      console.error('Error:', error);
     }
-   // navigation.navigate('Dashboard');
   };
 
   return (
@@ -77,7 +102,7 @@ const HoursSleep = ({navigation }) => {
 
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('FitnessGoal')}>
+        <TouchableOpacity style={styles.button} onPress={handlePress}>
           <Text style={styles.buttonText}>→</Text>
         </TouchableOpacity>
       </View>

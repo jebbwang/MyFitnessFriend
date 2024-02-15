@@ -6,8 +6,8 @@ import { ScrollView,
   from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Slider from "@react-native-community/slider"
-
-
+import { supabase } from '../supabase.js';
+  
 
 
 const ExerciseFreq = ({ onSelect }) => {
@@ -30,40 +30,64 @@ const ExerciseFreq = ({ onSelect }) => {
 
 
 
+//added route to get userId
+const ExerciseFrequencyQuestion = ({route, navigation, onSelect}) => {
+  const { userId } = route.params;
 
-const ExerciseFrequencyQuestion = ({navigation, onSelect}) => {
   const options = ['Rarely', 'Sometimes', 'Frequently', 'Everyday'];
 
   const [exerciseFrequency, setExerciseFrequency] = useState('');
 
-  const handleSubmit = async () => {
+  // const handleSubmit = async () => {
 
+  //   try {
+  //     const exerciseFreqData = {
+
+  //     };
+  
+  //     /*
+  //       Will have different variations of POST requests (one for each question page):
+  //         - submit userData
+  //         - submit exerciseFreqData
+  //         - etc.
+  //     */
+  //     const response = await fetch('http://localhost:3000/submit-questionnaire', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(exerciseFreqData),
+  //     });
+  
+  //     const jsonResponse = await response.json();
+  //     console.log(jsonResponse);
+
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  //  // navigation.navigate('Dashboard');
+  // };
+
+  const handlePress = async () => {
     try {
-      const exerciseFreqData = {
-
-      };
+      const { data, error } = await supabase
+        .from('User')
+        .update({
+          exerciseFreqType: exerciseFrequency
+        })
+        .match({ id: userId }) //update the userID that matches the current user
+        .select();
   
-      /*
-        Will have different variations of POST requests (one for each question page):
-          - submit userData
-          - submit exerciseFreqData
-          - etc.
-      */
-      const response = await fetch('http://localhost:3000/submit-questionnaire', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(exerciseFreqData),
-      });
+      if (error) {
+        console.error('Error updating:', error);
+        return;
+      }
   
-      const jsonResponse = await response.json();
-      console.log(jsonResponse);
-
+      console.log('Success:', data);
+      navigation.navigate('HoursOfSleep', { userId: userId });
     } catch (error) {
-      console.error(error);
+      console.error('Error:', error);
     }
-   // navigation.navigate('Dashboard');
   };
 
   return (
@@ -76,7 +100,7 @@ const ExerciseFrequencyQuestion = ({navigation, onSelect}) => {
 
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('HoursOfSleep')}>
+        <TouchableOpacity style={styles.button} onPress={handlePress}>
           <Text style={styles.buttonText}>→</Text>
         </TouchableOpacity>
       </View>

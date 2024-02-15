@@ -5,6 +5,7 @@ import { ScrollView,
      Platform, TouchableOpacity} 
   from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { supabase } from '../supabase.js';
 
 
 
@@ -141,34 +142,63 @@ const Questionnaire = ({navigation}) => {
     setDateOfBirth(currentDate);
   };
 
-  const handleSubmit = async () => {
+  // const handleSubmit = async () => {
 
+  //   try {
+  //     const questionnaireData = {
+
+  //     };
+  
+  //     /*
+  //       Will have different variations of POST requests (one for each question page):
+  //         - submit userData
+  //         - submit exerciseFreqData
+  //         - etc.
+  //     */
+  //     const response = await fetch('http://localhost:3000/submit-questionnaire', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(questionnaireData),
+  //     });
+  
+  //     const jsonResponse = await response.json();
+  //     console.log(jsonResponse);
+
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  //  // navigation.navigate('Dashboard');
+  // };
+
+  const handlePress = async () => {
     try {
-      const questionnaireData = {
-
-      };
+      const { data, error } = await supabase
+        .from('User')
+        .insert([{
+          firstName: firstName,
+          lastName: lastName,
+          dateOfBirth: dateOfBirth,
+          height: height,
+          heightType: selectedHeightUnit,
+          weight: weight,
+          weightType: selectedWeightUnit
+        }])
+        .select(); //get the newly inserted record
   
-      /*
-        Will have different variations of POST requests (one for each question page):
-          - submit userData
-          - submit exerciseFreqData
-          - etc.
-      */
-      const response = await fetch('http://localhost:3000/submit-questionnaire', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(questionnaireData),
-      });
+      console.log('Success:', data);
+      const newUserId = data[0].id; //get the id of the newly created row
   
-      const jsonResponse = await response.json();
-      console.log(jsonResponse);
-
+      if (!newUserId) {
+        console.error('ID of the newly created row is undefined'); //shouldnt go to this
+        return;
+      }
+  
+      navigation.navigate('ExerciseFrequency', { userId: newUserId });
     } catch (error) {
-      console.error(error);
+      console.error('Error:', error);
     }
-   // navigation.navigate('Dashboard');
   };
 
   return (
@@ -272,7 +302,7 @@ const Questionnaire = ({navigation}) => {
 
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('ExerciseFrequency')}>
+        <TouchableOpacity style={styles.nextButton} onPress={handlePress}>
           <Text style={styles.nextButtonText}>→</Text>
         </TouchableOpacity>
       </View>

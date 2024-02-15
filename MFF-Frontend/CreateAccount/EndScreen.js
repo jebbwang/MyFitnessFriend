@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { supabase } from '../supabase.js';
+
 
 const EndScreen = ({ route }) => {
     const { handleUserCompletion } = route.params;

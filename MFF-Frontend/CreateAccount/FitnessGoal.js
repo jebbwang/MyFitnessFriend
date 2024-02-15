@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { supabase } from '../supabase.js';
 import { ScrollView,
    View, Text,
     TextInput, Button, StyleSheet,
@@ -25,41 +26,66 @@ const FitnessGoalQuestion = ({ onSelect }) => {
 };
 
 
-const FitnessGoal = ({navigation }) => {
+const FitnessGoal = ({route, navigation }) => {
+  const { userId } = route.params;
+
   const options = ['Rarely', 'Sometimes', 'Frequently', 'Everyday'];
 
   const [fitnessGoal, setFitnessGoal] = useState('');
 
 
-  const handleSubmit = async () => {
+  // const handleSubmit = async () => {
 
+  //   try {
+  //     const fitnessData = {
+
+  //     };
+  
+  //     /*
+  //       Will have different variations of POST requests (one for each question page):
+  //         - submit userData
+  //         - submit exerciseFreqData
+  //         - etc.
+  //     */
+  //     const response = await fetch('http://localhost:3000/submit-questionnaire', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(fitnessData),
+  //     });
+  
+  //     const jsonResponse = await response.json();
+  //     console.log(jsonResponse);
+
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  //  // navigation.navigate('Dashboard');
+  // };
+
+  const handlePress = async () => {
     try {
-      const fitnessData = {
-
-      };
+      // console.log(fitnessGoal)
+      const { data, error } = await supabase
+        .from('User')
+        .update({
+          fitnessGoalType: fitnessGoal
+        })
+        .match({ id: userId }) //update the userID that matches the current user
+        .select();
   
-      /*
-        Will have different variations of POST requests (one for each question page):
-          - submit userData
-          - submit exerciseFreqData
-          - etc.
-      */
-      const response = await fetch('http://localhost:3000/submit-questionnaire', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(fitnessData),
-      });
+      if (error) {
+        console.error('Error updating:', error);
+        return;
+      }
   
-      const jsonResponse = await response.json();
-      console.log(jsonResponse);
-
+      console.log('Success:', data);
+      navigation.navigate('EndScreen', { userId: userId });
     } catch (error) {
-      console.error(error);
+      console.error('Error:', error);
     }
-   // navigation.navigate('Dashboard');
-  };
+  }
 
   return (
     <View style={styles.container}>
@@ -72,7 +98,7 @@ const FitnessGoal = ({navigation }) => {
 
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('EndScreen')}>
+        <TouchableOpacity style={styles.button} onPress={handlePress}>
           <Text style={styles.buttonText}>→</Text>
         </TouchableOpacity>
       </View>
