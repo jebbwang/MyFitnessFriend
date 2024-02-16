@@ -1,32 +1,31 @@
 import { useState } from 'react';
 import React from 'react';
-import { SafeAreaView, View, TextInput, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { SafeAreaView,ScrollView, View, TextInput, Text, TouchableOpacity, StyleSheet, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-const workoutData = [
-    {
-      workoutTitle: 'Chest Press',
-      workoutType: 'Strength Training',
-      instructions: '3 sets of 12 reps',
-    },
-    {
-      workoutTitle: 'Jog/Walk',
-      workoutType: 'Cardio Training',
-      instructions: '15 minutes at a moderate pace',
-    },
-    {
-      workoutTitle: 'Chest Press',
-      workoutType: 'Cross Training',
-      instructions: '3 sets of 10 reps with cross cables',
-    },
-    {
-        workoutTitle: 'Bicep Curl',
-        workoutType: 'Strength Training',
-        instructions: '3 sets of 10 reps with cross cables',
-      },
-  ];
-  
 
 const ExerciseList = () => {
+    const [muscle, setMuscle] = useState('');
+    const [exercises, setExercises] = useState([]);
+  
+  
+    const handleSearch = async () => {
+      try {
+        const response = await fetch(
+          'https://api.api-ninjas.com/v1/exercises?muscle=' + muscle,
+          {
+            method: 'GET',
+            headers: {
+              'X-Api-Key': '50Y/9uaDfwp9o6fY4IBaPA==1gCstnMSO4fTY7QJ'
+            }
+          }
+        );
+        const data = await response.json();
+        setExercises(data); 
+        console.log(data)
+      } catch (error) {
+        console.error(error);
+      }
+    };
   return (
     <SafeAreaView style={styles.safeArea}>
         
@@ -37,45 +36,65 @@ const ExerciseList = () => {
             style={styles.searchInput}
             placeholder="Search for workout"
             placeholderTextColor="#000"
-          />
+            value={muscle}
+            onChangeText={setMuscle}
+            onSubmitEditing={handleSearch} 
+        />
         <View>
             
         </View>
         </View>
-  
-        <View style={styles.exerciseContainer}>
-            {workoutData.map((workout, index) => (
-            <WorkoutItem key={index} workout={workout} />
-            ))}
+        <View style={styles.header}>
+          <Text style={styles.headerzitle}>Result for exercise [input]</Text>
+          <Pressable style={styles.viewPlanButton}>
+            <Text style={styles.viewPlanText}>View Plan</Text>
+          </Pressable>
         </View>
+        <ScrollView style={styles.scrollViewContainer}>
+          <View style={styles.exerciseContainer}>
+            {exercises.map((exercise, index) => (
+              <WorkoutItem key={index} workout={exercise} />
+            ))}
+          </View>
+        </ScrollView>
     </View>
     </SafeAreaView>
   );
 };
 
 const WorkoutItem = ({ workout }) => {
-    const { workoutTitle, workoutType, instructions } = workout;
+    const { name, type, instructions, difficulty, equipment } = workout;
     const [status, setStatus] = useState('add'); 
-    const buttonBackgroundColor = status === 'add' ? '#9C9C9C' : 'green'; 
-
+    const [showInstructions, setShowInstructions] = useState(false);
+    const buttonBackgroundColor = status === 'add' ? '#9C9C9C' : '#5DB06F'; 
 
     const handleAdd = () => {
         setStatus((currentStatus) => (currentStatus === 'add' ? 'check' : 'add'));
-      };
+    };
+    const toggleExpand = () => {
+        setShowInstructions((prevExpanded) => !prevExpanded);
+    };
+    
     return (
         <View style={styles.listFormat}>
-        <TouchableOpacity style={styles.workoutItem}>
+        <Pressable style={styles.workoutItem}>
           <View style={styles.workoutInfo}>
-            <Text style={styles.title}>{workoutTitle}</Text>
-            <Text style={styles.type}>{workoutType}</Text>
-            <TouchableOpacity style={styles.instructions}>
-                <Text>View Additional Info</Text>
-            </TouchableOpacity>
-           
+            <Text style={styles.title}>{name}</Text>
+            <Text style={styles.type}>{type}</Text>
+            <Pressable style={styles.instructions} onPress={toggleExpand}>
+                <Text>{showInstructions ? "Close Tab" : "View Additional Info"}</Text>
+          </Pressable>
+            {showInstructions && (
+                <View style={styles.additionalInfo}> 
+                    <Text>Difficulty: {difficulty}</Text>
+                    <Text>Equipment: {equipment}</Text>
+                </View>
+            
+          )}
           </View>
 
-        </TouchableOpacity>
-        <TouchableOpacity
+        </Pressable>
+        <Pressable
             style={[styles.actionButton, { backgroundColor: buttonBackgroundColor }]}
             onPress={handleAdd}
         >
@@ -84,11 +103,11 @@ const WorkoutItem = ({ workout }) => {
             size={24}
             color="#FFF" 
             />
-        </TouchableOpacity>
+        </Pressable>
 
         </View>
       );
-  };
+};
   
 
 const styles = StyleSheet.create({
@@ -100,6 +119,26 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
 
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  headerTitle: {
+    fontSize: 18,
+    color: '#fff',
+  },
+  viewPlanButton: {
+    backgroundColor: '#3E89E1',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+  },
+  viewPlanText: {
+    color: '#fff',
+    fontSize: 14,
   },
   searchContainer: {
     flexDirection: 'row',
@@ -158,6 +197,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderColor: "#fff",
     width: "70%"
+  },
+  additionalInfo: {
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    padding: 20,
+    borderRadius: 20,
+    marginTop: 10,
+    fontSize: 15,
   },
   add: {
     backgroundColor: "#fff",
