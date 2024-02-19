@@ -6,6 +6,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { useFonts } from 'expo-font';
 import { UserProvider } from './components/UserContext/UserContext';
+import FlashMessage from "react-native-flash-message";
+
 
 import SignInScreen from './SignInScreen';
 import Questionaire from './CreateAccount/Questionaire'; 
@@ -106,6 +108,8 @@ export default function App() {
         </Tab.Navigator>
       )}
     </NavigationContainer>
+    <FlashMessage position="top" /> 
+
     </UserProvider>
   );
 }

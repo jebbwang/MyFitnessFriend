@@ -9,6 +9,8 @@ import { ScrollView,
  from 'react-native';
 
  import { SelectList } from 'react-native-dropdown-select-list'
+ import { showMessage, hideMessage } from "react-native-flash-message";
+
  import Modal from "react-native-modal";
 
 import waterIntakepng from '../../../../assets/waterIntakeLogo.png';
@@ -20,6 +22,8 @@ const AddModal = ({ waterInfo, setWaterInfo, updateWaterIntake }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [inputValue, setInputValue] = useState('')
     const [selectedWaterUnit, setSelectedWaterUnit] = React.useState("");
+    const [waterGoalAchieved, setWaterGoalAchieved] = useState(false)
+    const ozInGallon = 128
 
     // Handlers
     const handleUserInputChange = (text) => {
@@ -45,6 +49,14 @@ const AddModal = ({ waterInfo, setWaterInfo, updateWaterIntake }) => {
         }
         else {
             newWaterIntake = waterCurrValue + numericValueInput; // default to ounces
+        }
+
+        if ((newWaterIntake >= waterInfo.dailyGoal * ozInGallon) && !(waterGoalAchieved)) {
+            setWaterGoalAchieved(true)
+            showMessage({
+            message: "Congrats! You achieved your daily water intake!",
+            type: "success",
+          });
         }
 
         updateWaterIntake(newWaterIntake);
