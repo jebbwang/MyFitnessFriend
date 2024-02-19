@@ -18,7 +18,7 @@ import addIcon from '../../../../assets/addIcon.png';
 const AddModal = ({ waterInfo, setWaterInfo, updateWaterIntake }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [inputValue, setInputValue] = useState('')
-    const [selected, setSelected] = React.useState("");
+    const [selectedWaterUnit, setSelectedWaterUnit] = React.useState("");
 
     const handleUserInputChange = (text) => {
         setInputValue(text);
@@ -27,21 +27,33 @@ const AddModal = ({ waterInfo, setWaterInfo, updateWaterIntake }) => {
     const handleAddButtonClick = () => {
         setModalVisible(!modalVisible)
 
-        const numericValue = parseInt(inputValue, 10);
+        const numericValueInput = parseInt(inputValue, 10);
         const waterCurrValue = parseInt(waterInfo.current, 10);
+        let newWaterIntake = 0;
 
-        // TODO: idea here is to convert every inputValue into the equivalent amount in ounces (regardless of what unit the user chose)
-        const newWaterIntake = waterCurrValue + numericValue;
+        // TODO: idea here is to convert every inputValue into the equivalent amount in OUNCES (regardless of what unit the user chose)
+        if (selectedWaterUnit == 'Cup(s)') {
+            newWaterIntake = waterCurrValue + (numericValueInput * 8); // 8 oz per cup
+        }
+        else if (selectedWaterUnit == 'Liter(s)') {
+            newWaterIntake = waterCurrValue + (numericValueInput * 33.814); // 33.814 oz per liter
+        }
+        else if (selectedWaterUnit == 'Gallon(s)') {
+            newWaterIntake = waterCurrValue + (numericValueInput * 128); // 33.814 oz per liter
+        }
+        else {
+            newWaterIntake = waterCurrValue + numericValueInput; // default to ounces
+        }
 
         updateWaterIntake(newWaterIntake);
     };
 
   
     const waterInfoTypeOptions = [
-        {key:'1', value:'Ounces'},
-        {key:'2', value:'Cups'},
-        {key:'3', value:'Liters'},
-        {key:'4', value:'Gallons'},
+        {key:'1', value:'Ounce(s)'},
+        {key:'2', value:'Cup(s)'},
+        {key:'3', value:'Liter(s)'},
+        {key:'4', value:'Gallon(s)'},
     ]
 
 
@@ -72,7 +84,7 @@ const AddModal = ({ waterInfo, setWaterInfo, updateWaterIntake }) => {
                                 // onBlur={() => setFocusedField(null)}
                             />
                             <SelectList 
-                                setSelected={(val) => setSelected(val)} 
+                                setSelected={(val) => setSelectedWaterUnit(val)} 
                                 data={waterInfoTypeOptions} 
                                 save="value"
                                 style={styles.dropdownComponent}

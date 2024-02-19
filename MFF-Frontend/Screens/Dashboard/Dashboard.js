@@ -12,7 +12,6 @@ import { ScrollView,
 
 
  import CircularProgress from 'react-native-circular-progress-indicator';
- import { CircularProgressBase } from 'react-native-circular-progress-indicator';
 
 
 
@@ -31,38 +30,13 @@ import { ScrollView,
     current: 15
   },
   waterInfo: {
-    dailyGoalType: 'gallon',
+    dailyGoalType: 'ounces',
     dailyGoal: 1,
     currentType: 'ounces',
     current: 32
   }
 
 }
-
-// const Dashboard = () => {
-//   return (
-//     <View style={styles.container}>
-//       <Text style={styles.title}>Dashboard</Text>
-
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//   },
-//   title: {
-//     fontSize: 24,
-//     fontWeight: 'bold',
-//   },
- 
-// });
-
-// export default Dashboard;
-
 
 
 const DashboardNutrition = ({  }) => {
@@ -75,10 +49,11 @@ const DashboardNutrition = ({  }) => {
     inActiveStrokeOpacity: 0.2
   };
 
+  // TODO: add the rest of the data for the page as useStates (exerciseInfo, caloricInfo)
   const [waterIntakeInfo, setWaterIntakeInfo] = useState({
     dailyGoalType: 'gallon',
     dailyGoal: 1,
-    currentType: 'ounces',
+    currentType: 'oz',
     current: 32
   });
 
@@ -88,7 +63,6 @@ const DashboardNutrition = ({  }) => {
       ...prevState,
       ["current"]: parseInt(value, 10),
     }));
-    // setWaterIntakeInfo(newWaterIntake);
 };
 
   return (
@@ -161,42 +135,14 @@ const DashboardNutrition = ({  }) => {
 
           </View>
         </View>
-            {/* <CircularProgressBase
-              {...props}
-              value={(dashboardFakeData.exerciseInfo.current / dashboardFakeData.exerciseInfo.recommended) * 100}
-              radius={80}
-              activeStrokeColor={'#badc58'}
-              inActiveStrokeColor={'#badc58'}
-            >
-              <CircularProgressBase
-                {...props}
-                value={(dashboardFakeData.exerciseInfo.current / dashboardFakeData.exerciseInfo.recommended)}
-                radius={60}
-                activeStrokeColor={'#18dcff'}
-                inActiveStrokeColor={'#18dcff'}
-              />
-            </CircularProgressBase> */}
-          {/* </CircularProgress> */}
-
-          <View style={styles.progressTextContainer}>
-            {/* <View style={{borderRadius: 10, marginBottom: 10}}>
-              <Text style={styles.sampleProgressText}>
-                    Remaining:
-              </Text>
-            </View> */}
-
-          
-          </View>
 
         </View>
 
-        {/* <View>
-
-        </View> */}
     </View>
 
     <ExerciseCard/>
     <WaterIntakeCard waterInfo={waterIntakeInfo} setWaterInfo={setWaterIntakeInfo} updateWaterIntake={updateWaterIntake}/>
+
   </View>
   );
 };
@@ -219,7 +165,7 @@ const Dashboard = ({ }) => {
         </View>
 
         <DashboardNutrition />
-        <DashboardNutrition />
+        {/* <DashboardNutrition /> */}
         {/* <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} >
             <Text style={styles.buttonText}>→</Text>
