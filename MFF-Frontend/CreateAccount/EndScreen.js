@@ -5,6 +5,7 @@ import { supabase } from '../supabase.js';
 
 const EndScreen = ({ route }) => {
     const { handleUserCompletion } = route.params;
+    
 
     const handleNext = () => {
 

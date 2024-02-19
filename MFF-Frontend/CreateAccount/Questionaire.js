@@ -6,6 +6,7 @@ import { ScrollView,
   from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { supabase } from '../supabase.js';
+import { useUserContext } from '../components/UserContext/UserContext.js';
 
 
 
@@ -172,6 +173,8 @@ const Questionnaire = ({navigation}) => {
   //  // navigation.navigate('Dashboard');
   // };
 
+  const { setUserId } = useUserContext();
+
   const handlePress = async () => {
     try {
       const { data, error } = await supabase
@@ -193,6 +196,9 @@ const Questionnaire = ({navigation}) => {
       if (!newUserId) {
         console.error('ID of the newly created row is undefined'); //shouldnt go to this
         return;
+      }
+      else { //set the userId in the context
+        setUserId(newUserId);
       }
   
       navigation.navigate('ExerciseFrequency', { userId: newUserId });

@@ -3,6 +3,7 @@ import { View, Text, FlatList, StyleSheet } from 'react-native';
 import TipsBanner from './TipsBanner';
 import ListItem from './RecommendationListItem';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { useUserContext } from '../../components/UserContext/UserContext';
 
 const ItemSeparator = () => <View style={{ height: 5 }} />; // space out the list items
 
@@ -41,6 +42,8 @@ const Recommendations = () => {
     </View>
   );
 
+  // const { userId } = useUserContext();
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={styles.mainContainer}>
@@ -54,6 +57,7 @@ const Recommendations = () => {
           style={styles.list}
         />
       </View>
+      {/* <Text style={{fontSize: 30}}>UserID: {userId}</Text> */}
     </GestureHandlerRootView>
   );
 };
