@@ -1,13 +1,21 @@
 import { useState } from 'react';
 import React from 'react';
-import { SafeAreaView,ScrollView, View, TextInput, Text, TouchableOpacity, StyleSheet, Pressable } from 'react-native';
+import { SafeAreaView,ScrollView, Modal, View, TextInput, Text, StyleSheet, Pressable, Animated } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const ExerciseList = () => {
+const ExerciseList = ({ navigation }) => {
     const [muscle, setMuscle] = useState('');
     const [exercises, setExercises] = useState([]);
-  
-  
+    const [isModalVisible, setIsModalVisible] = useState(false);
+
+    const viewPlan = () => {
+        navigation.navigate('WorkoutPlan'); 
+      };
+    
+      const handleCloseModal = () => {
+        setIsModalVisible(false);
+      };
+    
     const handleSearch = async () => {
       try {
         const response = await fetch(
@@ -34,7 +42,7 @@ const ExerciseList = () => {
           <Icon name="search" size={25} color="#000" />
           <TextInput
             style={styles.searchInput}
-            placeholder="Search for workout"
+            placeholder="Search..."
             placeholderTextColor="#000"
             value={muscle}
             onChangeText={setMuscle}
@@ -45,9 +53,9 @@ const ExerciseList = () => {
         </View>
         </View>
         <View style={styles.header}>
-          <Text style={styles.headerzitle}>Result for exercise [input]</Text>
+          <Text style={styles.headerTitle}>Looking for inspiration? Type in a muscle group to see exercise examples</Text>
           <Pressable style={styles.viewPlanButton}>
-            <Text style={styles.viewPlanText}>View Plan</Text>
+            <Text style={styles.viewPlanText }onPress={viewPlan}>View Plan</Text>
           </Pressable>
         </View>
         <ScrollView style={styles.scrollViewContainer}>
@@ -113,12 +121,35 @@ const WorkoutItem = ({ workout }) => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#1a2633',
+    backgroundColor: '#07203A',
   },
   container: {
     flex: 1,
     padding: 16,
 
+  },
+  modalView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dim the background
+  },
+  modalText: {
+    color: '#fff',
+    fontSize: 18,
+    padding: 16,
+    backgroundColor: '#444',
+    borderRadius: 10,
+  },
+  closeModalButton: {
+    marginTop: 20,
+    backgroundColor: '#f00',
+    padding: 10,
+    borderRadius: 5,
+  },
+  closeModalText: {
+    color: '#fff',
+    fontSize: 16,
   },
   header: {
     flexDirection: 'row',
@@ -127,8 +158,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   headerTitle: {
-    fontSize: 18,
+    fontSize: 14,
     color: '#fff',
+    fontWeight: "bold",
   },
   viewPlanButton: {
     backgroundColor: '#3E89E1',
@@ -138,7 +170,9 @@ const styles = StyleSheet.create({
   },
   viewPlanText: {
     color: '#fff',
-    fontSize: 14,
+    fontSize: 20,
+    fontWeight: "bold",
+    padding: 5,
   },
   searchContainer: {
     flexDirection: 'row',
