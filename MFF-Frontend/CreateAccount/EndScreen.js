@@ -1,13 +1,28 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { supabase } from '../supabase.js';
+import { useUserContext } from '../components/UserContext/UserContext.js';
+
 
 
 const EndScreen = ({ route }) => {
     const { handleUserCompletion } = route.params;
     
+    const { userId } = useUserContext();
 
-    const handleNext = () => {
+    const handleNext = async () => {
+
+        const { data, error } = await supabase
+        .from('User')
+        .update({
+          setupCompleted: true
+        })
+        .match({ authUserID: userId }) //update the userID that matches the current user
+    
+        if (error) {
+          console.error('Error updating:', error);
+          return;
+        }
 
         // Update the state to indicate that the user has completed the initial pages
         if (handleUserCompletion) {

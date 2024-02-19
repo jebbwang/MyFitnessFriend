@@ -7,7 +7,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { useFonts } from 'expo-font';
 import { UserProvider } from './components/UserContext/UserContext';
 
-import SignInScreen from './SignInScreen';
+import SignInScreen from './CreateAccount/SignInScreen';
 import Questionaire from './CreateAccount/Questionaire'; 
 import WelcomePage from './CreateAccount/WelcomePage';
 import ExerciseFrequencyQuestion from './CreateAccount/ExerciseFrequency';
@@ -93,7 +93,7 @@ export default function App() {
             component={CreateAccount}
             initialParams={{ setUserCompletedInitialPages }}
           /> */}
-          <Stack.Screen name="SignIn" component={SignInScreen} /> 
+          <Stack.Screen name="SignIn" component={SignInScreen} initialParams={{ handleUserCompletion }}/> 
           <Stack.Screen name="Welcome" component={WelcomePage} /> 
           <Stack.Screen name="Questionaire1" component={Questionaire} />
           <Stack.Screen name="ExerciseFrequency" component={ExerciseFrequencyQuestion} />

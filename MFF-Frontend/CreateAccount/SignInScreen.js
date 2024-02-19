@@ -4,16 +4,17 @@ import { supabase } from '../supabase.js';
 import { Button, Input } from 'react-native-elements'
 import { useUserContext } from '../components/UserContext/UserContext.js';
 
-
-const CreateAccount = ({ navigation }) => {
+const SignInScreen = ({ route, navigation }) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
 
-    const { setUserCompletedInitialPages } = useUserContext();
-    setUserCompletedInitialPages(true);
+    // const { setUserCompletedInitialPages } = useUserContext();
+    // setUserCompletedInitialPages(true);
 
     const { setUserId } = useUserContext();
+
+    const { handleUserCompletion } = route.params;
 
     useEffect(() => {
         AppState.addEventListener('change', handleAppStateChange);
@@ -30,36 +31,43 @@ const CreateAccount = ({ navigation }) => {
         }
     }
 
-    async function signUpWithEmail() {
-        setLoading(true)
-        const {
-            data: { session },
-            error,
-        } = await supabase.auth.signUp({
+    async function signInWithEmail() {
+        setLoading(true);
+        const { data, error } = await supabase.auth.signInWithPassword({
             email: email,
             password: password,
-        })
-
+        });
+    
         if (error) {
-            Alert.alert(error.message)
-        }
-        else if (!session) {
-            Alert.alert('Please check your inbox for email verification!')
-        }
-        else {
-            // insert user UUID into User table column "authUserID"
-            const { data, error } = await supabase
+            Alert.alert(error.message);
+        } else if (data) {
+            const userId = data.session.user.id; // get the user's id
+            setUserId(userId); // set the user's id in the context
+            console.log("User id: ", userId);
+
+            // Check if the user has completed the initial pages
+            const { data: userData, error: userError } = await supabase
                 .from('User')
-                .insert([{ authUserID: session.user.id }])
-                .single()
-            if (error) {
-                Alert.alert(error.message)
+                .select('setupCompleted')
+                .eq('authUserID', userId);
+            if (userError) {
+                console.error('Error fetching user data:', userError);
+                return;
             }
-            setUserId(session.user.id);
-            navigation.navigate('Welcome')
+            // if the setup has been completed aka the setupCompleted flag is true
+            if (userData[0].setupCompleted) {   
+                handleUserCompletion();
+            } else {
+                // navigate to welcome so the sign up process can be redone
+                navigation.navigate('Welcome')
+            }
+        } else {
+            console.log("No data returned");
+            Alert.alert("Something went wrong. Please try again.");
         }
-        setLoading(false)
+        setLoading(false);
     }
+    
 
     return (
         <View style={styles.container}>
@@ -93,13 +101,8 @@ const CreateAccount = ({ navigation }) => {
                     placeholderTextColor={'white'}
                 />
             </View>
-            <View style={styles.verticallySpaced}>
-                <Button
-                    title="Sign up"
-                    disabled={loading}
-                    onPress={() => signUpWithEmail()}
-                    buttonStyle={{ backgroundColor: '#3E89E1' }}
-                />
+            <View style={[styles.verticallySpaced, styles.mt20]}>
+                <Button title="Sign in" disabled={loading} onPress={() => signInWithEmail()} />
             </View>
         </View>
     );
@@ -121,4 +124,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default CreateAccount;
+export default SignInScreen;
