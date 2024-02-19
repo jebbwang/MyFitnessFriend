@@ -1,6 +1,6 @@
 
 import React from 'react';
-import {useState, useRef} from 'react';
+import {useState} from 'react';
 
 import { ScrollView,
   View, Text, Image,
@@ -16,10 +16,12 @@ import addIcon from '../../../../assets/addIcon.png';
 
 
 const AddModal = ({ waterInfo, setWaterInfo, updateWaterIntake }) => {
+    // UseStates
     const [modalVisible, setModalVisible] = useState(false);
     const [inputValue, setInputValue] = useState('')
     const [selectedWaterUnit, setSelectedWaterUnit] = React.useState("");
 
+    // Handlers
     const handleUserInputChange = (text) => {
         setInputValue(text);
       };

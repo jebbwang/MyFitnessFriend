@@ -9,6 +9,7 @@ import { ScrollView,
 
  import ExerciseCard from './components/ExerciseCard/exerciseCard';
  import WaterIntakeCard from './components/WaterIntakeCard/waterIntakeCard';
+ import NextWorkoutCard from './components/NextWorkoutCard/nextWorkoutCard';
 
 
  import CircularProgress from 'react-native-circular-progress-indicator';
@@ -142,6 +143,7 @@ const DashboardNutrition = ({  }) => {
 
     <ExerciseCard/>
     <WaterIntakeCard waterInfo={waterIntakeInfo} setWaterInfo={setWaterIntakeInfo} updateWaterIntake={updateWaterIntake}/>
+    <NextWorkoutCard/>
 
   </View>
   );
@@ -214,9 +216,9 @@ const styles = StyleSheet.create({
     color: 'white',
     marginBottom: 40,
     marginTop: 30,
-    textShadowColor: 'rgba(0, 0, 0, 0.75)', // Shadow color
-    textShadowOffset: { height: 4, width: 1 }, // Shadow offset (width, height)
-    textShadowRadius: 4, // Shadow blur radius
+    // textShadowColor: 'rgba(0, 0, 0, 0.75)', // Shadow color
+    // textShadowOffset: { height: 4, width: 1 }, // Shadow offset (width, height)
+    // textShadowRadius: 4, // Shadow blur radius
   },
   cardTitle: {
     fontSize: 20,
