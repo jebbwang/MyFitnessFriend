@@ -75,8 +75,8 @@ const ExerciseFrequencyQuestion = ({route, navigation, onSelect}) => {
         .update({
           exerciseFreqType: exerciseFrequency
         })
-        .match({ id: userId }) //update the userID that matches the current user
-        .select();
+        .match({ authUserID: userId }) //update the userID that matches the current user
+        // .select();
   
       if (error) {
         console.error('Error updating:', error);

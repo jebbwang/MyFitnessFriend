@@ -77,8 +77,8 @@ const HoursSleep = ({route, navigation }) => {
         .update({
           sleepAmount: hoursOfSleep
         })
-        .match({ id: userId }) //update the userID that matches the current user
-        .select();
+        .match({ authUserID: userId }) //update the userID that matches the current user
+        // .select();
   
       if (error) {
         console.error('Error updating:', error);

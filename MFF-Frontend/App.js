@@ -19,6 +19,9 @@ import Home from './Screens/Profile/Profile';
 import Profile from './Screens/Profile/Profile';
 import Recommendations from './Screens/Recommendations/RecommendationsPage';
 
+import CreateAccount from './CreateAccount/CreateAccount';
+
+
 
 
 const Stack = createStackNavigator();
@@ -41,8 +44,8 @@ function LandingPage({ navigation }) {
       
       <Text style={styles.noAcc}>Don't have an account? Get started!</Text>
       
-      {/* sign in screen */}
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Welcome')}>
+      {/* create account screen */}
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CreateAccount')}>
         <Text style={styles.buttonText}>Create account</Text>
       </TouchableOpacity>
     
@@ -84,6 +87,12 @@ export default function App() {
       {!userCompletedInitialPages ? (
         <Stack.Navigator initialRouteName="Landing">
           <Stack.Screen name="Landing" component={LandingPage} />
+          <Stack.Screen name="CreateAccount" component={CreateAccount} />
+          {/* <Stack.Screen
+            name="CreateAccount"
+            component={CreateAccount}
+            initialParams={{ setUserCompletedInitialPages }}
+          /> */}
           <Stack.Screen name="SignIn" component={SignInScreen} /> 
           <Stack.Screen name="Welcome" component={WelcomePage} /> 
           <Stack.Screen name="Questionaire1" component={Questionaire} />

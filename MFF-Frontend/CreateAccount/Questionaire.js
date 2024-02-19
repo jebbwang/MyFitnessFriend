@@ -173,13 +173,14 @@ const Questionnaire = ({navigation}) => {
   //  // navigation.navigate('Dashboard');
   // };
 
-  const { setUserId } = useUserContext();
+  // const { setUserId } = useUserContext();
+  const { userId } = useUserContext(); //get the userId from the context
 
   const handlePress = async () => {
     try {
       const { data, error } = await supabase
         .from('User')
-        .insert([{
+        .update([{
           firstName: firstName,
           lastName: lastName,
           dateOfBirth: dateOfBirth,
@@ -188,20 +189,23 @@ const Questionnaire = ({navigation}) => {
           weight: weight,
           weightType: selectedWeightUnit
         }])
-        .select(); //get the newly inserted record
+        .match({ authUserID: userId }) //update the userID that matches the current user
+        // .select(); //get the newly inserted record
   
       console.log('Success:', data);
-      const newUserId = data[0].id; //get the id of the newly created row
+      console.log('User ID:', userId);
+      console.log(userId)
+      // const newUserId = data[0].id; //get the id of the newly created row
   
-      if (!newUserId) {
-        console.error('ID of the newly created row is undefined'); //shouldnt go to this
-        return;
-      }
-      else { //set the userId in the context
-        setUserId(newUserId);
-      }
+      // if (!newUserId) {
+      //   console.error('ID of the newly created row is undefined'); //shouldnt go to this
+      //   return;
+      // }
+      // else { //set the userId in the context
+      //   setUserId(newUserId);
+      // }
   
-      navigation.navigate('ExerciseFrequency', { userId: newUserId });
+      navigation.navigate('ExerciseFrequency', { userId: userId });
     } catch (error) {
       console.error('Error:', error);
     }

@@ -42,7 +42,7 @@ const Recommendations = () => {
     </View>
   );
 
-  // const { userId } = useUserContext();
+  const { userId } = useUserContext();
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -57,7 +57,7 @@ const Recommendations = () => {
           style={styles.list}
         />
       </View>
-      {/* <Text style={{fontSize: 30}}>UserID: {userId}</Text> */}
+      <Text style={{fontSize: 30}}>UserID: {userId}</Text>
     </GestureHandlerRootView>
   );
 };
