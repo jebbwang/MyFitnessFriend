@@ -11,7 +11,7 @@ const TipsBanner = () => {
 
 const styles = StyleSheet.create({
   bannerContainer: {
-    backgroundColor: '#FFA337', // Yellow background color
+    backgroundColor: '#293849', 
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 20,
@@ -24,13 +24,13 @@ const styles = StyleSheet.create({
     shadowRadius: 4.65,
     elevation: 8,
     margin: 16,
-    marginTop: 32, // Depending on your layout, you may adjust this
+    marginTop: 32, 
   },
   bannerText: {
-    color: '#ffffff', // White text color
+    color: '#ffffff', 
     fontWeight: 'bold',
     fontSize: 18,
-    textAlign: 'center', // Center the text
+    textAlign: 'center',
   },
 });
 

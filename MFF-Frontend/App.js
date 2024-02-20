@@ -5,9 +5,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { useFonts } from 'expo-font';
+
+import Ionicons from '@expo/vector-icons/Ionicons';
+
+
 import { UserProvider } from './components/UserContext/UserContext';
 
-import SignInScreen from './SignInScreen';
+import SignInScreen from './CreateAccount/SignInScreen';
 import Questionaire from './CreateAccount/Questionaire'; 
 import WelcomePage from './CreateAccount/WelcomePage';
 import ExerciseFrequencyQuestion from './CreateAccount/ExerciseFrequency';
@@ -18,6 +22,9 @@ import EndScreen from './CreateAccount/EndScreen';
 import Home from './Screens/Profile/Profile';
 import Profile from './Screens/Profile/Profile';
 import Recommendations from './Screens/Recommendations/RecommendationsPage';
+
+import CreateAccount from './CreateAccount/CreateAccount';
+
 
 
 
@@ -41,8 +48,8 @@ function LandingPage({ navigation }) {
       
       <Text style={styles.noAcc}>Don't have an account? Get started!</Text>
       
-      {/* sign in screen */}
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Welcome')}>
+      {/* create account screen */}
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CreateAccount')}>
         <Text style={styles.buttonText}>Create account</Text>
       </TouchableOpacity>
     
@@ -82,9 +89,24 @@ export default function App() {
       {/* Nav stack below */}
     <NavigationContainer> 
       {!userCompletedInitialPages ? (
-        <Stack.Navigator initialRouteName="Landing">
+        <Stack.Navigator 
+            initialRouteName="Landing"
+            screenOptions={{
+              headerStyle: { backgroundColor: '#1A2633', shadowColor: 'transparent'},
+
+              // REMOVING SCREEN TITLE ON TOP 
+
+              headerTitle: ' ',
+              headerTintColor: 'white'}}
+          >
           <Stack.Screen name="Landing" component={LandingPage} />
-          <Stack.Screen name="SignIn" component={SignInScreen} /> 
+          <Stack.Screen name="CreateAccount" component={CreateAccount} />
+          {/* <Stack.Screen
+            name="CreateAccount"
+            component={CreateAccount}
+            initialParams={{ setUserCompletedInitialPages }}
+          /> */}
+          <Stack.Screen name="SignIn" component={SignInScreen} initialParams={{ handleUserCompletion }}/> 
           <Stack.Screen name="Welcome" component={WelcomePage} /> 
           <Stack.Screen name="Questionaire1" component={Questionaire} />
           <Stack.Screen name="ExerciseFrequency" component={ExerciseFrequencyQuestion} />
@@ -99,10 +121,50 @@ export default function App() {
         </Stack.Navigator>
       ) : (
         // Tab Navigator is what controls the tabs for bottom navigation bar
-        <Tab.Navigator>
-          <Tab.Screen name="Recommendations" component={Recommendations} />
-          <Tab.Screen name="Dashboard" component={Dashboard} />
-          <Tab.Screen name="Profile" component={Profile} />
+        <Tab.Navigator 
+          screenOptions={{
+            tabBarActiveTintColor: "white",
+            tabBarInactiveTintColor: "white",
+            tabBarStyle: {
+              backgroundColor: '#3E89E1', // Color of the tab bar
+            },
+
+            headerStyle: { backgroundColor: '#1A2633', shadowColor: 'transparent'},
+            // headerStyle: { backgroundColor: '#1A2633'},
+
+              // REMOVING SCREEN TITLE ON TOP 
+
+              headerTitle: ' ',
+              headerTintColor: 'white'            
+          }}>
+            
+          <Tab.Screen 
+            name="Recommendations" 
+            component={Recommendations} 
+            options={{ 
+              tabBarIcon: ({ color, size, focused }) => (
+                <Ionicons name={focused ? "list-sharp" : "list-outline"} color={color} size={size} />
+              ),
+            }} 
+          />
+          <Tab.Screen 
+            name="Dashboard" 
+            component={Dashboard} 
+            options={{ 
+              tabBarIcon: ({ color, size, focused }) => (
+                <Ionicons name={focused ? "home" : "home-outline"} color={color} size={size} />
+              ),
+            }} 
+          />
+          <Tab.Screen 
+            name="Profile" 
+            component={Profile} 
+            options={{ 
+              tabBarIcon: ({ color, size, focused }) => (
+                <Ionicons name={focused ? "person" : "person-outline"} color={color} size={size} />
+              ),
+            }} 
+          />
         </Tab.Navigator>
       )}
     </NavigationContainer>
@@ -113,7 +175,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#014EAA', 
+    backgroundColor: '#1A2633', 
     alignItems: 'center',
     justifyContent: 'center',
   },
