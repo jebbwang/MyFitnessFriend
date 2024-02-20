@@ -10,6 +10,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 
 import { UserProvider } from './components/UserContext/UserContext';
+import FlashMessage from "react-native-flash-message";
+
 
 import SignInScreen from './CreateAccount/SignInScreen';
 import Questionaire from './CreateAccount/Questionaire'; 
@@ -168,6 +170,8 @@ export default function App() {
         </Tab.Navigator>
       )}
     </NavigationContainer>
+    <FlashMessage position="top" /> 
+
     </UserProvider>
   );
 }
