@@ -56,8 +56,11 @@ const Recommendations = () => {
           ListEmptyComponent={NoRecommendationsComponent} // Render when the list is empty
           style={styles.list}
         />
+
+      {/* temp view the curr user id for debug */}
+      <Text style={{fontSize: 30, color: 'white'}}>UserID: {userId}</Text>
+
       </View>
-      <Text style={{fontSize: 30}}>UserID: {userId}</Text>
     </GestureHandlerRootView>
   );
 };
@@ -65,11 +68,11 @@ const Recommendations = () => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: '#014EAA',
+    backgroundColor: '#1A2633',
   },
   list: {
     flex: 1,
-    backgroundColor: '#014EAA',
+    backgroundColor: '#1A2633',
   },
   noItemsView: {
     flex: 1,

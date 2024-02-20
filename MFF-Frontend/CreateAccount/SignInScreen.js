@@ -102,7 +102,11 @@ const SignInScreen = ({ route, navigation }) => {
                 />
             </View>
             <View style={[styles.verticallySpaced, styles.mt20]}>
-                <Button title="Sign in" disabled={loading} onPress={() => signInWithEmail()} />
+                <Button title="Sign in" 
+                disabled={loading}
+                buttonStyle={{ backgroundColor: '#3E89E1' }}
+                titleStyle={{ fontWeight: 'bold' }} 
+                onPress={() => signInWithEmail()} />
             </View>
         </View>
     );
@@ -110,8 +114,8 @@ const SignInScreen = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#014EAA', // Set the background color to #014EAA
-        flex: 1, // Add this line to make the container fill the entire screen
+        backgroundColor: '#1A2633', 
+        flex: 1, //fill container to the whole screen
         padding: 12,
     },
     verticallySpaced: {

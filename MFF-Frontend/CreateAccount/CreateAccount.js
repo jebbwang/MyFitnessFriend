@@ -99,6 +99,7 @@ const CreateAccount = ({ navigation }) => {
                     disabled={loading}
                     onPress={() => signUpWithEmail()}
                     buttonStyle={{ backgroundColor: '#3E89E1' }}
+                    titleStyle={{ fontWeight: 'bold' }} 
                 />
             </View>
         </View>
@@ -107,7 +108,7 @@ const CreateAccount = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#014EAA', // Set the background color to #014EAA
+        backgroundColor: '#1A2633', // Set the background color to #014EAA
         flex: 1, // Add this line to make the container fill the entire screen
         padding: 12,
     },
