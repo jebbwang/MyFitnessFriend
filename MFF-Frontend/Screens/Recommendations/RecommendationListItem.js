@@ -7,6 +7,9 @@ const ListItem = ({ text, onToggleCheckbox, isChecked, onDelete }) => {
   const [checked, setChecked] = useState(isChecked);
 
   const toggleCheckbox = () => {
+    if (onToggleCheckbox === undefined){
+      return
+    }
     setChecked(!checked);
     onToggleCheckbox();
   };
