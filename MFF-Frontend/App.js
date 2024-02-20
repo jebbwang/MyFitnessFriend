@@ -18,7 +18,8 @@ import EndScreen from './CreateAccount/EndScreen';
 import Home from './Screens/Profile/Profile';
 import Profile from './Screens/Profile/Profile';
 import Recommendations from './Screens/Recommendations/RecommendationsPage';
-
+import ExerciseList from './Screens/Exercise/ExerciseList';
+import ViewPlan from './Screens/Exercise/ViewPlan';
 
 
 const Stack = createStackNavigator();
@@ -37,6 +38,10 @@ function LandingPage({ navigation }) {
       {/* sign in screen */}
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SignIn')}>
         <Text style={styles.buttonText}>Sign in</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Exercise')}>
+        <Text style={styles.buttonText}>Exercise</Text>
       </TouchableOpacity>
       
       <Text style={styles.noAcc}>Don't have an account? Get started!</Text>
@@ -90,6 +95,9 @@ export default function App() {
           <Stack.Screen name="ExerciseFrequency" component={ExerciseFrequencyQuestion} />
           <Stack.Screen name="HoursOfSleep" component={HoursSleep} />
           <Stack.Screen name="FitnessGoal" component={FitnessGoal} />
+          <Stack.Screen name="Exercise" component={ExerciseList} />
+          <Stack.Screen name="WorkoutPlan" component={ViewPlan} />
+
           
           {/* Passing in the 'handleUserCompletion' function is causing warning for non-serializable data */}
           <Stack.Screen name="EndScreen" component={EndScreen} initialParams={{ handleUserCompletion }}/>
