@@ -130,6 +130,7 @@ export default function App() {
             },
 
             headerStyle: { backgroundColor: '#1A2633', shadowColor: 'transparent'},
+            // headerStyle: { backgroundColor: '#1A2633'},
 
               // REMOVING SCREEN TITLE ON TOP 
 

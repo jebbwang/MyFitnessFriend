@@ -1,7 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, TextInput, TouchableOpacity, StyleSheet, Text } from 'react-native';
+import { useUserContext } from '../../components/UserContext/UserContext';
+import { supabase } from '../../supabase';
 
 const Profile = () => {
+  const { userId } = useUserContext();
+
   const [userInfo, setUserInfo] = useState({
     firstName: 'Henry',
     lastName: 'Reyes',
@@ -10,7 +14,37 @@ const Profile = () => {
     height: '170',
     fitnessGoal: 'maintain',
     dateOfBirth: '1990-01-01', 
+    weightType: 'lbs',
+    heightType: 'cm',
   });
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const { data, error } = await supabase
+        .from('User')
+        .select('*')
+        .eq('authUserID', userId)
+        .single();
+
+      if (data) {
+        setUserInfo({
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          weight: data.weight.toString(),
+          height: data.height.toString(),
+          fitnessGoal: data.fitnessGoalType,
+          dateOfBirth: data.dateOfBirth,
+          weightType: data.weightType,
+          heightType: data.heightType,
+        });
+      } else {
+        console.error(error);
+      }
+    };
+
+    fetchUserData();
+  }, [userId]);
 
 
   const inputRefs = {
@@ -58,6 +92,7 @@ const Profile = () => {
   };
 
   return (
+    // console.log(userId),
     <View style={styles.mainContainer}>
       <View style={styles.header} >
         <Text style={styles.header}>Fitness Profile Settings</Text>
@@ -70,25 +105,25 @@ const Profile = () => {
       <View style={styles.infoContainer} >
       <View style={styles.labelrow}>
         <View style={styles.label}>
-          <Text>First Name </Text>
+          <Text style={{ color: 'white', fontWeight: 'bold' }}>First Name</Text>
         </View>
-        <Text> Last Name</Text>
+        <Text style={{ color: 'white', fontWeight: 'bold' }}>Last Name</Text>
       </View>
       <View style={styles.row}>
         {renderInputField('firstName', 'First Name')}   
         {renderInputField('lastName', 'Last Name')}
       </View>
       <View style={styles.labelrow}>
-        <Text>Email</Text>
+        <Text style={{ color: 'white', fontWeight: 'bold' }}>Email</Text>
       </View>
       <View style={styles.row}>
         {renderInputField('email', 'Email', 'email-address')}
       </View>
       <View style={styles.labelrow}>
         <View style={styles.label}>
-          <Text>Weight         </Text>
+          <Text style={{ color: 'white', fontWeight: 'bold' }}>Weight ({userInfo.weightType})</Text>
         </View>
-        <Text>Height</Text>
+          <Text style={{ color: 'white', fontWeight: 'bold' }}>Height ({userInfo.heightType})</Text>
       </View>
       <View style={styles.row}>
         {renderInputField('weight', 'Weight', 'numeric')}
@@ -96,9 +131,9 @@ const Profile = () => {
       </View>
       <View style={styles.labelrow}>
         <View style={styles.label}>
-          <Text>Fitness Goal</Text>
+          <Text style={{ color: 'white', fontWeight: 'bold' }}>Fitness Goal</Text>
         </View>
-        <Text>DOB</Text>
+          <Text style={{ color: 'white', fontWeight: 'bold' }}>DOB</Text>
       </View>
       <View style={styles.row}>
         {renderInputField('fitnessGoal', 'Fitness Goal')}
@@ -114,10 +149,10 @@ const Profile = () => {
       <TouchableOpacity style={styles.button} >
         <Text style={styles.buttonText}>Update</Text>
       </TouchableOpacity>
-
+{/* 
       <TouchableOpacity style={styles.backHome} >
         <Text style={styles.buttonText}>←</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
         
       </View>
 
@@ -130,7 +165,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
 
-    backgroundColor: '#014EAA',
+    backgroundColor: '#1A2633',
     justifyContent: 'center',
   },
   header: {
@@ -143,18 +178,20 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     marginTop: 4,
     fontSize: 14,
+    fontWeight: 'bold'
   },
   infoContainer: {
-    backgroundColor: "rgba(120, 173, 252, 1)",
+    backgroundColor: "#293849",
     padding: 50,
     borderRadius: 20,
-    height: 500,
-    marginTop: 40,
+    height: 490,
+    marginTop: 20,
+    marginBottom: 60, //maybe remove this
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between', 
-    marginBottom: 5,
+    marginBottom: 20,
   },
   labelrow: {
     flexDirection: "row",
@@ -182,7 +219,7 @@ const styles = StyleSheet.create({
     color: "black",
   },
   button: {
-    backgroundColor: '#014EAA',  
+    backgroundColor: '#3E89E1',  
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 25,  
@@ -191,7 +228,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     shadowRadius: 3,
     justifyContent: "center",
-    marginTop: 10,
+    marginTop: 20,
     alignItems: "center"
   },
   buttonText: {
@@ -201,7 +238,7 @@ const styles = StyleSheet.create({
   
   },
   backHome: {
-    backgroundColor: '#014EAA',  
+    backgroundColor: '#3E89E1',  
     paddingVertical: 10,
     paddingVertical: 10,
     paddingHorizontal: 20,
@@ -209,7 +246,7 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(0, 0, 0, 0.1)',  
     shadowOffset: { width: 0, height: 4 },
     width: 60,
-    marginTop: 90,
+    marginTop: 60,
   }
 });
 

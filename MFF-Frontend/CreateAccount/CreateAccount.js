@@ -47,10 +47,10 @@ const CreateAccount = ({ navigation }) => {
             Alert.alert('Please check your inbox for email verification!')
         }
         else {
-            // insert user UUID into User table column "authUserID"
+            // insert user UUID and email into User table columns authUserID and email
             const { data, error } = await supabase
                 .from('User')
-                .insert([{ authUserID: session.user.id }])
+                .insert([{ authUserID: session.user.id, email: session.user.email }])
                 .single()
             if (error) {
                 Alert.alert(error.message)
