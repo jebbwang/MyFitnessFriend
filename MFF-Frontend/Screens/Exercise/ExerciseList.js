@@ -1,19 +1,14 @@
 import { useState } from 'react';
 import React from 'react';
-import { SafeAreaView,ScrollView, Modal, View, TextInput, Text, StyleSheet, Pressable, Animated } from 'react-native';
+import { SafeAreaView,ScrollView, View, TextInput, Text, StyleSheet, Pressable, Animated } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const ExerciseList = ({ navigation }) => {
     const [muscle, setMuscle] = useState('');
     const [exercises, setExercises] = useState([]);
-    const [isModalVisible, setIsModalVisible] = useState(false);
 
     const viewPlan = () => {
         navigation.navigate('WorkoutPlan'); 
-      };
-    
-      const handleCloseModal = () => {
-        setIsModalVisible(false);
       };
     
     const handleSearch = async () => {
@@ -23,13 +18,12 @@ const ExerciseList = ({ navigation }) => {
           {
             method: 'GET',
             headers: {
-              'X-Api-Key': '50Y/9uaDfwp9o6fY4IBaPA==1gCstnMSO4fTY7QJ'
+              'X-Api-Key': '',
             }
           }
         );
         const data = await response.json();
         setExercises(data); 
-        console.log(data)
       } catch (error) {
         console.error(error);
       }
@@ -132,7 +126,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dim the background
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
   },
   modalText: {
     color: '#fff',
