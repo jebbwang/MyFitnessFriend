@@ -167,6 +167,8 @@ const styles = StyleSheet.create({
 
     backgroundColor: '#1A2633',
     justifyContent: 'center',
+
+    marginTop : -20,
   },
   header: {
     color: "white",
@@ -186,7 +188,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     height: 490,
     marginTop: 20,
-    marginBottom: 60, //maybe remove this
+    marginBottom: 60, 
   },
   row: {
     flexDirection: 'row',
