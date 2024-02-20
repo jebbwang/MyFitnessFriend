@@ -57,8 +57,7 @@ const Recommendations = () => {
           style={styles.list}
         />
 
-      {/* temp view the curr user id for debug */}
-      <Text style={{fontSize: 30, color: 'white'}}>UserID: {userId}</Text>
+      
 
       </View>
     </GestureHandlerRootView>
