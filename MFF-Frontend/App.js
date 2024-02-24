@@ -24,15 +24,12 @@ import EndScreen from './CreateAccount/EndScreen';
 import Home from './Screens/Profile/Profile';
 import Profile from './Screens/Profile/Profile';
 import Recommendations from './Screens/Recommendations/RecommendationsPage';
-<<<<<<< HEAD
 
 import CreateAccount from './CreateAccount/CreateAccount';
 
 
-=======
 import ExerciseList from './Screens/Exercise/ExerciseList';
 import ViewPlan from './Screens/Exercise/ViewPlan';
->>>>>>> henry
 
 
 const Stack = createStackNavigator();

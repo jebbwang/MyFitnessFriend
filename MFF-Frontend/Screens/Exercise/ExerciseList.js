@@ -18,7 +18,7 @@ const ExerciseList = ({ navigation }) => {
           {
             method: 'GET',
             headers: {
-              'X-Api-Key': '',
+              'X-Api-Key': process.env.WORKOUT_API_KEY
             }
           }
         );
