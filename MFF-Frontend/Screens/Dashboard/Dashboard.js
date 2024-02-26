@@ -13,6 +13,7 @@ import { ScrollView,
 
 
  import CircularProgress from 'react-native-circular-progress-indicator';
+import LogCard from './components/FoodLogCard/logCard';
 
 
 
@@ -142,6 +143,7 @@ const DashboardNutrition = ({  }) => {
     </View>
 
     <ExerciseCard/>
+    <LogCard />
     <WaterIntakeCard waterInfo={waterIntakeInfo} setWaterInfo={setWaterIntakeInfo} updateWaterIntake={updateWaterIntake}/>
     <NextWorkoutCard/>
 
