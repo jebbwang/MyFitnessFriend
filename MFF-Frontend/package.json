@@ -28,11 +28,8 @@
     "react-native": "0.73.4",
     "react-native-blur": "^3.2.2",
     "react-native-circular-progress-indicator": "^4.4.2",
-<<<<<<< HEAD
     "react-native-dropdown-select-list": "^2.0.5",
-=======
     "react-native-collapsible": "^1.6.1",
->>>>>>> henry
     "react-native-elements": "^3.4.3",
     "react-native-flash-message": "^0.4.2",
     "react-native-gesture-handler": "~2.14.0",

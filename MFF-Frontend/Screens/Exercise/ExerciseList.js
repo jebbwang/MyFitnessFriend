@@ -18,7 +18,7 @@ const ExerciseList = ({ navigation }) => {
           {
             method: 'GET',
             headers: {
-              'X-Api-Key': '',
+              'X-Api-Key': '50Y/9uaDfwp9o6fY4IBaPA==1gCstnMSO4fTY7QJ',
             }
           }
         );

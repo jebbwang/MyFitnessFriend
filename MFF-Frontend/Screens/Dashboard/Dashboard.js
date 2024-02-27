@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { ScrollView,
   View, Text,
@@ -14,7 +14,8 @@ import { ScrollView,
 
  import CircularProgress from 'react-native-circular-progress-indicator';
 
-
+ import { useUserContext } from '../../components/UserContext/UserContext';
+ import { supabase } from '../../supabase.js';
 
  const dashboardFakeData = {
   name: {
@@ -42,6 +43,8 @@ import { ScrollView,
 
 const DashboardNutrition = ({  }) => {
 
+  const { userId } = useUserContext();
+
   const ozInGallon = 128
 
   const props = {
@@ -55,16 +58,74 @@ const DashboardNutrition = ({  }) => {
     dailyGoalType: 'gallon',
     dailyGoal: 1,
     currentType: 'oz',
-    current: 32
+    current: 0
   });
 
 
   const updateWaterIntake = (value) => {
+    // setWaterIntakeInfo((prevState) => ({
+    //   ...prevState,
+    //   ["current"]: parseInt(value, 10),
+    // }));
+
+    updateWaterIntakeInTable(value);
+  };
+
+  // Update the UserWaterIntake table in the Supabase table
+  const updateWaterIntakeInTable = async (value) => {
+    try {
+      const { data, error } = await supabase
+        .from('UserWaterIntake')
+        .insert({ amount: parseInt(value, 10), userId: userId });
+
+      if (error) {
+        console.error(error);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
     setWaterIntakeInfo((prevState) => ({
       ...prevState,
-      ["current"]: parseInt(value, 10),
+      ["current"]: prevState.current + parseInt(value, 10),
     }));
-};
+  };
+
+  // useEffect runs once the component is mounted aka when the page is first loaded, anything after that happens outside of this function
+  // Fetch the water intake data from the UserWaterIntake table in the Supabase database
+  useEffect(() => {
+    const fetchWaterIntake = async () => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+  
+      // Convert to ISO strings
+      const todayStr = today.toISOString();
+      const tomorrowStr = tomorrow.toISOString();
+  
+      try {
+        const { data, error } = await supabase
+          .from('UserWaterIntake')
+          .select('amount')
+          .eq('userId', userId)
+          .gte('created_at', todayStr)
+          .lt('created_at', tomorrowStr);
+  
+        if (error) throw error;
+  
+        const totalWaterIntake = data.reduce((total, record) => total + record.amount, 0);
+        setWaterIntakeInfo((prevState) => ({
+          ...prevState,
+          ["current"]: totalWaterIntake,
+        }));
+      } catch (error) {
+        console.error("Error fetching water intake: ", error);
+      }
+    };
+  
+    fetchWaterIntake();
+  }, []);
 
   return (
     <View>
