@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, View, Text, TextInput, Pressable, StyleSheet, ScrollView, FlatList } from 'react-native';
+import { Alert, Modal, View, Text, TextInput, Pressable, StyleSheet, ScrollView, FlatList } from 'react-native';
 
 function FoodLog() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -97,9 +97,11 @@ function FoodLog() {
         renderItem={({ item }) => (
           <View style={styles.mealItem}>
             <Text style={styles.mealName}>{item.mealName}</Text>
-            {item.mealDetails.map((detail, index) => (
-              <Text key={index} style={styles.mealDetail}>{detail}</Text>
-            ))}
+            <View style={styles.mealDetailContainer}>
+              {item.mealDetails.map((detail, index) => (
+                <Text key={index} style={styles.mealDetail}>{detail}</Text>
+              ))}
+            </View>
           </View>
         )}
       />
@@ -159,7 +161,6 @@ const styles = StyleSheet.create({
   scrollViewContent: {
     alignItems: "center", 
     flexGrow: 1,
-
   },
   input: {
     height: 40,
@@ -200,7 +201,6 @@ const styles = StyleSheet.create({
     padding: 10,
     elevation: 2,
     marginTop: 10,
-    
   },
   buttonClose: {
     backgroundColor: "#2196F3",
@@ -227,13 +227,24 @@ const styles = StyleSheet.create({
   mealItem: {
     marginTop: 10,
     padding: 10,
-    backgroundColor: '#FFF',
+    backgroundColor: '#E8E8E8', 
     borderRadius: 10,
+    shadowColor: "#000", 
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   mealName: {
     color: '#000',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  mealDetailContainer: {
+    backgroundColor: '#F8F8F8',
+    borderRadius: 5,
+    padding: 5,
+    marginTop: 5,
   },
   mealDetail: {
     color: '#555',
@@ -245,5 +256,4 @@ const styles = StyleSheet.create({
     marginTop: 10,
   }
 })
-
 export default FoodLog;
