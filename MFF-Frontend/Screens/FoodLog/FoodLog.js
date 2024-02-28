@@ -7,7 +7,6 @@ function FoodLog() {
   const [mealDetails, setMealDetails] = useState(['']); 
   const [meals, setMeals] = useState([]); 
 
-
   const addMealDetail = () => {
     setMealDetails([...mealDetails, '']);
   };
@@ -24,10 +23,17 @@ function FoodLog() {
   };
 
   const finalizeMeal = () => {
-    setMeals([...meals, { mealName, mealDetails }]);
-    setMealName('');
-    setMealDetails(['']);
-    setModalVisible(!modalVisible);
+    if (!mealName.trim() || mealDetails.every(detail => !detail.trim())) {
+      Alert.alert(
+        "Invalid Meal",
+        "Please make sure the meal has a name and at least one ingredient."
+      );
+    } else {
+      setMeals([...meals, { mealName, mealDetails: mealDetails.filter(detail => detail.trim()) }]);
+      setMealName('');
+      setMealDetails(['']);
+      setModalVisible(!modalVisible);
+    }
   };
 
   return (
@@ -63,6 +69,7 @@ function FoodLog() {
             <Text style={styles.modalHeader}>Meal ingredients</Text>
             {mealDetails.map((detail, index) => (
               <View key={index} style={styles.detailInputContainer}>
+                {/* remove button */}
                 <Pressable onPress={() => removeMealDetail(index)} style={styles.removeButton}>
                   <Text style={styles.removeButtonText}>-</Text>
                 </Pressable>
@@ -72,7 +79,7 @@ function FoodLog() {
                   value={detail}
                   placeholder="Meal Detail (e.g., Ingredient)"
                 />
-
+                {/* add button only aplies to most recent ingredient */}
                 {index === mealDetails.length - 1 && (
                   <Pressable onPress={addMealDetail} style={styles.addButton}>
                     <Text style={styles.addButtonText}>+</Text>
@@ -80,6 +87,8 @@ function FoodLog() {
                 )}
               </View>
             ))}
+
+            {/* user is done with creating meal */}
             <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={finalizeMeal}
@@ -89,7 +98,6 @@ function FoodLog() {
           </ScrollView>
         </View>
       </Modal>
-
       {/* Displaying all meals */}
       <FlatList
         data={meals}
@@ -114,6 +122,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#1A2633",
     justifyContent: 'center',
+    flex: 1,
   },
   header: {
     color: "#78ADFC",
@@ -155,8 +164,6 @@ const styles = StyleSheet.create({
     backgroundColor:"#78ADFC",
     maxHeight: '80%',
     width: '100%',
-  
-    
   },
   scrollViewContent: {
     alignItems: "center", 
