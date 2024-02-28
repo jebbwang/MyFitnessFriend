@@ -5,6 +5,7 @@ function FoodLog() {
   const [modalVisible, setModalVisible] = useState(false);
   const [mealName, setMealName] = useState('');
   const [mealDetails, setMealDetails] = useState(['']); 
+  // meals is an array of {mealName, mealDetails} objects
   const [meals, setMeals] = useState([]); 
 
   const addMealDetail = () => {
@@ -57,8 +58,16 @@ function FoodLog() {
           setModalVisible(!modalVisible);
         }}
       >
+      
         <View style={styles.centeredView}>
           <ScrollView style={styles.modalView} contentContainerStyle={styles.scrollViewContent}>
+          {/* "X" button to close the modal */}
+          <Pressable 
+              style={styles.closeButton} 
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={styles.closeButtonText}>X</Text>
+          </Pressable>
             <Text style={styles.modalHeader}>Meal Name</Text>
             <TextInput
               style={[styles.input, styles.inputRound]}
@@ -261,6 +270,23 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 25,
     marginTop: 10,
-  }
+  }, 
+  closeButton: {
+    position: 'absolute',  
+    left: -20,
+    top: -20,
+    backgroundColor: "#1A2633",
+    width: 30,
+    height: 30,
+    borderRadius: 15,  
+    justifyContent: 'center',  
+    alignItems: 'center', 
+    zIndex: 10, 
+  },
+  closeButtonText: {
+    color: "#78ADFC",
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 })
 export default FoodLog;
