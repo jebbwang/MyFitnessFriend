@@ -3,21 +3,24 @@ import React from 'react';
 import { ScrollView,
   View, Text, Image,
    TextInput, Button, StyleSheet,
-    Platform, TouchableOpacity} 
+    Platform, TouchableOpacity, Pressable} 
  from 'react-native';
 
 import exerciseCardpng from '../../../../assets/exerciseCard.png';
 
 
 const LogCard = ({  }) => {
-  
+    
+    const viewLog = () => {
+
+    }
     return (
       <View style={styles.logCard}>
         <Image source={exerciseCardpng} style={styles.exerciseCardImage}></Image>
 
-        <View style={styles.logContainer}>
+        <Pressable style={styles.logContainer} onPress={viewLog}>
             <Text style={styles.logHeader}>Log Food</Text>
-        </View>
+        </Pressable>
       </View>
     );
   };
