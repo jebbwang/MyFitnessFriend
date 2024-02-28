@@ -1,20 +1,33 @@
 import React, { useState } from 'react';
-import { Modal, View, Text, TextInput, Pressable, StyleSheet, ScrollView } from 'react-native';
+import { Modal, View, Text, TextInput, Pressable, StyleSheet, ScrollView, FlatList } from 'react-native';
 
 function FoodLog() {
   const [modalVisible, setModalVisible] = useState(false);
   const [mealName, setMealName] = useState('');
   const [mealDetails, setMealDetails] = useState(['']); 
+  const [meals, setMeals] = useState([]); 
+
 
   const addMealDetail = () => {
-    setMealDetails([...mealDetails, '']); 
+    setMealDetails([...mealDetails, '']);
   };
-
 
   const updateMealDetail = (index, value) => {
     const updatedDetails = [...mealDetails];
     updatedDetails[index] = value;
     setMealDetails(updatedDetails);
+  };
+
+  const removeMealDetail = (index) => {
+    const updatedDetails = mealDetails.filter((_, detailIndex) => detailIndex !== index);
+    setMealDetails(updatedDetails);
+  };
+
+  const finalizeMeal = () => {
+    setMeals([...meals, { mealName, mealDetails }]);
+    setMealName('');
+    setMealDetails(['']);
+    setModalVisible(!modalVisible);
   };
 
   return (
@@ -39,21 +52,27 @@ function FoodLog() {
         }}
       >
         <View style={styles.centeredView}>
-          <ScrollView style={styles.modalView} >
+          <ScrollView style={styles.modalView} contentContainerStyle={styles.scrollViewContent}>
+            <Text style={styles.modalHeader}>Meal Name</Text>
             <TextInput
               style={[styles.input, styles.inputRound]}
               onChangeText={setMealName}
               value={mealName}
               placeholder="Meal Name"
             />
+            <Text style={styles.modalHeader}>Meal ingredients</Text>
             {mealDetails.map((detail, index) => (
               <View key={index} style={styles.detailInputContainer}>
+                <Pressable onPress={() => removeMealDetail(index)} style={styles.removeButton}>
+                  <Text style={styles.removeButtonText}>-</Text>
+                </Pressable>
                 <TextInput
                   style={styles.input}
                   onChangeText={(text) => updateMealDetail(index, text)}
                   value={detail}
                   placeholder="Meal Detail (e.g., Ingredient)"
                 />
+
                 {index === mealDetails.length - 1 && (
                   <Pressable onPress={addMealDetail} style={styles.addButton}>
                     <Text style={styles.addButtonText}>+</Text>
@@ -63,13 +82,27 @@ function FoodLog() {
             ))}
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}
+              onPress={finalizeMeal}
             >
               <Text style={styles.textStyle}>Done</Text>
             </Pressable>
           </ScrollView>
         </View>
       </Modal>
+
+      {/* Displaying all meals */}
+      <FlatList
+        data={meals}
+        keyExtractor={(_, index) => index.toString()}
+        renderItem={({ item }) => (
+          <View style={styles.mealItem}>
+            <Text style={styles.mealName}>{item.mealName}</Text>
+            {item.mealDetails.map((detail, index) => (
+              <Text key={index} style={styles.mealDetail}>{detail}</Text>
+            ))}
+          </View>
+        )}
+      />
     </View>
   );
 }
@@ -109,7 +142,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
-    alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -118,9 +150,16 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 10,
-    backgroundColor: "#1A2633",
+    backgroundColor:"#78ADFC",
     maxHeight: '80%',
-    width: '90%',
+    width: '100%',
+  
+    
+  },
+  scrollViewContent: {
+    alignItems: "center", 
+    flexGrow: 1,
+
   },
   input: {
     height: 40,
@@ -128,6 +167,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     width: '80%',
+    color: "white"
   },
   inputRound: {
     borderRadius: 20,
@@ -137,14 +177,18 @@ const styles = StyleSheet.create({
   detailInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '90%',
+    justifyContent: 'space-evenly',
+    width: '75%',
+    color: "white",
   },
   addButton: {
-    marginLeft: 10,
-    backgroundColor: '#2196F3',
+    marginLeft: 30,
+    backgroundColor: '#5DB06F',
     borderRadius: 20,
     padding: 10,
+    width: 60,
+    flex: "row",
+    alignItems: "center"
   },
   addButtonText: {
     color: 'white',
@@ -155,6 +199,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     elevation: 2,
+    marginTop: 10,
+    
   },
   buttonClose: {
     backgroundColor: "#2196F3",
@@ -164,6 +210,40 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
+  removeButton: {
+    marginRight: 30,
+    backgroundColor: '#D9534F',
+    borderRadius: 20,
+    padding: 10,
+    width: 60,
+    flex: "row",
+    alignItems: "center"
+  },
+  removeButtonText: {
+    color: 'white',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  mealItem: {
+    marginTop: 10,
+    padding: 10,
+    backgroundColor: '#FFF',
+    borderRadius: 10,
+  },
+  mealName: {
+    color: '#000',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  mealDetail: {
+    color: '#555',
+    fontSize: 16,
+  },
+  modalHeader: {
+    fontWeight: "bold",
+    fontSize: 25,
+    marginTop: 10,
+  }
 })
 
 export default FoodLog;
