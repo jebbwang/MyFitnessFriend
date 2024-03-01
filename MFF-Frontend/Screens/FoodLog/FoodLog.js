@@ -4,6 +4,7 @@ import { Alert, Modal,
    Pressable, StyleSheet, 
    ScrollView, FlatList } 
 from 'react-native';
+import { API_KEY } from '@env';
 
 
 // API CALL, returns an array of nutrional data
@@ -14,7 +15,7 @@ const fetchNutritionInfo = async (foodItem) => {
       {
         method: 'GET',
         headers: {
-          'X-Api-Key':"50Y/9uaDfwp9o6fY4IBaPA==1gCstnMSO4fTY7QJ"
+          'X-Api-Key': API_KEY
         }
       }
     );
