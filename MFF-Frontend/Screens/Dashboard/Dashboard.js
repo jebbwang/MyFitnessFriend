@@ -13,6 +13,7 @@ import { ScrollView,
 
 
  import CircularProgress from 'react-native-circular-progress-indicator';
+import LogCard from './components/FoodLogCard/logCard';
 
  import { useUserContext } from '../../components/UserContext/UserContext';
  import { supabase } from '../../supabase.js';
@@ -90,6 +91,7 @@ const DashboardNutrition = ({  }) => {
       ["current"]: prevState.current + parseInt(value, 10),
     }));
   };
+  };
 
   // useEffect runs once the component is mounted aka when the page is first loaded, anything after that happens outside of this function
   // Fetch the water intake data from the UserWaterIntake table in the Supabase database
@@ -129,12 +131,7 @@ const DashboardNutrition = ({  }) => {
 
   return (
     <View>
-    {/* <View style={styles.cardTitleContainer}>
-            <Text style={styles.cardTitle}>Today</Text>
-          </View> */}
-
-          <Text style={styles.cardTitle}>Today</Text>
-    
+      <Text style={styles.cardTitle}>Today</Text>
     <View style={styles.card}>
           
       <View style={[styles.progressContainer, {marginTop: 10}]}>
@@ -143,7 +140,6 @@ const DashboardNutrition = ({  }) => {
             <CircularProgress
               {...props}
               value={(dashboardFakeData.caloricInfo.current / dashboardFakeData.caloricInfo.recommended) * 100}
-              // maxValue={2000}
               radius={50}
               activeStrokeColor={'#F1A81B'}
               inActiveStrokeColor={'#F1A81A'}
@@ -162,7 +158,6 @@ const DashboardNutrition = ({  }) => {
             <CircularProgress
               {...props}
               value={waterIntakeInfo.current < ozInGallon ? (waterIntakeInfo.current / (parseInt(waterIntakeInfo.dailyGoal, 10) * ozInGallon) * 100) : 100}
-              // maxValue={2000}
               radius={50}
               activeStrokeColor={'#3E89E1'}
               inActiveStrokeColor={'#3E89E0'}
@@ -181,7 +176,6 @@ const DashboardNutrition = ({  }) => {
             <CircularProgress
               {...props}
               value={(dashboardFakeData.exerciseInfo.current / dashboardFakeData.exerciseInfo.recommended) * 100}
-              // maxValue={2000}
               radius={50}
               activeStrokeColor={'#26A341'}
               inActiveStrokeColor={'#26A340'}
@@ -203,6 +197,7 @@ const DashboardNutrition = ({  }) => {
     </View>
 
     <ExerciseCard/>
+    <LogCard />
     <WaterIntakeCard waterInfo={waterIntakeInfo} setWaterInfo={setWaterIntakeInfo} updateWaterIntake={updateWaterIntake}/>
     <NextWorkoutCard/>
 
@@ -211,37 +206,20 @@ const DashboardNutrition = ({  }) => {
 };
 
 
-const Dashboard = ({ }) => {
+const Dashboard = ({  }) => {
   const options = ['Rarely', 'Sometimes', 'Frequently', 'Everyday'];
-
-
-
   return (
     <View style={styles.container}>
-      <ScrollView 
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
-      >
-        {/* <CircularProgress value={58} /> */}
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>Welcome Back, {dashboardFakeData.name.first}!</Text>
-        </View>
+        <ScrollView 
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
+        >
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>Welcome Back, {dashboardFakeData.name.first}!</Text>
+          </View>
 
-        <DashboardNutrition />
-        {/* <DashboardNutrition /> */}
-        {/* <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} >
-            <Text style={styles.buttonText}>→</Text>
-          </TouchableOpacity> 
-        </View> */}
+          <DashboardNutrition />
       </ScrollView>
-     
-
-     
-      
-      {/* <View style={styles.buttonContainer}>
-        <Button title="Submit" onPress={handleSubmit} />
-      </View> */}
 
     </View>
   );
@@ -258,12 +236,6 @@ const styles = StyleSheet.create({
 
   },
   titleContainer: {
-    // backgroundColor: '#fcc777',
-    // marginRight: 30,
-    // height: 60,
-    // paddingLeft: ,
-    // justifyContent: 'center',
-    // alignItems: 'center',
     borderRadius: '20'
     
   },
@@ -277,9 +249,6 @@ const styles = StyleSheet.create({
     color: 'white',
     marginBottom: 40,
     marginTop: 30,
-    // textShadowColor: 'rgba(0, 0, 0, 0.75)', // Shadow color
-    // textShadowOffset: { height: 4, width: 1 }, // Shadow offset (width, height)
-    // textShadowRadius: 4, // Shadow blur radius
   },
   cardTitle: {
     fontSize: 20,
@@ -294,9 +263,6 @@ const styles = StyleSheet.create({
     marginRight: 30,
 
     alignSelf: 'flex-start',
-    // textShadowColor: 'rgba(0, 0, 0, 0.75)', // Shadow color
-    // textShadowOffset: { height: 3, width: 1 }, // Shadow offset (width, height)
-    // textShadowRadius: 6, // Shadow blur radius
   },
   cardTitleContainer: {
     marginRight: 200,
@@ -304,17 +270,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#273646",
     padding: 5,
     marginBottom: 20,
-    // backgroundColor: 'white',
-
-    // borderWidth: 2,
-    // borderColor: 'white',
     borderRadius: 20,
-    // borderTopRightRadius: 20,
-    // borderBottomRightRadius: 20,
 
   },
   progressContainer: {
-    // flexDirection: "col",
     marginBottom: 15,
     alignItems: 'center'
   },

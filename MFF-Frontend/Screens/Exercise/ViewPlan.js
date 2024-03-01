@@ -16,6 +16,7 @@ function ViewPlan() {
       completed: [1, 0, 0, 1]
     },
     {
+      
       id: '2',
       date: 'February 10, 2024',
       workout: ['Cardio #1', 'Strength #1', 'Cardio #2', 'Strength #2'],

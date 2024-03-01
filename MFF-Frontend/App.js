@@ -26,11 +26,9 @@ import Profile from './Screens/Profile/Profile';
 import Recommendations from './Screens/Recommendations/RecommendationsPage';
 
 import CreateAccount from './CreateAccount/CreateAccount';
-
-
 import ExerciseList from './Screens/Exercise/ExerciseList';
 import ViewPlan from './Screens/Exercise/ViewPlan';
-
+import FoodLog from './Screens/FoodLog/FoodLog';
 
 const Stack = createStackNavigator();
 
@@ -52,6 +50,10 @@ function LandingPage({ navigation }) {
 
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Exercise')}>
         <Text style={styles.buttonText}>Exercise</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('FoodLog')}>
+        <Text style={styles.buttonText}>FoodLog</Text>
       </TouchableOpacity>
       
       <Text style={styles.noAcc}>Don't have an account? Get started!</Text>
@@ -76,25 +78,8 @@ export default function App() {
   };
 
   return (
-    /*
-    User Provider allows all of the following pages to access useState variables listed here in
-    App.js. 
-    
-    This is used for EndScreen.js in the following way:
-
-      - It requires the 'userCompletedInitialPages' variable to keep track of when the user 
-        completed the initial questionarre/setup. Upon completing it, the user is redirected 
-        to main dashboard.
-
-    This may not be necessary (app still functions without it), though future issues may come up
-    in terms of storing/fetching user questionarre data. Need to ensure all the data the user inputs
-    from the questionarre is uploaded to backend database after clicking 'Next' on every page.
-      - Upon 'Next' button click, it fires a POST request to the server to store data in database.
-        (ensures no potential data loss)
-      
-    */
     <UserProvider>
-      {/* Nav stack below */}
+ 
     <NavigationContainer> 
       {!userCompletedInitialPages ? (
         <Stack.Navigator 
@@ -122,6 +107,8 @@ export default function App() {
           <Stack.Screen name="FitnessGoal" component={FitnessGoal} />
           <Stack.Screen name="Exercise" component={ExerciseList} />
           <Stack.Screen name="WorkoutPlan" component={ViewPlan} />
+          <Stack.Screen name="FoodLog" component={FoodLog} />
+     
 
           
           {/* Passing in the 'handleUserCompletion' function is causing warning for non-serializable data */}
