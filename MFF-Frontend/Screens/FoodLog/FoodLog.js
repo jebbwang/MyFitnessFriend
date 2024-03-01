@@ -1,40 +1,78 @@
 import React, { useState } from 'react';
-import { Alert, Modal, View, Text, TextInput, Pressable, StyleSheet, ScrollView, FlatList } from 'react-native';
+import { Alert, Modal, 
+  View, Text, TextInput,
+   Pressable, StyleSheet, 
+   ScrollView, FlatList } 
+from 'react-native';
+
+
+// API CALL, returns an array of nutrional data
+const fetchNutritionInfo = async (foodItem) => {
+  try {
+    const response = await fetch(
+      'https://api.api-ninjas.com/v1/nutrition?query=' + foodItem,
+      {
+        method: 'GET',
+        headers: {
+          'X-Api-Key':"50Y/9uaDfwp9o6fY4IBaPA==1gCstnMSO4fTY7QJ"
+        }
+      }
+    );
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    return data; 
+  } catch (error) {
+    console.error(error);
+    return null; 
+}
+};
 
 function FoodLog() {
   const [modalVisible, setModalVisible] = useState(false);
   const [mealName, setMealName] = useState('');
   const [mealDetails, setMealDetails] = useState(['']); 
+
   // meals is an array of {mealName, mealDetails} objects
   const [meals, setMeals] = useState([]); 
 
   const addMealDetail = () => {
     setMealDetails([...mealDetails, '']);
   };
-
+  // add button calls this function
   const updateMealDetail = (index, value) => {
     const updatedDetails = [...mealDetails];
     updatedDetails[index] = value;
     setMealDetails(updatedDetails);
   };
-
+  // remove button calls this function
   const removeMealDetail = (index) => {
     const updatedDetails = mealDetails.filter((_, detailIndex) => detailIndex !== index);
     setMealDetails(updatedDetails);
   };
 
-  const finalizeMeal = () => {
+  // function is called when user clicks "done" on modal
+  const finalizeMeal = async () => {
     if (!mealName.trim() || mealDetails.every(detail => !detail.trim())) {
-      Alert.alert(
-        "Invalid Meal",
-        "Please make sure the meal has a name and at least one ingredient."
-      );
-    } else {
-      setMeals([...meals, { mealName, mealDetails: mealDetails.filter(detail => detail.trim()) }]);
-      setMealName('');
-      setMealDetails(['']);
-      setModalVisible(!modalVisible);
+      Alert.alert("Invalid Meal", "Please make sure the meal has a name and at least one ingredient.");
+      return;
     }
+  
+    const processedDetails = [];
+  
+    // for each mealDetail in meal, call API 
+    for (const detail of mealDetails.filter(detail => detail.trim())) {
+      const nutritionData = await fetchNutritionInfo(detail);
+      processedDetails.push(nutritionData ? { detail, nutritionData } : { detail, error: "Error fetching nutrition data" });
+    }
+  
+    setMeals(currentMeals => [...currentMeals, { mealName, mealDetails: processedDetails }]);
+    //console.log(processedDetails)
+    // Reset the form fields
+    setMealName('');
+    setMealDetails(['']);
+    setModalVisible(false); 
   };
 
   return (
@@ -66,16 +104,16 @@ function FoodLog() {
               style={styles.closeButton} 
               onPress={() => setModalVisible(!modalVisible)}
             >
-              <Text style={styles.closeButtonText}>X</Text>
+            <Text style={styles.closeButtonText}>X</Text>
           </Pressable>
-            <Text style={styles.modalHeader}>Meal Name</Text>
-            <TextInput
-              style={[styles.input, styles.inputRound]}
-              onChangeText={setMealName}
-              value={mealName}
-              placeholder="Meal Name"
-            />
-            <Text style={styles.modalHeader}>Meal ingredients</Text>
+          <Text style={styles.modalHeader}>Meal Name</Text>
+          <TextInput
+            style={[styles.input, styles.inputRound]}
+            onChangeText={setMealName}
+            value={mealName}
+            placeholder="Meal Name"
+          />
+          <Text style={styles.modalHeader}>Meal ingredients</Text>
             {mealDetails.map((detail, index) => (
               <View key={index} style={styles.detailInputContainer}>
                 {/* remove button */}
@@ -95,18 +133,18 @@ function FoodLog() {
                   </Pressable>
                 )}
               </View>
-            ))}
+          ))}
 
-            {/* user is done with creating meal */}
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={finalizeMeal}
-            >
-              <Text style={styles.textStyle}>Done</Text>
-            </Pressable>
-          </ScrollView>
-        </View>
-      </Modal>
+          {/* user is done with creating meal */}
+          <Pressable
+            style={[styles.button, styles.buttonClose]}
+            onPress={finalizeMeal}
+          >
+            <Text style={styles.textStyle}>Done</Text>
+          </Pressable>
+        </ScrollView>
+      </View>
+    </Modal>
       {/* Displaying all meals */}
       <FlatList
         data={meals}
@@ -114,15 +152,31 @@ function FoodLog() {
         renderItem={({ item }) => (
           <View style={styles.mealItem}>
             <Text style={styles.mealName}>{item.mealName}</Text>
-            <View style={styles.mealDetailContainer}>
-              {item.mealDetails.map((detail, index) => (
-                <Text key={index} style={styles.mealDetail}>{detail}</Text>
-              ))}
-            </View>
-          </View>
-        )}
-      />
-    </View>
+            {item.mealDetails.map((mealDetail, index) => (
+              <View key={index} style={styles.mealDetailContainer}>
+                <Text style={styles.foodItem}>{mealDetail.detail}</Text>
+                {/* display nutrition data for each foodItem */}
+                {mealDetail.nutritionData && (
+                  <>
+                  <Text style={styles.mealDetail}>
+                    Calories: {mealDetail.nutritionData[0].calories ? mealDetail.nutritionData[0].calories : 'N/A'}
+                  </Text>
+                  <Text style={styles.mealDetail}>
+                  Protein: {mealDetail.nutritionData[0].protein_g ? mealDetail.nutritionData[0].protein_g + "g": 'N/A'}
+                  </Text>
+                  <Text style={styles.mealDetail}>
+                  Carbohydrates: {mealDetail.nutritionData[0].carbohydrates_total_g ? mealDetail.nutritionData[0].carbohydrates_total_g + "g": 'N/A'}
+                  </Text>
+                  
+                </>
+                )}
+              </View>
+          ))}
+        </View>
+  )}
+/>
+
+  </View>
   );
 }
 
@@ -239,6 +293,14 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 24,
     fontWeight: 'bold',
+    
+  },
+  foodItem: {
+    mealDetail: {
+      color: '#555',
+      fontSize: 18,
+      fontWeight: "bold",
+    },
   },
   mealItem: {
     marginTop: 10,
