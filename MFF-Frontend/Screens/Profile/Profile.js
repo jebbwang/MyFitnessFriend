@@ -7,15 +7,15 @@ const Profile = () => {
   const { userId } = useUserContext();
 
   const [userInfo, setUserInfo] = useState({
-    firstName: 'Henry',
-    lastName: 'Reyes',
-    email: 'user1@gmail.com',
-    weight: '145',
-    height: '170',
-    fitnessGoal: 'maintain',
-    dateOfBirth: '1990-01-01', 
-    weightType: 'lbs',
-    heightType: 'cm',
+    firstName: '',
+    lastName: '',
+    email: '',
+    weight: '',
+    height: '',
+    fitnessGoal: '',
+    dateOfBirth: '', 
+    weightType: '',
+    heightType: '',
   });
 
   useEffect(() => {
