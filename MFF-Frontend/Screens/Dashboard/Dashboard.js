@@ -13,7 +13,7 @@ import { ScrollView,
 
 
  import CircularProgress from 'react-native-circular-progress-indicator';
-import LogCard from './components/FoodLogCard/logCard';
+import LogCard from './components/FoodLogCard/logCard.js';
 
  import { useUserContext } from '../../components/UserContext/UserContext';
  import { supabase } from '../../supabase.js';
@@ -91,7 +91,7 @@ const DashboardNutrition = ({  }) => {
       ["current"]: prevState.current + parseInt(value, 10),
     }));
   };
-  };
+  // };
 
   // useEffect runs once the component is mounted aka when the page is first loaded, anything after that happens outside of this function
   // Fetch the water intake data from the UserWaterIntake table in the Supabase database
@@ -210,6 +210,7 @@ const Dashboard = ({  }) => {
   const options = ['Rarely', 'Sometimes', 'Frequently', 'Everyday'];
   return (
     <View style={styles.container}>
+      <View style={{height: 700}}>
         <ScrollView 
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
@@ -220,7 +221,7 @@ const Dashboard = ({  }) => {
 
           <DashboardNutrition />
       </ScrollView>
-
+      </View>
     </View>
   );
 };

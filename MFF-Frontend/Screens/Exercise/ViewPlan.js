@@ -132,7 +132,7 @@ function ViewPlan() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:'#07203A',
+    backgroundColor:'#1A2633',
   },
   scrollView: {
     margin: 10,
@@ -140,8 +140,10 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 40,
     color: "#fff",
-    fontWeight: "bold",
-    marginVertical: 20,
+    fontWeight: "800",
+    marginLeft: 10,
+    marginBottom: 20,
+    // marginVertical: 20,
   },
   dayContainer: {
     marginBottom: 20,
