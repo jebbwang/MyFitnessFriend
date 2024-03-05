@@ -13,7 +13,7 @@ import { ScrollView,
 
 
  import CircularProgress from 'react-native-circular-progress-indicator';
-import LogCard from './components/FoodLogCard/logCard.js';
+import LogCard from './components/FoodLogCard/logCard';
 
  import { useUserContext } from '../../components/UserContext/UserContext';
  import { supabase } from '../../supabase.js';
@@ -30,7 +30,7 @@ import LogCard from './components/FoodLogCard/logCard.js';
   exerciseInfo: {
     type: 'min',
     recommended: 45,
-    current: 15
+    current: 0
   },
   waterInfo: {
     dailyGoalType: 'ounces',
@@ -43,6 +43,12 @@ import LogCard from './components/FoodLogCard/logCard.js';
 
 
 const DashboardNutrition = ({  }) => {
+  const [workoutPlanItems, setWorkoutPlanItems] = useState([]);
+  const [completedWorkouts, setCompletedWorkouts] = useState(new Array(workoutPlanItems.length).fill(0))
+
+  handleSetCompletedWorkouts = ( updatedList ) => {
+    setCompletedWorkouts(updatedList)
+  }
 
   const { userId } = useUserContext();
 
@@ -54,6 +60,17 @@ const DashboardNutrition = ({  }) => {
     inActiveStrokeOpacity: 0.2
   };
 
+  const handleSetWorkoutPlanItems = (newWorkout) => {
+    setWorkoutPlanItems([...workoutPlanItems, newWorkout]);
+    console.log(workoutPlanItems);
+  }
+
+  const removeItemFromList = (itemToRemove) => {
+    // Use the filter method to create a new array without the item to remove
+    const updatedItems = workoutPlanItems.filter(item => item !== itemToRemove);
+    setWorkoutPlanItems(updatedItems);
+  };
+
   // TODO: add the rest of the data for the page as useStates (exerciseInfo, caloricInfo)
   const [waterIntakeInfo, setWaterIntakeInfo] = useState({
     dailyGoalType: 'gallon',
@@ -61,6 +78,22 @@ const DashboardNutrition = ({  }) => {
     currentType: 'oz',
     current: 0
   });
+
+  const [exerciseInfo, setExerciseInfo] = useState({
+    dailyGoalType: 'min',
+    dailyGoal: 60,
+    currentType: 'min',
+    current: 0
+  });
+
+  const updateExerciseInfo = (value) => {
+    setExerciseInfo((prevState) => ({
+      ...prevState,
+      ["current"]: parseInt(value, 10),
+    }));
+
+    // updateWaterIntakeInTable(value);
+  };
 
 
   const updateWaterIntake = (value) => {
@@ -91,6 +124,8 @@ const DashboardNutrition = ({  }) => {
       ["current"]: prevState.current + parseInt(value, 10),
     }));
   };
+  
+  //
   // };
 
   // useEffect runs once the component is mounted aka when the page is first loaded, anything after that happens outside of this function
@@ -196,7 +231,7 @@ const DashboardNutrition = ({  }) => {
 
     </View>
 
-    <ExerciseCard/>
+    <ExerciseCard items={workoutPlanItems} handleAddItems={handleSetWorkoutPlanItems} handleRemove={removeItemFromList} completedWorkouts={completedWorkouts} handleSetCompletedWorkouts={handleSetCompletedWorkouts}/>
     <LogCard />
     <WaterIntakeCard waterInfo={waterIntakeInfo} setWaterInfo={setWaterIntakeInfo} updateWaterIntake={updateWaterIntake}/>
     <NextWorkoutCard/>

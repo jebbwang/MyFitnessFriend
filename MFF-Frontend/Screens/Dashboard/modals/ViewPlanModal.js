@@ -13,125 +13,35 @@ import { ScrollView, Modal,
 
 //  import Modal from "react-native-modal";
 
-import waterIntakepng from '../../../../assets/waterIntakeLogo.png';
-import addIcon from '../../../../assets/addIcon.png';
+
+import ViewPlan from '../../Exercise/ViewPlan';
 
 
-const ViewPlanModal = ({ waterInfo, setWaterInfo, updateWaterIntake }) => {
-    // UseStates
+const ViewPlanModal = ({ items, completedWorkouts, handleSetCompletedWorkouts }) => {
     const [modalVisible, setModalVisible] = useState(false);
-    const [inputValue, setInputValue] = useState('')
-    const [selectedWaterUnit, setSelectedWaterUnit] = React.useState("");
-    const [waterGoalAchieved, setWaterGoalAchieved] = useState(false)
-    const ozInGallon = 128
 
-    // Handlers
-    const handleUserInputChange = (text) => {
-        setInputValue(text);
-      };
-
-    const handleAddButtonClick = () => {
+    const handleClose = () => {
         setModalVisible(!modalVisible)
-
-        const numericValueInput = parseInt(inputValue, 10);
-        const waterCurrValue = parseInt(waterInfo.current, 10);
-        let newWaterIntake = 0;
-
-        // TODO: idea here is to convert every inputValue into the equivalent amount in OUNCES (regardless of what unit the user chose)
-        if (selectedWaterUnit == 'Cup(s)') {
-            newWaterIntake = (numericValueInput * 8); // 8 oz per cup
-        }
-        else if (selectedWaterUnit == 'Liter(s)') {
-            newWaterIntake = (numericValueInput * 33.814); // 33.814 oz per liter
-        }
-        else if (selectedWaterUnit == 'Gallon(s)') {
-            newWaterIntake = (numericValueInput * 128); // 33.814 oz per liter
-        }
-        else {
-            newWaterIntake = numericValueInput; // default to ounces
-        }
-
-        if ((newWaterIntake >= waterInfo.dailyGoal * ozInGallon) && !(waterGoalAchieved)) {
-            setWaterGoalAchieved(true)
-            showMessage({
-            message: "Congrats! You achieved your daily water intake!",
-            type: "success",
-          });
-        }
-
-        updateWaterIntake(newWaterIntake);
-    };
-
-  
-    const waterInfoTypeOptions = [
-        {key:'1', value:'Ounce(s)'},
-        {key:'2', value:'Cup(s)'},
-        {key:'3', value:'Liter(s)'},
-        {key:'4', value:'Gallon(s)'},
-    ]
-
+    }
 
     return (
         <View>
             <Modal
                 visible={modalVisible}
                 presentationStyle='pageSheet'
+                animationType="slide"
                 style={styles.modalContainer}
+                statusBarTranslucent={true}
                 >
                 <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-
-                    <View style={styles.card}>
-                        <Text style={styles.modalText}>Log Water Intake</Text>
-
-                        <View style={{flexDirection: 'row', alignSelf: 'flex-start', width: 220, zIndex: 1}}>
-                            <TextInput
-                                // ref={waterIntake}
-                                placeholder={'Enter amount'}
-                                // placeholderTextColor={"white"}
-                                keyboardType="numeric"
-                                // value={0}
-                                onChangeText={handleUserInputChange}
-                                style={styles.input}
-                                // onFocus={() => setFocusedField(fieldName)}
-                                // onBlur={() => setFocusedField(null)}
-                            />
-                            <SelectList 
-                                setSelected={(val) => setSelectedWaterUnit(val)} 
-                                data={waterInfoTypeOptions} 
-                                save="value"
-                                style={styles.dropdownComponent}
-                                boxStyles={styles.dropdown}
-                                inputStyles={styles.dropdownText}
-                                dropdownStyles={{backgroundColor: '#273646', borderWidth: 2}}
-                                dropdownTextStyles={styles.dropdownText}
-                            />
-                        </View>
-
-                        <View style={{flexDirection: 'row', alignSelf: 'flex-end', position: 'absolute', bottom: 20, right: 20}}>
-                            <TouchableOpacity
-                                style={[styles.button, styles.buttonClose, {marginRight: 5, backgroundColor: '#90999e'}]}
-                                onPress={() => setModalVisible(!modalVisible)}>
-                                <Text style={styles.textStyle}>Cancel</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={handleAddButtonClick}>
-                                <Text style={[styles.textStyle]}>
-                                    Add
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                    
-                </View>
-                </View>
+                    <ViewPlan handleClose={handleClose} newItems={items} completedWorkouts={completedWorkouts} handleSetCompletedWorkouts={handleSetCompletedWorkouts}/>
+                </View> 
             </Modal>
             <TouchableOpacity
-                style={[styles.button, styles.buttonClose]}
+                style={[styles.viewPlanButton, styles.buttonClose]}
                 onPress={() => setModalVisible(true)}>
-                <Text style={[styles.textStyle]}>
-                    View Plan
+                <Text style={[styles.viewPlanText]}>
+                    View Current Plan
                 </Text>
             </TouchableOpacity>
         </View>
@@ -254,7 +164,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 22,
+        paddingTop: 22,
+        backgroundColor: '#273646'
       },
       modalView: {
         borderRadius: 20,
@@ -284,5 +195,22 @@ const styles = StyleSheet.create({
         fontWeight: "800",
         marginBottom: 15,
         alignSelf: 'flex-start',
+      },
+      viewPlanText: {
+        color: '#fff',
+        fontSize: 14,
+        fontWeight: "bold",
+        padding: 5,
+      },
+      viewPlanButton: {
+        backgroundColor: '#3E89E1',
+        height: 40,
+        width: 170,
+        paddingVertical: 8,
+        paddingHorizontal: 16,
+        borderRadius: 20,
+        // marginTop: 25,
+        alignSelf: 'center',
+    
       },
 })

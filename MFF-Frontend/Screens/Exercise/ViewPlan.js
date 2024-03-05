@@ -1,29 +1,33 @@
 import React from 'react';
 import { useState } from 'react';
-import { SafeAreaView, ScrollView,FlatList, View, Text, StyleSheet, Pressable } from 'react-native';
+import { SafeAreaView, ScrollView,FlatList, View, Text, StyleSheet, Pressable, TouchableOpacity } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 
 import ListItem from '../Recommendations/RecommendationListItem';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-function ViewPlan() {
+const ViewPlan = ({ handleClose, newItems, handleAddItems, 
+  // completedWorkouts, handleSetCompletedWorkouts 
+}) => {
+  const [completedWorkouts, setCompletedWorkouts] = useState(new Array(newItems.length).fill(0))
+
   // testing data
   const [items, setItems] = useState([
     {
       id: '1',
-      date: 'February 11, 2024',
-      workout: ['Strength #1', 'Strength #2', 'Cardio #1', 'Strength #3'],
-      completed: [1, 0, 0, 1]
-    },
+      date: 'Today', 
+      workout: newItems,
+      completed: completedWorkouts
+    }, 
+    // The rest of the items in this array are fake 'previous days' for testing purposes  
     {
-      
       id: '2',
       date: 'February 10, 2024',
       workout: ['Cardio #1', 'Strength #1', 'Cardio #2', 'Strength #2'],
       completed: [1, 0, 0, 0]
     },
     {
-      id: '3',
+      id: '3', 
       date: 'February 9, 2024',
       workout: ['Cardio #1', 'Strength #1', 'Cardio #2', 'Strength #2'],
       completed: [1, 1, 1, 0]
@@ -63,7 +67,11 @@ function ViewPlan() {
       if (item.id === id && index === 0) { 
         let newCompleted = [...item.completed];
         newCompleted[workoutIndex] = newCompleted[workoutIndex] === 0 ? 1 : 0;
-        return { ...item, completed: newCompleted };
+        let updated = { ...item, completed: newCompleted }
+        setCompletedWorkouts(updated)
+        handleSetCompletedWorkouts(completedWorkouts)
+        console.log(completedWorkouts)
+        return updated;
       }
       return item;
     }));
@@ -83,7 +91,7 @@ function ViewPlan() {
           </View>
         </Pressable>
         <Collapsible collapsed={isCollapsed}>
-          {workouts.map((workout, exerciseIndex) => (
+          {workouts && workouts.map((workout, exerciseIndex) => (
             <ListItem
               key={exerciseIndex}
               text={workout}
@@ -93,6 +101,7 @@ function ViewPlan() {
             />
           ))}
         </Collapsible>
+       
       </View>
     );
   };
@@ -123,6 +132,9 @@ function ViewPlan() {
           keyExtractor={(item) => item.id}
           ItemSeparatorComponent={ItemSeparator}
         />
+        <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
+          <Text style={styles.viewPlanText }>Close</Text>
+        </TouchableOpacity>
       </GestureHandlerRootView>
     </SafeAreaView>
   );
@@ -133,6 +145,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor:'#1A2633',
+    width: 400,
+    // padding: 200
+    // marginTop: 20,
+    // height: 800,
   },
   scrollView: {
     margin: 10,
@@ -185,6 +201,23 @@ const styles = StyleSheet.create({
   workoutText: {
     fontSize: 16,
     color: '#fff', 
+  },
+  closeButton: {
+    backgroundColor: 'gray',
+    height: 40,
+    width: 'auto',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    // marginTop: 25,
+    alignSelf: 'center',
+
+  },
+  viewPlanText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: "bold",
+    padding: 5,
   },
 });
 

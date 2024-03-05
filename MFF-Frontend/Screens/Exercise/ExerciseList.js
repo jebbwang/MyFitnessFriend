@@ -7,10 +7,11 @@ import levenshtein from 'fast-levenshtein'
 import { SelectList } from 'react-native-dropdown-select-list'
 import RNPickerSelect from 'react-native-picker-select';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import ViewPlanModal from '../Dashboard/modals/ViewPlanModal';
 
 
 
-const ExerciseList = ({ handleClose, navigation }) => {
+const ExerciseList = ({ handleClose, items, handleAddItems, handleRemove, completedWorkouts, handleSetCompletedWorkouts }) => {
     const [muscle, setMuscle] = useState('');
     const [closestMuscle, setClosestMuscle] = useState('')
     const [exercises, setExercises] = useState([]);
@@ -51,8 +52,6 @@ const ExerciseList = ({ handleClose, navigation }) => {
       { label: 'Intermediate', value: 'intermediate' },
       { label: 'Expert', value: 'expert' },
     ];
-  
-
 
     const viewPlan = () => {
         navigation.navigate('WorkoutPlan'); 
@@ -144,7 +143,7 @@ const ExerciseList = ({ handleClose, navigation }) => {
                   items={difficultyTypes}
                   placeholder={{label: 'Select Difficulty', value: 'select_muscle'}}
                   textInputProps={{color: 'white', textAlign: 'center', fontWeight: '700'}}
-                  
+                                                                                                                                             
               />
             </View>
         </View>
@@ -153,7 +152,7 @@ const ExerciseList = ({ handleClose, navigation }) => {
           <View style={styles.exerciseContainer}>
             
             {filteredExercises.map((exercise, index) => (
-              <WorkoutItem key={index} workout={exercise} />
+              <WorkoutItem key={index} workout={exercise} items={items} handleAddItems={handleAddItems} handleRemove={handleRemove}/>
             ))}
           </View>
         </ScrollView>
@@ -162,9 +161,10 @@ const ExerciseList = ({ handleClose, navigation }) => {
         
     </View>
     <View style={{flexDirection:'row', justifyContent:'space-around'}}>
-          <TouchableOpacity style={styles.viewPlanButton} onPress={viewPlan}>
+          <ViewPlanModal items={items} handleAddItems={handleAddItems} completedWorkouts={completedWorkouts} handleSetCompletedWorkouts={handleSetCompletedWorkouts}/>
+          {/* <TouchableOpacity style={styles.viewPlanButton} onPress={viewPlan}>
             <Text style={styles.viewPlanText }>View Current Plan</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
             <Text style={styles.viewPlanText }>Close</Text>
           </TouchableOpacity>
@@ -173,15 +173,46 @@ const ExerciseList = ({ handleClose, navigation }) => {
   );
 };
 
-const WorkoutItem = ({ workout }) => {
+const WorkoutItem = ({ workout, items, handleAddItems, handleRemove }) => {
     const { name, type, instructions, difficulty, equipment } = workout;
     const [status, setStatus] = useState('add'); 
     const [showInstructions, setShowInstructions] = useState(false);
+    const [completed, setCompleted] = useState(new Array(items.length).fill(0))
+    const [currentDate, setCurrentDate] = useState(new Date());
+    // const [selectedItems, setSelectedItems] = useState([]);
+    // const [added, setAdded] = useState(false);
+
     const buttonBackgroundColor = status === 'add' ? '#9C9C9C' : '#5DB06F'; 
 
-    const handleAdd = () => {
+    // const removeItemFromList = (itemToRemove) => {
+    //   // Use the filter method to create a new array without the item to remove
+    //   const updatedItems = selectedItems.filter(item => item !== itemToRemove);
+    //   setSelectedItems(updatedItems);
+    // };
+
+    const handleAdd = (key ) => {
         setStatus((currentStatus) => (currentStatus === 'add' ? 'check' : 'add'));
+ 
+        // const newItem = {
+        //   id: key,
+        //   date: currentDate.toLocaleString(), 
+        //   workout: items,
+        //   completed: completed
+        // }
+
+        
+        if (status === 'add') {
+          handleAddItems(name);
+        }
+        else {
+          // TODO: implement remove method when user adds workout but deselects it
+          handleRemove(name);
+        }
+        // console.log(newItem);
+        // console.log(items);
     };
+
+
     const toggleExpand = () => {
         setShowInstructions((prevExpanded) => !prevExpanded);
     };
@@ -207,7 +238,7 @@ const WorkoutItem = ({ workout }) => {
         </Pressable>
         <Pressable
             style={[styles.actionButton, { backgroundColor: buttonBackgroundColor }]}
-            onPress={handleAdd}
+            onPress={() => handleAdd(1)}
         >
             <Icon
             name={status === 'check' ? 'check' : 'add'}
