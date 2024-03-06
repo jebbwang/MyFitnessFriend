@@ -51,13 +51,15 @@ const AddModal = ({ waterInfo, setWaterInfo, updateWaterIntake }) => {
             newWaterIntake = numericValueInput; // default to ounces
         }
 
-        if ((newWaterIntake >= waterInfo.dailyGoal * ozInGallon) && !(waterGoalAchieved)) {
-            setWaterGoalAchieved(true)
-            showMessage({
-            message: "Congrats! You achieved your daily water intake!",
-            type: "success",
-          });
-        }
+        // removed this for now, will figure out how to make it work with current implementation later
+        
+        // if ((newWaterIntake >= waterInfo.dailyGoal * ozInGallon) && !(waterGoalAchieved)) {
+        //     setWaterGoalAchieved(true)
+        //     showMessage({
+        //     message: "Congrats! You achieved your daily water intake!",
+        //     type: "success",
+        //   });
+        // }
 
         updateWaterIntake(newWaterIntake);
     };
