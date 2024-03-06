@@ -91,8 +91,6 @@ const DashboardNutrition = ({  }) => {
       ["current"]: prevState.current + parseInt(value, 10),
     }));
   };
-  };
-
   // useEffect runs once the component is mounted aka when the page is first loaded, anything after that happens outside of this function
   // Fetch the water intake data from the UserWaterIntake table in the Supabase database
   useEffect(() => {
