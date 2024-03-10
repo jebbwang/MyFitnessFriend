@@ -126,7 +126,7 @@ export default function App() {
             tabBarInactiveTintColor: "white",
             tabBarStyle: {
               // marginLeft: 10,
-              paddingLeft: 15,
+              // paddingLeft: 15,
               // width: 410,
               backgroundColor: '#3E89E1', // Color of the tab bar
             },
@@ -158,7 +158,7 @@ export default function App() {
               ),
             }} 
           />
-          <Tab.Screen 
+          {/* <Tab.Screen 
             name="Workout Plan" 
             component={ViewPlan} 
             options={{ 
@@ -166,7 +166,7 @@ export default function App() {
                 <Ionicons name={focused ? "calendar" : "calendar-outline"} color={color} size={size} />
               ),
             }} 
-          />
+          /> */}
           <Tab.Screen 
             name="Profile" 
             component={Profile} 

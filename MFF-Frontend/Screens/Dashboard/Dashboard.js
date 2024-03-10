@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useState } from 'react';
 import { ScrollView,
   View, Text,
@@ -44,21 +44,27 @@ import LogCard from './components/FoodLogCard/logCard';
 
 const DashboardNutrition = ({  }) => {
   const [workoutPlanItems, setWorkoutPlanItems] = useState([]);
-  const [completedWorkouts, setCompletedWorkouts] = useState(new Array(workoutPlanItems.length).fill(0))
+  const workoutArraySize = 25
+  const [completedWorkouts, setCompletedWorkouts] = useState(new Array(workoutArraySize).fill(0)) // length was previously workoutPlanItems.length but dynamic data costed a lot of speed, switched to static max
 
-  handleSetCompletedWorkouts = ( updatedList ) => {
-    setCompletedWorkouts(updatedList)
-  }
-
+  // -- CONSTANT VARS --
   const { userId } = useUserContext();
 
   const ozInGallon = 128
+  const minInHour = 60
+
+  // -------------------
 
   const props = {
     activeStrokeWidth: 20,
     inActiveStrokeWidth: 20,
     inActiveStrokeOpacity: 0.2
   };
+
+  handleSetCompletedWorkouts = ( updatedList ) => {
+    setCompletedWorkouts(updatedList)
+    console.log(completedWorkouts)
+  }
 
   const handleSetWorkoutPlanItems = (newWorkout) => {
     setWorkoutPlanItems([...workoutPlanItems, newWorkout]);
@@ -80,8 +86,8 @@ const DashboardNutrition = ({  }) => {
   });
 
   const [exerciseInfo, setExerciseInfo] = useState({
-    dailyGoalType: 'min',
-    dailyGoal: 60,
+    dailyGoalType: 'hour',
+    dailyGoal: 1,
     currentType: 'min',
     current: 0
   });
@@ -92,7 +98,7 @@ const DashboardNutrition = ({  }) => {
       ["current"]: parseInt(value, 10),
     }));
 
-    // updateWaterIntakeInTable(value);
+    // TODO: update exerciseinfo table;
   };
 
 
@@ -192,7 +198,7 @@ const DashboardNutrition = ({  }) => {
           <View style={{marginHorizontal: 5}}>
             <CircularProgress
               {...props}
-              value={waterIntakeInfo.current < ozInGallon ? (waterIntakeInfo.current / (parseInt(waterIntakeInfo.dailyGoal, 10) * ozInGallon) * 100) : 100}
+              value={waterIntakeInfo.current < ozInGallon ? (waterIntakeInfo.current / (parseInt(waterIntakeInfo.dailyGoal, 10) * 128) * 100) : 100}
               radius={50}
               activeStrokeColor={'#3E89E1'}
               inActiveStrokeColor={'#3E89E0'}
@@ -210,7 +216,7 @@ const DashboardNutrition = ({  }) => {
           <View style={{marginHorizontal: 5}}>
             <CircularProgress
               {...props}
-              value={(dashboardFakeData.exerciseInfo.current / dashboardFakeData.exerciseInfo.recommended) * 100}
+              value={exerciseInfo.current < minInHour ? (exerciseInfo.current / (parseInt(exerciseInfo.dailyGoal, 10) * minInHour) * 100) : 100}
               radius={50}
               activeStrokeColor={'#26A341'}
               inActiveStrokeColor={'#26A340'}
@@ -220,7 +226,7 @@ const DashboardNutrition = ({  }) => {
                 Exercise
               </Text>
               <Text style={[styles.sampleDataProgressText, {color: '#26A341'}]}>
-                {dashboardFakeData.exerciseInfo.current} / {dashboardFakeData.exerciseInfo.recommended} {dashboardFakeData.exerciseInfo.type === 'min' ? 'min' : 'hr'} 
+              {exerciseInfo.current} / {parseInt(exerciseInfo.dailyGoal, 10) * minInHour} min
               </Text>
             </View>
 
@@ -231,10 +237,10 @@ const DashboardNutrition = ({  }) => {
 
     </View>
 
-    <ExerciseCard items={workoutPlanItems} handleAddItems={handleSetWorkoutPlanItems} handleRemove={removeItemFromList} completedWorkouts={completedWorkouts} handleSetCompletedWorkouts={handleSetCompletedWorkouts}/>
+    <ExerciseCard items={workoutPlanItems} exerciseInfo={exerciseInfo} updateExerciseInfo={updateExerciseInfo}  handleAddItems={handleSetWorkoutPlanItems} handleRemove={removeItemFromList} completedWorkouts={completedWorkouts} handleSetCompletedWorkouts={handleSetCompletedWorkouts}/>
     <LogCard />
     <WaterIntakeCard waterInfo={waterIntakeInfo} setWaterInfo={setWaterIntakeInfo} updateWaterIntake={updateWaterIntake}/>
-    <NextWorkoutCard/>
+    <NextWorkoutCard items={workoutPlanItems} exerciseInfo={exerciseInfo} updateExerciseInfo={updateExerciseInfo} handleAddItems={handleSetWorkoutPlanItems} handleRemove={removeItemFromList} completedWorkouts={completedWorkouts} handleSetCompletedWorkouts={handleSetCompletedWorkouts}/>
 
   </View>
   );
@@ -242,7 +248,30 @@ const DashboardNutrition = ({  }) => {
 
 
 const Dashboard = ({  }) => {
-  const options = ['Rarely', 'Sometimes', 'Frequently', 'Everyday'];
+  const { userId } = useUserContext();
+
+  const [userFirstName, setUserFirstName] = useState('');
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const { data, error } = await supabase
+        .from('User')
+        .select('*')
+        .eq('authUserID', userId)
+        .single();
+
+      if (data) {
+        setUserFirstName(data.firstName);
+      } else {
+        console.error(error);
+      }
+    };
+
+    fetchUserData();
+  }, [userId]);
+
+
+  
   return (
     <View style={styles.container}>
       <View style={{height: 700}}>
@@ -251,7 +280,7 @@ const Dashboard = ({  }) => {
           contentContainerStyle={styles.scrollContent}
         >
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>Welcome Back, {dashboardFakeData.name.first}!</Text>
+            <Text style={styles.title}>Welcome Back, {userFirstName}!</Text>
           </View>
 
           <DashboardNutrition />
@@ -267,7 +296,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#1A2633",
     // paddingTop: 60,
-    justifyContent: 'center',
+    justifyContent: 'center', 
     // alignItems: 'center'
 
   },

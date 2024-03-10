@@ -16,7 +16,7 @@ import exerciseCardpng from '../../../../assets/exerciseCard.png';
 import ExerciseListModal from '../../modals/ExerciseListModal';
 
 
-const ExerciseCard = ({ items, handleAddItems, handleRemove, completedWorkouts, handleSetCompletedWorkouts }) => {
+const ExerciseCard = ({ items, handleAddItems, handleRemove, completedWorkouts, handleSetCompletedWorkouts, exerciseInfo, updateExerciseInfo }) => {
     const [muscle, setMuscle] = useState('');
 
     const handleSearch = () => {
@@ -26,7 +26,7 @@ const ExerciseCard = ({ items, handleAddItems, handleRemove, completedWorkouts, 
     return (
       <View style={styles.exerciseCard}>
         <Image source={exerciseCardpng} style={styles.exerciseCardImage}></Image>
-        <ExerciseListModal items={items} handleAddItems={handleAddItems} handleRemove={handleRemove} completedWorkouts={completedWorkouts} handleSetCompletedWorkouts={handleSetCompletedWorkouts}/>
+        <ExerciseListModal items={items} exerciseInfo={exerciseInfo} updateExerciseInfo={updateExerciseInfo} handleAddItems={handleAddItems} handleRemove={handleRemove} completedWorkouts={completedWorkouts} handleSetCompletedWorkouts={handleSetCompletedWorkouts}/>
 
         {/* <View style={{width: 250, backgroundColor: '#596470', marginLeft: 15, height: 40, borderRadius: 20}}>
             <View style={styles.searchBar}>

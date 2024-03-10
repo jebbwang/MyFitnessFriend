@@ -17,7 +17,7 @@ import { ScrollView, Modal,
 import ViewPlan from '../../Exercise/ViewPlan';
 
 
-const ViewPlanModal = ({ items, completedWorkouts, handleSetCompletedWorkouts }) => {
+const ViewPlanModal = ({ items, exerciseInfo, updateExerciseInfo, completedWorkouts, handleSetCompletedWorkouts }) => {
     const [modalVisible, setModalVisible] = useState(false);
 
     const handleClose = () => {
@@ -34,7 +34,7 @@ const ViewPlanModal = ({ items, completedWorkouts, handleSetCompletedWorkouts })
                 statusBarTranslucent={true}
                 >
                 <View style={styles.centeredView}>
-                    <ViewPlan handleClose={handleClose} newItems={items} completedWorkouts={completedWorkouts} handleSetCompletedWorkouts={handleSetCompletedWorkouts}/>
+                    <ViewPlan handleClose={handleClose} newItems={items} exerciseInfo={exerciseInfo} updateExerciseInfo={updateExerciseInfo} completedWorkouts={completedWorkouts} handleSetCompletedWorkouts={handleSetCompletedWorkouts}/>
                 </View> 
             </Modal>
             <TouchableOpacity
@@ -50,36 +50,7 @@ const ViewPlanModal = ({ items, completedWorkouts, handleSetCompletedWorkouts })
 
 export default ViewPlanModal;
 
-// const WaterIntakeCard = ({ waterInfo, setWaterInfo, updateWaterIntake }) => {
 
-//     return (
-//     <>
-//       <View style={styles.waterIntakeCard}>
-
-//         <Image source={waterIntakepng} style={styles.waterIntakeCardImage}></Image>
-
-//         <View style={styles.waterIntakeInfoContainer}>
-//             <View style={styles.waterIntakeInfo}>
-//                 <Text style={styles.waterIntakeInfoText}>Current</Text>
-//                 <Text style={styles.waterIntakeInfoSubText}>{waterInfo.current} {waterInfo.currentType}</Text>
-//             </View>
-//             <View style={styles.waterIntakeInfo}>
-//                 <Text style={styles.waterIntakeInfoText}>Daily Goal</Text>
-//                 <Text style={styles.waterIntakeInfoSubText}>{waterInfo.dailyGoal} {waterInfo.dailyGoalType}</Text>
-//             </View>
-//             <View style={styles.waterIntakeInfo}>
-//                 <AddModal waterInfo={waterInfo} setWaterInfo={setWaterInfo} updateWaterIntake={updateWaterIntake}/>
-                
-//             </View>
-
-//         </View>
-        
-//       </View>
-//     </>
-//     );
-//   };
-
-// export default WaterIntakeCard;
 
 const styles = StyleSheet.create({
     card: {

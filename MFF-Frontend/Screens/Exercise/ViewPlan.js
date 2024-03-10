@@ -3,15 +3,29 @@ import { useState } from 'react';
 import { SafeAreaView, ScrollView,FlatList, View, Text, StyleSheet, Pressable, TouchableOpacity } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 
+import Modal from "react-native-modal";
+
 import ListItem from '../Recommendations/RecommendationListItem';
+import ExerciseTimeCard from '../Dashboard/components/ExerciseTimeCard/exerciseTimeCard';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-const ViewPlan = ({ handleClose, newItems, handleAddItems, 
-  // completedWorkouts, handleSetCompletedWorkouts 
+const ViewPlan = ({ handleClose, newItems, handleAddItems, exerciseInfo, updateExerciseInfo,
+  completedWorkouts, handleSetCompletedWorkouts // these refer to the total completedWorkouts -> connected to dashboard via NextWorkoutComponent
 }) => {
-  const [completedWorkouts, setCompletedWorkouts] = useState(new Array(newItems.length).fill(0))
+  // UseStates
+  // const [modalVisible, setModalVisible] = useState(false);
+  const [exerciseModalVisible, setExerciseModalVisible] = useState(false);
 
-  // testing data
+  const updateExerciseModalVisibility = () => {
+    setExerciseModalVisible(!exerciseModalVisible)
+  }
+
+
+  // This tracks which workouts the user just checked as compeleted (THIS IS NOW STATIC)
+  const workoutArraySize = 25
+  const [currentCompletedWorkouts, setCurrentCompletedWorkouts] = useState(new Array(workoutArraySize).fill(0))
+
+
   const [items, setItems] = useState([
     {
       id: '1',
@@ -19,13 +33,15 @@ const ViewPlan = ({ handleClose, newItems, handleAddItems,
       workout: newItems,
       completed: completedWorkouts
     }, 
+
     // The rest of the items in this array are fake 'previous days' for testing purposes  
+    // can be replaced with actual data from previous days (don't think we'll have enough data in time for Final PR)
     {
       id: '2',
       date: 'February 10, 2024',
       workout: ['Cardio #1', 'Strength #1', 'Cardio #2', 'Strength #2'],
-      completed: [1, 0, 0, 0]
-    },
+      completed: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    }, 
     {
       id: '3', 
       date: 'February 9, 2024',
@@ -40,6 +56,12 @@ const ViewPlan = ({ handleClose, newItems, handleAddItems,
     },
   ]);
 
+
+  /*
+  TODO: handleDelete is currently not fully functional
+    - Action of deleting works, but the change will not save (need to connect it to a state in the dashboard)
+  This is not yet implemented fully 
+  */
   const handleDelete = (id, workoutIndex) => {
     setItems(items.map((item, index) => {
 
@@ -47,7 +69,7 @@ const ViewPlan = ({ handleClose, newItems, handleAddItems,
       // workoutPlan is for today's 
 
       // the only plan that is editable is today's (the current)
-      if (item.id === id && index === 0) {
+      if (item.id === id && index === 0) { 
         let newWorkouts = [...item.workout];
         let newCompleted = [...item.completed];
         
@@ -68,9 +90,13 @@ const ViewPlan = ({ handleClose, newItems, handleAddItems,
         let newCompleted = [...item.completed];
         newCompleted[workoutIndex] = newCompleted[workoutIndex] === 0 ? 1 : 0;
         let updated = { ...item, completed: newCompleted }
-        setCompletedWorkouts(updated)
-        handleSetCompletedWorkouts(completedWorkouts)
-        console.log(completedWorkouts)
+
+        setCurrentCompletedWorkouts(updated.completed)
+        handleSetCompletedWorkouts(updated.completed)
+
+        setExerciseModalVisible(true) // This is the modal for a user to log how long their workout was
+
+        console.log(updated.completed)
         return updated;
       }
       return item;
@@ -112,7 +138,7 @@ const ViewPlan = ({ handleClose, newItems, handleAddItems,
       id={item.id}
       date={item.date}
       workouts={item.workout}
-      completed={item.completed}
+      completed={completedWorkouts}
       onToggleCheckbox={handleToggleCheckbox}
       onDelete={handleDelete}
       isCollapsible={index > 0}
@@ -126,12 +152,14 @@ const ViewPlan = ({ handleClose, newItems, handleAddItems,
     <SafeAreaView style={styles.container}>
       <GestureHandlerRootView style={{ flex: 1, margin: 10 }}>
         <Text style={styles.header}>Workout Plan</Text>
+        <ExerciseTimeCard exerciseInfo={exerciseInfo} updateExerciseInfo={updateExerciseInfo} modalVisible={exerciseModalVisible} updateModalVisible={updateExerciseModalVisibility}/>
         <FlatList
           data={items}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           ItemSeparatorComponent={ItemSeparator}
         />
+        
         <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
           <Text style={styles.viewPlanText }>Close</Text>
         </TouchableOpacity>

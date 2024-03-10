@@ -40,6 +40,7 @@ const AddModal = ({ waterInfo, setWaterInfo, updateWaterIntake }) => {
         // TODO: idea here is to convert every inputValue into the equivalent amount in OUNCES (regardless of what unit the user chose)
         if (selectedWaterUnit == 'Cup(s)') {
             newWaterIntake = waterCurrValue + (numericValueInput * 8); // 8 oz per cup
+            console.log(newWaterIntake)
         }
         else if (selectedWaterUnit == 'Liter(s)') {
             newWaterIntake = waterCurrValue + (numericValueInput * 33.814); // 33.814 oz per liter
@@ -49,6 +50,7 @@ const AddModal = ({ waterInfo, setWaterInfo, updateWaterIntake }) => {
         }
         else {
             newWaterIntake = waterCurrValue + numericValueInput; // default to ounces
+            console.log(newWaterIntake)
         }
 
         if ((newWaterIntake >= waterInfo.dailyGoal * ozInGallon) && !(waterGoalAchieved)) {

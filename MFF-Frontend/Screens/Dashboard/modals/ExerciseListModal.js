@@ -22,7 +22,7 @@ import { ScrollView, Modal,
 import ExerciseList from '../../Exercise/ExerciseList';
 
 
-const ExerciseListModal = ({ items, handleAddItems, handleRemove, completedWorkouts, handleSetCompletedWorkouts }) => {
+const ExerciseListModal = ({ items, exerciseInfo, updateExerciseInfo, handleAddItems, handleRemove, completedWorkouts, handleSetCompletedWorkouts }) => {
     // UseStates
     const [modalVisible, setModalVisible] = useState(false);
     const [inputValue, setInputValue] = useState('')
@@ -55,7 +55,7 @@ const ExerciseListModal = ({ items, handleAddItems, handleRemove, completedWorko
                 statusBarTranslucent={true}
                 >
                 <View style={styles.centeredView}>
-                    <ExerciseList handleClose={handleClose} items={items} handleAddItems={handleAddItems} handleRemove={handleRemove} completedWorkouts={completedWorkouts} handleSetCompletedWorkouts={handleSetCompletedWorkouts}/>
+                    <ExerciseList handleClose={handleClose} items={items} exerciseInfo={exerciseInfo} updateExerciseInfo={updateExerciseInfo} handleAddItems={handleAddItems} handleRemove={handleRemove} completedWorkouts={completedWorkouts} handleSetCompletedWorkouts={handleSetCompletedWorkouts}/>
                 </View> 
             </Modal>
             <View style={{width: 240, backgroundColor: '#26A341', marginLeft: 20, height: 40, borderRadius: 20}}>

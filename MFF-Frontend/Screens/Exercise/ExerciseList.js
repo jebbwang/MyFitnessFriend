@@ -11,7 +11,7 @@ import ViewPlanModal from '../Dashboard/modals/ViewPlanModal';
 
 
 
-const ExerciseList = ({ handleClose, items, handleAddItems, handleRemove, completedWorkouts, handleSetCompletedWorkouts }) => {
+const ExerciseList = ({ handleClose, items, exerciseInfo, updateExerciseInfo, handleAddItems, handleRemove, completedWorkouts, handleSetCompletedWorkouts }) => {
     const [muscle, setMuscle] = useState('');
     const [closestMuscle, setClosestMuscle] = useState('')
     const [exercises, setExercises] = useState([]);
@@ -161,7 +161,7 @@ const ExerciseList = ({ handleClose, items, handleAddItems, handleRemove, comple
         
     </View>
     <View style={{flexDirection:'row', justifyContent:'space-around'}}>
-          <ViewPlanModal items={items} handleAddItems={handleAddItems} completedWorkouts={completedWorkouts} handleSetCompletedWorkouts={handleSetCompletedWorkouts}/>
+          <ViewPlanModal items={items} exerciseInfo={exerciseInfo} updateExerciseInfo={updateExerciseInfo} handleAddItems={handleAddItems} completedWorkouts={completedWorkouts} handleSetCompletedWorkouts={handleSetCompletedWorkouts}/>
           {/* <TouchableOpacity style={styles.viewPlanButton} onPress={viewPlan}>
             <Text style={styles.viewPlanText }>View Current Plan</Text>
           </TouchableOpacity> */}
