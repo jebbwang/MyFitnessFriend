@@ -19,9 +19,7 @@ import addIcon from '../../../../assets/addIcon.png';
 
 const AddModal = ({ exerciseInfo, updateExerciseInfo, modalVisible, updateModalVisible }) => {
     // UseStates
-    // const [modalVisible, setModalVisible] = useState(false);
     const [inputValue, setInputValue] = useState('')
-    // const [selectedWaterUnit, setSelectedWaterUnit] = React.useState("");
     const [exerciseGoalAchieved, setExerciseGoalAchieved] = useState(false)
     const minInHour = 60
 

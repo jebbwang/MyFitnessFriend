@@ -34,23 +34,21 @@ const AddModal = ({ waterInfo, setWaterInfo, updateWaterIntake }) => {
         setModalVisible(!modalVisible)
 
         const numericValueInput = parseInt(inputValue, 10);
-        const waterCurrValue = parseInt(waterInfo.current, 10);
+        // const waterCurrValue = parseInt(waterInfo.current, 10);
         let newWaterIntake = 0;
 
         // TODO: idea here is to convert every inputValue into the equivalent amount in OUNCES (regardless of what unit the user chose)
         if (selectedWaterUnit == 'Cup(s)') {
-            newWaterIntake = waterCurrValue + (numericValueInput * 8); // 8 oz per cup
-            console.log(newWaterIntake)
+            newWaterIntake = (numericValueInput * 8); // 8 oz per cup
         }
         else if (selectedWaterUnit == 'Liter(s)') {
-            newWaterIntake = waterCurrValue + (numericValueInput * 33.814); // 33.814 oz per liter
+            newWaterIntake = (numericValueInput * 33.814); // 33.814 oz per liter
         }
         else if (selectedWaterUnit == 'Gallon(s)') {
-            newWaterIntake = waterCurrValue + (numericValueInput * 128); // 33.814 oz per liter
+            newWaterIntake = (numericValueInput * 128); // 33.814 oz per liter
         }
         else {
-            newWaterIntake = waterCurrValue + numericValueInput; // default to ounces
-            console.log(newWaterIntake)
+            newWaterIntake = numericValueInput; // default to ounces
         }
 
         if ((newWaterIntake >= waterInfo.dailyGoal * ozInGallon) && !(waterGoalAchieved)) {
@@ -89,15 +87,10 @@ const AddModal = ({ waterInfo, setWaterInfo, updateWaterIntake }) => {
 
                         <View style={{flexDirection: 'row', alignSelf: 'flex-start', width: 220, zIndex: 1}}>
                             <TextInput
-                                // ref={waterIntake}
                                 placeholder={'Enter amount'}
-                                // placeholderTextColor={"white"}
                                 keyboardType="numeric"
-                                // value={0}
                                 onChangeText={handleUserInputChange}
                                 style={styles.input}
-                                // onFocus={() => setFocusedField(fieldName)}
-                                // onBlur={() => setFocusedField(null)}
                             />
                             <SelectList 
                                 setSelected={(val) => setSelectedWaterUnit(val)} 
@@ -131,15 +124,12 @@ const AddModal = ({ waterInfo, setWaterInfo, updateWaterIntake }) => {
                 </View>
             </Modal>
             <TouchableOpacity
-                // style={[styles.button, styles.buttonOpen]}
                 onPress={() => setModalVisible(true)}>
                 <Image source={addIcon} style={{width: 25, height: 25, marginLeft: 10}} />
 
             </TouchableOpacity>
         </View>
-    //   <TouchableOpacity onPress={onPress} >
-    //     <Image source={addIcon} style={{width: 25, height: 25, marginLeft: 10}} />
-    //   </TouchableOpacity>
+
     );
   };
 
@@ -179,14 +169,9 @@ const styles = StyleSheet.create({
     card: {
         backgroundColor: '#273646',
         borderRadius: 20,
-        
-        // borderWidth: 2,
-        // borderColor: 'white',
         height: 210,
         width: 350,
         padding: 20,
-        // marginBottom: 1,
-        // marginTop: 40,
         alignItems: 'center',
     },
     modalContainer: {
@@ -194,9 +179,6 @@ const styles = StyleSheet.create({
     },
     input: {
         fontSize: 15,
-        // backgroundColor: '#83949e',
-
-        // fontWeight: '700',
         alignSelf: 'flex-start',
         height: 50,
         width: 120,
@@ -234,13 +216,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#273646',
         borderRadius: 20,
         flexDirection: 'row',
-        
-        // borderWidth: 2,
-        // borderColor: 'white',
         height: 70,
         padding: 10,
         marginBottom: 20,
-        // marginTop: 40,
         alignItems: 'center',
     },
     waterIntakeCardImage: {
@@ -250,7 +228,6 @@ const styles = StyleSheet.create({
     },
     waterIntakeInfoContainer: {
         flexDirection: 'row',
-        // marginLeft: 10,
         width: 280,
         justifyContent: 'center',
         alignItems: 'center'
@@ -276,27 +253,12 @@ const styles = StyleSheet.create({
         marginTop: 22,
       },
       modalView: {
-        // margin: 20,
-        // backgroundColor: '#1A2633',
-        // opacity: '0.7',
         borderRadius: 20,
-        // padding: 100,
-        // width: 10000,
-        // height: 10000,
         justifyContent: 'center',
         alignItems: 'center',
-        // shadowColor: '#000',
-        // shadowOffset: {
-        //   width: 0,
-        //   height: 0,
-        // },
-        // shadowOpacity: 2,
-        // shadowRadius: 100,
-        // elevation: 10,
       },
       button: {
         borderRadius: 20,
-        // marginHorizontal: 5,
         padding: 10,
         elevation: 2,
       },
