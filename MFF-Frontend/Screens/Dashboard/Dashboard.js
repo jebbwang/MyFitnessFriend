@@ -18,14 +18,20 @@ import LogCard from './components/FoodLogCard/logCard';
  import { useUserContext } from '../../components/UserContext/UserContext';
  import { supabase } from '../../supabase.js';
 
+ import DateTimePicker from '@react-native-community/datetimepicker';
+ import DateTimePickerModal from "react-native-modal-datetime-picker";
+ import { FontAwesome } from '@expo/vector-icons';
+ import moment from 'moment'; 
+
+
  const dashboardFakeData = {
   name: {
-    first: 'John',
-    last: 'Smith'
+    first: '',
+    last: ''
   },
   caloricInfo: {
     recommended: 2000,
-    current: 1800
+    current: 0
   },
   exerciseInfo: {
     type: 'min',
@@ -36,7 +42,7 @@ import LogCard from './components/FoodLogCard/logCard';
     dailyGoalType: 'ounces',
     dailyGoal: 1,
     currentType: 'ounces',
-    current: 32
+    current: 0
   }
 
 }
@@ -100,6 +106,9 @@ const DashboardNutrition = ({  }) => {
 
     // TODO: update exerciseinfo table;
   };
+  
+  // date from the time picker
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
 
   const updateWaterIntake = (value) => {
@@ -130,15 +139,11 @@ const DashboardNutrition = ({  }) => {
       ["current"]: prevState.current + parseInt(value, 10),
     }));
   };
-  
-  //
-  // };
-
   // useEffect runs once the component is mounted aka when the page is first loaded, anything after that happens outside of this function
   // Fetch the water intake data from the UserWaterIntake table in the Supabase database
   useEffect(() => {
     const fetchWaterIntake = async () => {
-      const today = new Date();
+      const today = selectedDate;
       today.setHours(0, 0, 0, 0);
       const tomorrow = new Date(today);
       tomorrow.setDate(tomorrow.getDate() + 1);
@@ -168,11 +173,45 @@ const DashboardNutrition = ({  }) => {
     };
   
     fetchWaterIntake();
-  }, []);
+  }, [selectedDate]);
+
+  const onDateChange = (selectedDate) => {
+    const currentDate = selectedDate;
+    setSelectedDate(currentDate);
+    console.log("A date has been picked: ", selectedDate);
+    hideDatePicker();
+  };
+
+  const isToday = (targetDate) => {
+    const today = new Date();
+    return targetDate.getDate() === today.getDate() &&
+      targetDate.getMonth() === today.getMonth() &&
+      targetDate.getFullYear() === today.getFullYear();
+  };
+
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
 
   return (
     <View>
-      <Text style={styles.cardTitle}>Today</Text>
+      <View style={styles.subheaderContainer}>
+        <Text style={styles.cardTitle}>{moment(selectedDate).format('MMMM D, YYYY')}</Text>
+        <FontAwesome name="calendar-o" size={25} color="white" onPress={showDatePicker}/>
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible}
+          mode="date"
+          onConfirm={onDateChange}
+          onCancel={hideDatePicker}
+          themeVariant="light"
+        />
+      </View>
     <View style={styles.card}>
           
       <View style={[styles.progressContainer, {marginTop: 10}]}>
@@ -237,10 +276,16 @@ const DashboardNutrition = ({  }) => {
 
     </View>
 
-    <ExerciseCard items={workoutPlanItems} exerciseInfo={exerciseInfo} updateExerciseInfo={updateExerciseInfo}  handleAddItems={handleSetWorkoutPlanItems} handleRemove={removeItemFromList} completedWorkouts={completedWorkouts} handleSetCompletedWorkouts={handleSetCompletedWorkouts}/>
-    <LogCard />
-    <WaterIntakeCard waterInfo={waterIntakeInfo} setWaterInfo={setWaterIntakeInfo} updateWaterIntake={updateWaterIntake}/>
-    <NextWorkoutCard items={workoutPlanItems} exerciseInfo={exerciseInfo} updateExerciseInfo={updateExerciseInfo} handleAddItems={handleSetWorkoutPlanItems} handleRemove={removeItemFromList} completedWorkouts={completedWorkouts} handleSetCompletedWorkouts={handleSetCompletedWorkouts}/>
+    
+    {isToday(selectedDate) ? (
+      <>
+        <ExerciseCard items={workoutPlanItems} exerciseInfo={exerciseInfo} updateExerciseInfo={updateExerciseInfo}  handleAddItems={handleSetWorkoutPlanItems} handleRemove={removeItemFromList} completedWorkouts={completedWorkouts} handleSetCompletedWorkouts={handleSetCompletedWorkouts}/>
+        <LogCard />
+        <WaterIntakeCard waterInfo={waterIntakeInfo} setWaterInfo={setWaterIntakeInfo} updateWaterIntake={updateWaterIntake}/>
+        <NextWorkoutCard items={workoutPlanItems} exerciseInfo={exerciseInfo} updateExerciseInfo={updateExerciseInfo} handleAddItems={handleSetWorkoutPlanItems} handleRemove={removeItemFromList} completedWorkouts={completedWorkouts} handleSetCompletedWorkouts={handleSetCompletedWorkouts}/>
+
+      </>
+    ) : null}
 
   </View>
   );
@@ -248,30 +293,33 @@ const DashboardNutrition = ({  }) => {
 
 
 const Dashboard = ({  }) => {
+  const options = ['Rarely', 'Sometimes', 'Frequently', 'Everyday'];
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const { userId } = useUserContext();
-
-  const [userFirstName, setUserFirstName] = useState('');
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const { data, error } = await supabase
-        .from('User')
-        .select('*')
-        .eq('authUserID', userId)
-        .single();
+      try {
+        const { data, error } = await supabase
+          .from('User')
+          .select('firstName, lastName')
+          .eq('authUserID', userId);
 
-      if (data) {
-        setUserFirstName(data.firstName);
-      } else {
-        console.error(error);
+        if (error) throw error;
+
+        if (data.length > 0) {
+          setFirstName(data[0].firstName);
+          setLastName(data[0].lastName);
+        }
+      } catch (error) {
+        console.error("Error fetching user data (first and last name): ", error);
       }
     };
 
     fetchUserData();
-  }, [userId]);
+  }, []);
 
-
-  
   return (
     <View style={styles.container}>
       <View style={{height: 700}}>
@@ -280,7 +328,7 @@ const Dashboard = ({  }) => {
           contentContainerStyle={styles.scrollContent}
         >
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>Welcome Back, {userFirstName}!</Text>
+            <Text style={styles.title}>Welcome Back, {firstName}!</Text>
           </View>
 
           <DashboardNutrition />
@@ -316,14 +364,14 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   cardTitle: {
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: '800',
     color: 'white',
-    padding: 5,
+    paddingLeft: 5,
     marginBottom: 5,
     // marginTop: 10,
 
-    width: 180,
+    // width: 180,
     // marginLeft: 30,
     marginRight: 30,
 
@@ -498,6 +546,12 @@ const styles = StyleSheet.create({
     // marginBottom: 20
     // backgroundColor: "#434c57",
     color: "white"
+  },
+  subheaderContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    // alignItems: 'center',
+    marginBottom: 5,
   },
 });
 
