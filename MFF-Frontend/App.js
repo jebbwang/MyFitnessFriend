@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { useFonts } from 'expo-font';
-
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 
@@ -78,6 +78,7 @@ export default function App() {
   };
 
   return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
     <UserProvider>
  
     <NavigationContainer> 
@@ -124,6 +125,9 @@ export default function App() {
             tabBarActiveTintColor: "white",
             tabBarInactiveTintColor: "white",
             tabBarStyle: {
+              // marginLeft: 10,
+              // paddingLeft: 15,
+              // width: 410,
               backgroundColor: '#3E89E1', // Color of the tab bar
             },
 
@@ -135,7 +139,7 @@ export default function App() {
               headerTitle: ' ',
               headerTintColor: 'white'            
           }}>
-            
+          
           <Tab.Screen 
             name="Recommendations" 
             component={Recommendations} 
@@ -154,6 +158,15 @@ export default function App() {
               ),
             }} 
           />
+          {/* <Tab.Screen 
+            name="Workout Plan" 
+            component={ViewPlan} 
+            options={{ 
+              tabBarIcon: ({ color, size, focused }) => (
+                <Ionicons name={focused ? "calendar" : "calendar-outline"} color={color} size={size} />
+              ),
+            }} 
+          /> */}
           <Tab.Screen 
             name="Profile" 
             component={Profile} 
@@ -169,6 +182,7 @@ export default function App() {
     <FlashMessage position="top" /> 
 
     </UserProvider>
+    </GestureHandlerRootView>
   );
 }
 

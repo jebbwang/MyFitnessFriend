@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useState } from 'react';
 import { ScrollView,
   View, Text,
@@ -49,15 +49,38 @@ import LogCard from './components/FoodLogCard/logCard';
 
 
 const DashboardNutrition = ({  }) => {
+  const [workoutPlanItems, setWorkoutPlanItems] = useState([]);
+  const workoutArraySize = 25
+  const [completedWorkouts, setCompletedWorkouts] = useState(new Array(workoutArraySize).fill(0)) // length was previously workoutPlanItems.length but dynamic data costed a lot of speed, switched to static max
 
+  // -- CONSTANT VARS --
   const { userId } = useUserContext();
 
   const ozInGallon = 128
+  const minInHour = 60
+
+  // -------------------
 
   const props = {
     activeStrokeWidth: 20,
     inActiveStrokeWidth: 20,
     inActiveStrokeOpacity: 0.2
+  };
+
+  handleSetCompletedWorkouts = ( updatedList ) => {
+    setCompletedWorkouts(updatedList)
+    console.log(completedWorkouts)
+  }
+
+  const handleSetWorkoutPlanItems = (newWorkout) => {
+    setWorkoutPlanItems([...workoutPlanItems, newWorkout]);
+    console.log(workoutPlanItems);
+  }
+
+  const removeItemFromList = (itemToRemove) => {
+    // Use the filter method to create a new array without the item to remove
+    const updatedItems = workoutPlanItems.filter(item => item !== itemToRemove);
+    setWorkoutPlanItems(updatedItems);
   };
 
   // TODO: add the rest of the data for the page as useStates (exerciseInfo, caloricInfo)
@@ -68,6 +91,22 @@ const DashboardNutrition = ({  }) => {
     current: 0
   });
 
+  const [exerciseInfo, setExerciseInfo] = useState({
+    dailyGoalType: 'hour',
+    dailyGoal: 1,
+    currentType: 'min',
+    current: 0
+  });
+
+  const updateExerciseInfo = (value) => {
+    setExerciseInfo((prevState) => ({
+      ...prevState,
+      ["current"]: parseInt(value, 10),
+    }));
+
+    // TODO: update exerciseinfo table;
+  };
+  
   // date from the time picker
   const [selectedDate, setSelectedDate] = useState(new Date());
 
@@ -198,7 +237,7 @@ const DashboardNutrition = ({  }) => {
           <View style={{marginHorizontal: 5}}>
             <CircularProgress
               {...props}
-              value={waterIntakeInfo.current < ozInGallon ? (waterIntakeInfo.current / (parseInt(waterIntakeInfo.dailyGoal, 10) * ozInGallon) * 100) : 100}
+              value={waterIntakeInfo.current < ozInGallon ? (waterIntakeInfo.current / (parseInt(waterIntakeInfo.dailyGoal, 10) * 128) * 100) : 100}
               radius={50}
               activeStrokeColor={'#3E89E1'}
               inActiveStrokeColor={'#3E89E0'}
@@ -216,7 +255,7 @@ const DashboardNutrition = ({  }) => {
           <View style={{marginHorizontal: 5}}>
             <CircularProgress
               {...props}
-              value={(dashboardFakeData.exerciseInfo.current / dashboardFakeData.exerciseInfo.recommended) * 100}
+              value={exerciseInfo.current < minInHour ? (exerciseInfo.current / (parseInt(exerciseInfo.dailyGoal, 10) * minInHour) * 100) : 100}
               radius={50}
               activeStrokeColor={'#26A341'}
               inActiveStrokeColor={'#26A340'}
@@ -226,7 +265,7 @@ const DashboardNutrition = ({  }) => {
                 Exercise
               </Text>
               <Text style={[styles.sampleDataProgressText, {color: '#26A341'}]}>
-                {dashboardFakeData.exerciseInfo.current} / {dashboardFakeData.exerciseInfo.recommended} {dashboardFakeData.exerciseInfo.type === 'min' ? 'min' : 'hr'} 
+              {exerciseInfo.current} / {parseInt(exerciseInfo.dailyGoal, 10) * minInHour} min
               </Text>
             </View>
 
@@ -237,14 +276,16 @@ const DashboardNutrition = ({  }) => {
 
     </View>
 
+    
     {isToday(selectedDate) ? (
       <>
-        <ExerciseCard/>
+        <ExerciseCard items={workoutPlanItems} exerciseInfo={exerciseInfo} updateExerciseInfo={updateExerciseInfo}  handleAddItems={handleSetWorkoutPlanItems} handleRemove={removeItemFromList} completedWorkouts={completedWorkouts} handleSetCompletedWorkouts={handleSetCompletedWorkouts}/>
         <LogCard />
         <WaterIntakeCard waterInfo={waterIntakeInfo} setWaterInfo={setWaterIntakeInfo} updateWaterIntake={updateWaterIntake}/>
+        <NextWorkoutCard items={workoutPlanItems} exerciseInfo={exerciseInfo} updateExerciseInfo={updateExerciseInfo} handleAddItems={handleSetWorkoutPlanItems} handleRemove={removeItemFromList} completedWorkouts={completedWorkouts} handleSetCompletedWorkouts={handleSetCompletedWorkouts}/>
+
       </>
     ) : null}
-    <NextWorkoutCard/>
 
   </View>
   );
@@ -281,6 +322,7 @@ const Dashboard = ({  }) => {
 
   return (
     <View style={styles.container}>
+      <View style={{height: 700}}>
         <ScrollView 
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
@@ -291,7 +333,7 @@ const Dashboard = ({  }) => {
 
           <DashboardNutrition />
       </ScrollView>
-
+      </View>
     </View>
   );
 };
@@ -302,7 +344,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#1A2633",
     // paddingTop: 60,
-    justifyContent: 'center',
+    justifyContent: 'center', 
     // alignItems: 'center'
 
   },

@@ -1,29 +1,49 @@
 import React from 'react';
 import { useState } from 'react';
-import { SafeAreaView, ScrollView,FlatList, View, Text, StyleSheet, Pressable } from 'react-native';
+import { SafeAreaView, ScrollView,FlatList, View, Text, StyleSheet, Pressable, TouchableOpacity } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 
+import Modal from "react-native-modal";
+
 import ListItem from '../Recommendations/RecommendationListItem';
+import ExerciseTimeCard from '../Dashboard/components/ExerciseTimeCard/exerciseTimeCard';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-function ViewPlan() {
-  // testing data
+const ViewPlan = ({ handleClose, newItems, handleAddItems, exerciseInfo, updateExerciseInfo,
+  completedWorkouts, handleSetCompletedWorkouts // these refer to the total completedWorkouts -> connected to dashboard via NextWorkoutComponent
+}) => {
+  // UseStates
+  // const [modalVisible, setModalVisible] = useState(false);
+  const [exerciseModalVisible, setExerciseModalVisible] = useState(false);
+
+  const updateExerciseModalVisibility = () => {
+    setExerciseModalVisible(!exerciseModalVisible)
+  }
+
+
+  // This tracks which workouts the user just checked as compeleted (THIS IS NOW STATIC)
+  const workoutArraySize = 25
+  const [currentCompletedWorkouts, setCurrentCompletedWorkouts] = useState(new Array(workoutArraySize).fill(0))
+
+
   const [items, setItems] = useState([
     {
       id: '1',
-      date: 'February 11, 2024',
-      workout: ['Strength #1', 'Strength #2', 'Cardio #1', 'Strength #3'],
-      completed: [1, 0, 0, 1]
-    },
+      date: 'Today', 
+      workout: newItems,
+      completed: completedWorkouts
+    }, 
+
+    // The rest of the items in this array are fake 'previous days' for testing purposes  
+    // can be replaced with actual data from previous days (don't think we'll have enough data in time for Final PR)
     {
-      
       id: '2',
       date: 'February 10, 2024',
       workout: ['Cardio #1', 'Strength #1', 'Cardio #2', 'Strength #2'],
-      completed: [1, 0, 0, 0]
-    },
+      completed: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    }, 
     {
-      id: '3',
+      id: '3', 
       date: 'February 9, 2024',
       workout: ['Cardio #1', 'Strength #1', 'Cardio #2', 'Strength #2'],
       completed: [1, 1, 1, 0]
@@ -36,6 +56,12 @@ function ViewPlan() {
     },
   ]);
 
+
+  /*
+  TODO: handleDelete is currently not fully functional
+    - Action of deleting works, but the change will not save (need to connect it to a state in the dashboard)
+  This is not yet implemented fully 
+  */
   const handleDelete = (id, workoutIndex) => {
     setItems(items.map((item, index) => {
 
@@ -43,7 +69,7 @@ function ViewPlan() {
       // workoutPlan is for today's 
 
       // the only plan that is editable is today's (the current)
-      if (item.id === id && index === 0) {
+      if (item.id === id && index === 0) { 
         let newWorkouts = [...item.workout];
         let newCompleted = [...item.completed];
         
@@ -63,7 +89,15 @@ function ViewPlan() {
       if (item.id === id && index === 0) { 
         let newCompleted = [...item.completed];
         newCompleted[workoutIndex] = newCompleted[workoutIndex] === 0 ? 1 : 0;
-        return { ...item, completed: newCompleted };
+        let updated = { ...item, completed: newCompleted }
+
+        setCurrentCompletedWorkouts(updated.completed)
+        handleSetCompletedWorkouts(updated.completed)
+
+        setExerciseModalVisible(true) // This is the modal for a user to log how long their workout was
+
+        console.log(updated.completed)
+        return updated;
       }
       return item;
     }));
@@ -83,7 +117,7 @@ function ViewPlan() {
           </View>
         </Pressable>
         <Collapsible collapsed={isCollapsed}>
-          {workouts.map((workout, exerciseIndex) => (
+          {workouts && workouts.map((workout, exerciseIndex) => (
             <ListItem
               key={exerciseIndex}
               text={workout}
@@ -93,6 +127,7 @@ function ViewPlan() {
             />
           ))}
         </Collapsible>
+       
       </View>
     );
   };
@@ -103,7 +138,7 @@ function ViewPlan() {
       id={item.id}
       date={item.date}
       workouts={item.workout}
-      completed={item.completed}
+      completed={completedWorkouts}
       onToggleCheckbox={handleToggleCheckbox}
       onDelete={handleDelete}
       isCollapsible={index > 0}
@@ -117,12 +152,17 @@ function ViewPlan() {
     <SafeAreaView style={styles.container}>
       <GestureHandlerRootView style={{ flex: 1, margin: 10 }}>
         <Text style={styles.header}>Workout Plan</Text>
+        <ExerciseTimeCard exerciseInfo={exerciseInfo} updateExerciseInfo={updateExerciseInfo} modalVisible={exerciseModalVisible} updateModalVisible={updateExerciseModalVisibility}/>
         <FlatList
           data={items}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           ItemSeparatorComponent={ItemSeparator}
         />
+        
+        <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
+          <Text style={styles.viewPlanText }>Close</Text>
+        </TouchableOpacity>
       </GestureHandlerRootView>
     </SafeAreaView>
   );
@@ -132,7 +172,11 @@ function ViewPlan() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:'#07203A',
+    backgroundColor:'#1A2633',
+    width: 400,
+    // padding: 200
+    // marginTop: 20,
+    // height: 800,
   },
   scrollView: {
     margin: 10,
@@ -140,8 +184,10 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 40,
     color: "#fff",
-    fontWeight: "bold",
-    marginVertical: 20,
+    fontWeight: "800",
+    marginLeft: 10,
+    marginBottom: 20,
+    // marginVertical: 20,
   },
   dayContainer: {
     marginBottom: 20,
@@ -183,6 +229,23 @@ const styles = StyleSheet.create({
   workoutText: {
     fontSize: 16,
     color: '#fff', 
+  },
+  closeButton: {
+    backgroundColor: 'gray',
+    height: 40,
+    width: 'auto',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    // marginTop: 25,
+    alignSelf: 'center',
+
+  },
+  viewPlanText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: "bold",
+    padding: 5,
   },
 });
 

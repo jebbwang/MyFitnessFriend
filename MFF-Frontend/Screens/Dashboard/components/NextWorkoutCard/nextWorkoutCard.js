@@ -8,8 +8,9 @@ import { ScrollView,
  from 'react-native';
 
 //  import Modal from "react-native-modal"; // can maybe use this for the workout plan screen
+import ViewPlanModal from '../../modals/ViewPlanModal';
 
-const NextWorkoutCard = ({  }) => {
+const NextWorkoutCard = ({ items, handleAddItems, handleRemove, completedWorkouts, exerciseInfo, updateExerciseInfo }) => {
 
     return (
     <>
@@ -18,16 +19,19 @@ const NextWorkoutCard = ({  }) => {
 
         <View style={styles.nextWorkoutContainer}>
             <View style={styles.nextWorkoutInfo}>
-                <Text style={styles.nextWorkoutInfoText}>Next Workout</Text>
-                <Text style={styles.nextWorkoutInfoSubText}>Random Workout</Text>
-            </View>
-            <TouchableOpacity
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => null}>
-                <Text style={[styles.textStyle]}>
-                    View Plan
+                <Text style={styles.nextWorkoutInfoText}>
+                    Next Workout
                 </Text>
-            </TouchableOpacity>
+                <Text style={styles.nextWorkoutInfoSubText}>
+                    {/* {completedWorkouts && completedWorkouts.map((val, i) => (
+                        val === 0 ? items.workout[i] : "None"
+                    ))} */}
+                    Random Workout
+                </Text>
+            </View>
+            <View style={styles.button}>
+                <ViewPlanModal items={items} exerciseInfo={exerciseInfo} updateExerciseInfo={updateExerciseInfo} handleAddItems={handleAddItems} completedWorkouts={completedWorkouts} handleSetCompletedWorkouts={handleSetCompletedWorkouts}/>
+            </View>
 
         </View>
         
@@ -42,30 +46,19 @@ const styles = StyleSheet.create({
     card: {
         backgroundColor: '#273646',
         borderRadius: 20,
-        
-        // borderWidth: 2,
-        // borderColor: 'white',
         height: 210,
         width: 175,
         padding: 20,
-        // marginBottom: 1,
-        // marginTop: 40,
         alignItems: 'center',
     },
 
     nextWorkoutCard: {
         backgroundColor: '#273646',
         borderRadius: 20,
-        // flexDirection: 'row',
-        
-        // borderWidth: 2,
-        // borderColor: 'white',
-        height: 130,
-        width: 180,
+        height: 140,
+        width: 200,
         padding: 10,
         marginBottom: 20,
-        // marginTop: 40,
-        alignItems: 'center',
     },
     nextWorkoutCardImage: {
         width: 50,
@@ -73,18 +66,13 @@ const styles = StyleSheet.create({
         marginLeft: 10
     },
     nextWorkoutContainer: {
-        // flexDirection: 'row',
-        // marginLeft: 10,
         width: 180,
         justifyContent: 'center',
-        alignItems: 'center'
     },
     nextWorkoutInfo: {
         marginHorizontal: 10
     },
     nextWorkoutInfoText: {
-        // width: 170,
-        // marginLeft: 40,
         marginTop: 5,
         color: 'white',
         fontSize: 23,
@@ -98,10 +86,7 @@ const styles = StyleSheet.create({
     },
       button: {
         borderRadius: 20,
-        // marginHorizontal: 5,
-        marginTop: 15,
-        marginLeft: 50,
-        // width: 120,
+        marginTop: 10,
         padding: 10,
         elevation: 2,
       },

@@ -7,69 +7,51 @@ import levenshtein from 'fast-levenshtein'
 import { SelectList } from 'react-native-dropdown-select-list'
 import RNPickerSelect from 'react-native-picker-select';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import ViewPlanModal from '../Dashboard/modals/ViewPlanModal';
 
 
 
-const muscleTypes = [
-  { label: "Abdominals", value: 'abdominals' },
-  { label: "Abductors", value: "abductors" },
-  { label: "Adductors", value: 'adductors' },
-  { label: 'Biceps', value: "biceps" },
-  { label: 'Calves', value: "calves" },
-  { label: 'Chest', value: "chest" },
-  { label: 'Forearms', value: "forearms" },
-  { label: 'Glutes', value: "glutes" },
-  { label: 'Hamstrings', value: "hamstrings" },
-  { label: 'Lats', value: "lats" },
-  { label: 'Lower Back', value: "lower_back" },
-  { label: 'Middle Back', value: "middle_back" },
-  { label: 'Neck', value: "neck" },
-  { label: 'Quadriceps', value: "quadriceps" },
-  { label: 'Traps', value: "traps" },
-  { label: 'Triceps', value: "triceps" },
-];
-
-const exerciseTypes = [
-  { label: 'Cardio', value: 'cardio' },
-  { label: 'Olympic Weightlifting', value: 'olympic_weightlifting' },
-  { label: 'Plyometrics', value: 'plyometrics' },
-  { label: 'Powerlifting', value: 'powerlifting' },
-  { label: 'Strength', value: 'strength' },
-  { label: 'Stretching', value: 'stretching' },
-  { label: 'Strongman', value: 'strongman' },
-];
-
-const difficultyTypes = [
-  { label: 'Beginner', value: 'beginner' },
-  { label: 'Intermediate', value: 'intermediate' },
-  { label: 'Expert', value: 'expert' },
-];
-
-
-const ExerciseList = ({ navigation }) => {
+const ExerciseList = ({ handleClose, items, exerciseInfo, updateExerciseInfo, handleAddItems, handleRemove, completedWorkouts, handleSetCompletedWorkouts }) => {
     const [muscle, setMuscle] = useState('');
     const [closestMuscle, setClosestMuscle] = useState('')
     const [exercises, setExercises] = useState([]);
     const [filteredExercises, setFilteredExercises] = useState([])
 
-    const [muscleType, setMuscleType] = useState('');
-    const [exerciseType, setExerciseType] = useState('');
-    const [difficultyType, setDifficultyType] = useState('');
-  
-    // useEffect(() => {
-    //   // Filter the data based on the selected filters
-    //   const filteredResult = exercises.filter((item) => {
-    //     const exerciseTypeMatch = !exerciseType || item.type === exerciseType;
-    //     const muscleTypeMatch = !muscleType || item.muscle === muscleType;
-    //     const difficultyTypeMatch = !difficultyType || item.difficulty === difficultyType;
-    
-    //     return exerciseTypeMatch && muscleTypeMatch && difficultyTypeMatch;
-    //   });
-    
-    //   // Update the filtered data state
-    //   setExercises(filteredResult);
-    // }, [exercises, exerciseType, muscleType, difficultyType]);
 
+    const muscleTypes = [
+      { label: "Abdominals", value: 'abdominals' },
+      { label: "Abductors", value: "abductors" },
+      { label: "Adductors", value: 'adductors' },
+      { label: 'Biceps', value: "biceps" },
+      { label: 'Calves', value: "calves" },
+      { label: 'Chest', value: "chest" },
+      { label: 'Forearms', value: "forearms" },
+      { label: 'Glutes', value: "glutes" },
+      { label: 'Hamstrings', value: "hamstrings" },
+      { label: 'Lats', value: "lats" },
+      { label: 'Lower Back', value: "lower_back" },
+      { label: 'Middle Back', value: "middle_back" },
+      { label: 'Neck', value: "neck" },
+      { label: 'Quadriceps', value: "quadriceps" },
+      { label: 'Traps', value: "traps" },
+      { label: 'Triceps', value: "triceps" },
+    ];
+    
+    const exerciseTypes = [
+      { label: 'Cardio', value: 'cardio' },
+      { label: 'Olympic Weightlifting', value: 'olympic_weightlifting' },
+      { label: 'Plyometrics', value: 'plyometrics' },
+      { label: 'Powerlifting', value: 'powerlifting' },
+      { label: 'Strength', value: 'strength' },
+      { label: 'Stretching', value: 'stretching' },
+      { label: 'Strongman', value: 'strongman' },
+    ];
+    
+    const difficultyTypes = [
+      { label: 'Beginner', value: 'beginner' },
+      { label: 'Intermediate', value: 'intermediate' },
+      { label: 'Expert', value: 'expert' },
+    ];
 
     const viewPlan = () => {
         navigation.navigate('WorkoutPlan'); 
@@ -93,7 +75,6 @@ const ExerciseList = ({ navigation }) => {
     }
 
     handleSetMuscle = (value) => {
-      // console.log('handle muscle: ' + value)
       setMuscle(value)
       findClosestLevenshtein()
     }
@@ -143,50 +124,7 @@ const ExerciseList = ({ navigation }) => {
             <Text style={styles.viewPlanText }>Search</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.muscleFilterDropdown}>
-            {/* <View style={styles.dropdown}>
-              <RNPickerSelect
-                  style={styles.picker}
-                  onValueChange={(value) => handleFilterChange(1, value)}
-                  items={exerciseTypes}
-                  placeholder={{label: 'Exercise', value: 'select_muscle'}}
-                  textInputProps={{color: 'white', textAlign: 'center', fontWeight: '700'}}
-                  
-              />
-            </View> */}
 
-            {/* <View style={styles.dropdown}>
-              <RNPickerSelect
-                  style={styles.picker}
-                  onValueChange={(value) => setFilteredExercises(exercises.filter((item) => {
-                   
-                    const muscleTypeMatch = !value || item.muscle === value;
-                
-                    return muscleTypeMatch;
-                  }))}
-                  items={muscleTypes}
-                  placeholder={{label: 'Muscle', value: 'select_muscle'}}
-                  textInputProps={{color: 'white', textAlign: 'center', fontWeight: '700'}}
-                  
-              />
-            </View> */}
-            
-            {/* <View style={styles.dropdown}>
-              <RNPickerSelect
-                  style={styles.picker}
-                  onValueChange={(value) => setFilteredExercises(exercises.filter((item) => {
-                   
-                    const difficultyTypeMatch = !value || item.difficulty === value;
-                
-                    return difficultyTypeMatch;
-                  }))}
-                  items={difficultyTypes}
-                  placeholder={{label: 'Select Difficulty', value: 'select_muscle'}}
-                  textInputProps={{color: 'white', textAlign: 'center', fontWeight: '700'}}
-                  
-              />
-            </View> */}
-        </View>
 
         <View style={styles.header}>
           <Text style={styles.headerTitle}>{ closestMuscle ? 'Results shown for: ' + closestMuscle : 'Search to display results.'}</Text>
@@ -205,7 +143,7 @@ const ExerciseList = ({ navigation }) => {
                   items={difficultyTypes}
                   placeholder={{label: 'Select Difficulty', value: 'select_muscle'}}
                   textInputProps={{color: 'white', textAlign: 'center', fontWeight: '700'}}
-                  
+                                                                                                                                             
               />
             </View>
         </View>
@@ -214,7 +152,7 @@ const ExerciseList = ({ navigation }) => {
           <View style={styles.exerciseContainer}>
             
             {filteredExercises.map((exercise, index) => (
-              <WorkoutItem key={index} workout={exercise} />
+              <WorkoutItem key={index} workout={exercise} items={items} handleAddItems={handleAddItems} handleRemove={handleRemove}/>
             ))}
           </View>
         </ScrollView>
@@ -222,24 +160,59 @@ const ExerciseList = ({ navigation }) => {
        
         
     </View>
-    <View>
-          <Pressable style={styles.viewPlanButton}>
-            <Text style={styles.viewPlanText }onPress={viewPlan}>View Current Plan</Text>
-          </Pressable>
+    <View style={{flexDirection:'row', justifyContent:'space-around'}}>
+          <ViewPlanModal items={items} exerciseInfo={exerciseInfo} updateExerciseInfo={updateExerciseInfo} handleAddItems={handleAddItems} completedWorkouts={completedWorkouts} handleSetCompletedWorkouts={handleSetCompletedWorkouts}/>
+          {/* <TouchableOpacity style={styles.viewPlanButton} onPress={viewPlan}>
+            <Text style={styles.viewPlanText }>View Current Plan</Text>
+          </TouchableOpacity> */}
+          <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
+            <Text style={styles.viewPlanText }>Close</Text>
+          </TouchableOpacity>
         </View>
     </SafeAreaView>
   );
 };
 
-const WorkoutItem = ({ workout }) => {
+const WorkoutItem = ({ workout, items, handleAddItems, handleRemove }) => {
     const { name, type, instructions, difficulty, equipment } = workout;
     const [status, setStatus] = useState('add'); 
     const [showInstructions, setShowInstructions] = useState(false);
+    const [completed, setCompleted] = useState(new Array(items.length).fill(0))
+    const [currentDate, setCurrentDate] = useState(new Date());
+    // const [selectedItems, setSelectedItems] = useState([]);
+    // const [added, setAdded] = useState(false);
+
     const buttonBackgroundColor = status === 'add' ? '#9C9C9C' : '#5DB06F'; 
 
-    const handleAdd = () => {
+    // const removeItemFromList = (itemToRemove) => {
+    //   // Use the filter method to create a new array without the item to remove
+    //   const updatedItems = selectedItems.filter(item => item !== itemToRemove);
+    //   setSelectedItems(updatedItems);
+    // };
+
+    const handleAdd = (key ) => {
         setStatus((currentStatus) => (currentStatus === 'add' ? 'check' : 'add'));
+ 
+        // const newItem = {
+        //   id: key,
+        //   date: currentDate.toLocaleString(), 
+        //   workout: items,
+        //   completed: completed
+        // }
+
+        
+        if (status === 'add') {
+          handleAddItems(name);
+        }
+        else {
+          // TODO: implement remove method when user adds workout but deselects it
+          handleRemove(name);
+        }
+        // console.log(newItem);
+        // console.log(items);
     };
+
+
     const toggleExpand = () => {
         setShowInstructions((prevExpanded) => !prevExpanded);
     };
@@ -265,7 +238,7 @@ const WorkoutItem = ({ workout }) => {
         </Pressable>
         <Pressable
             style={[styles.actionButton, { backgroundColor: buttonBackgroundColor }]}
-            onPress={handleAdd}
+            onPress={() => handleAdd(1)}
         >
             <Icon
             name={status === 'check' ? 'check' : 'add'}
@@ -277,7 +250,8 @@ const WorkoutItem = ({ workout }) => {
         </View>
       );
 };
-  
+
+// export default ExerciseList;
 
 const styles = StyleSheet.create({
   safeArea: {
@@ -286,7 +260,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: 16,
+    padding: 18,
 
   },
   modalView: {
@@ -328,6 +302,17 @@ const styles = StyleSheet.create({
   },
   viewPlanButton: {
     backgroundColor: '#3E89E1',
+    height: 40,
+    width: 'auto',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    // marginTop: 25,
+    alignSelf: 'center',
+
+  },
+  closeButton: {
+    backgroundColor: 'gray',
     height: 40,
     width: 'auto',
     paddingVertical: 8,

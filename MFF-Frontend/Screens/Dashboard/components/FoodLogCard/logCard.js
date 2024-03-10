@@ -9,7 +9,7 @@ import { ScrollView,
 import exerciseCardpng from '../../../../assets/exerciseCard.png';
 
 
-const LogCard = ({  }) => {
+const LogCard = ({ title }) => {
     
     const viewLog = () => {
 
@@ -18,9 +18,9 @@ const LogCard = ({  }) => {
       <View style={styles.logCard}>
         <Image source={exerciseCardpng} style={styles.exerciseCardImage}></Image>
 
-        <Pressable style={styles.logContainer} onPress={viewLog}>
-            <Text style={styles.logHeader}>Log Food</Text>
-        </Pressable>
+        <View style={styles.logContainer} >
+            <Text style={styles.logHeader}>{title}</Text>
+        </View>
       </View>
     );
   };
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     },
 
     logContainer: {
-        width: 250, backgroundColor: '#596470', marginLeft: 15, height: 35, borderRadius: 20,
+        width: 250, backgroundColor: '#596470', marginLeft: 15, height: 40, borderRadius: 20,
         flex: "row",
         alignItems: "center",
         justifyContent: "center",
