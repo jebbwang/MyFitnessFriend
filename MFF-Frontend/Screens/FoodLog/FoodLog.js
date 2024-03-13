@@ -78,26 +78,29 @@ function FoodLog( {handleClose}) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Track Your Meals</Text>
-      <Pressable
-        style={({ pressed }) => [
-          styles.createMeal,
-          { backgroundColor: pressed ? '#5474A5' : '#78ADFC' },
-        ]}
-        onPress={() => setModalVisible(true)}
-      >
-        <Text style={styles.createMealHeader}>Create Meal</Text>
-      </Pressable>
-
+      <View >
+        <Text style={styles.header}>Track Your Meals</Text>
+              <Pressable
+                style={({ pressed }) => [
+                  styles.createMeal,
+                  { backgroundColor: pressed ? '#5474A5' : '#78ADFC' },
+                ]}
+                onPress={() => setModalVisible(true)}
+              >
+                <Text style={styles.createMealHeader}>Create Meal</Text>
+          </Pressable>
+      </View>
+     
 
       <Modal
-        animationType="slide"
+        animationType="slide" 
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
           setModalVisible(!modalVisible);
         }}
       >
+        
       
         <View style={styles.centeredView}>
           <ScrollView style={styles.modalView} contentContainerStyle={styles.scrollViewContent}>
@@ -145,7 +148,11 @@ function FoodLog( {handleClose}) {
             <Text style={styles.textStyle}>Done</Text>
           </Pressable>
         </ScrollView>
+        <Pressable style={styles.closeLog} onPress={handleClose}>
+          <Text style={styles.createMealHeader} >Close Log</Text>
+        </Pressable>
       </View>
+      
     </Modal>
       {/* Displaying all meals */}
       <FlatList
@@ -177,9 +184,12 @@ function FoodLog( {handleClose}) {
         </View>
         )}
       />
+      {/* <View>
       <Pressable style={styles.closeLog} onPress={handleClose}>
         <Text style={styles.createMealHeader} >Close Log</Text>
       </Pressable>
+      </View> */}
+      
 
   </View>
   
@@ -202,35 +212,37 @@ const styles = StyleSheet.create({
   },
   closeLog: {
     backgroundColor: "#78ADFC",
-    width: "100%",
+    width: 150,
     borderRadius: 30,
     padding: 20,
-    marginTop: 15,
+    // marginTop: 15,
     alignItems: 'center',
     
   },
   createMeal: {
-    backgroundColor: "#78ADFC",
-    width: "40%",
+    backgroundColor: '#273646',
+    width: "50%",
     borderRadius: 30,
     padding: 20,
     marginTop: 15,
+    marginBottom: 15,
     alignItems: 'center',
+    alignSelf: 'center'
   },
   createMealHeader: {
-    color: "#2B5B93",
+    color: "black",
     fontWeight: "bold",
     fontSize: 20,
   },
   centeredView: {
+    backgroundColor: '#273646',
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
+    // marginTop: 30,
   },
   modalView: {
     margin: 20,
-    backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
     shadowColor: "#000",
@@ -241,7 +253,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 10,
-    backgroundColor:"#78ADFC",
+    backgroundColor: '#273646',
     maxHeight: '80%',
     width: '100%',
   },
@@ -331,7 +343,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   mealName: {
-    color: '#000',
+    color: 'black',
     fontSize: 18,
     fontWeight: 'bold',
   },
@@ -349,6 +361,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 25,
     marginTop: 10,
+    color: 'white'
   }, 
   closeButton: {
     position: 'absolute',  

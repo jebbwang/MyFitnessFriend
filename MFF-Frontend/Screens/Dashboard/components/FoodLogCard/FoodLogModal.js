@@ -21,8 +21,13 @@ const FoodLogModal = ({ /* props if any */ }) => {
         visible={modalVisible}
         onRequestClose={handleClose}
       >
-        <View>
+        <View style={styles.centeredView}>
             <FoodLog handleClose={handleClose} />
+            <View style={{}}>
+              <TouchableOpacity style={styles.closeLog} onPress={handleClose}>
+                <Text style={styles.createMealHeader} >Close Log</Text>
+              </TouchableOpacity>
+            </View>
         </View>
       </Modal>
       <View style={{width: 240, backgroundColor: '#F1C21B', marginLeft: 20, height: 40, borderRadius: 20}}>
@@ -38,11 +43,13 @@ const FoodLogModal = ({ /* props if any */ }) => {
 
 const styles = StyleSheet.create({
     centeredView: {
-     
         flex: 1,
         marginLeft: 0,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: "#1A2633",
+
+
       },
       searchBar: {
         // width: 250,
@@ -51,6 +58,20 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         marginTop: 10,
 
+      },
+      closeLog: {
+        backgroundColor: "#78ADFC",
+        width: "100%",
+        borderRadius: 30,
+        padding: 20,
+        marginBottom: 35,
+        alignItems: 'center',
+        
+      },
+      createMealHeader: {
+        color: "black",
+        fontWeight: "bold",
+        fontSize: 20,
       },
       searchInput: {
       
