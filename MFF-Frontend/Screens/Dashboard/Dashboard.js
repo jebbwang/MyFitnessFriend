@@ -98,12 +98,25 @@ const DashboardNutrition = ({  }) => {
     current: 0
   });
 
-  const updateExerciseInfo = (value) => {
+  // Update the UserWorkouts table in the Supabase table
+  const updateExerciseInfo = async (value) => {
+    try {
+      const { data, error } = await supabase
+        .from('UserWorkouts')
+        .insert({ amount: parseInt(value, 10), userId: userId });
+
+      if (error) {
+        console.error(error);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    
     setExerciseInfo((prevState) => ({
       ...prevState,
       ["current"]: parseInt(value, 10),
     }));
-
     // TODO: update exerciseinfo table;
   };
   
@@ -140,9 +153,9 @@ const DashboardNutrition = ({  }) => {
     }));
   };
   // useEffect runs once the component is mounted aka when the page is first loaded, anything after that happens outside of this function
-  // Fetch the water intake data from the UserWaterIntake table in the Supabase database
+  // Fetch the water intake and workout data from the corresponding tables in the Supabase database
   useEffect(() => {
-    const fetchWaterIntake = async () => {
+    const fetchDashboardData = async () => {
       const today = selectedDate;
       today.setHours(0, 0, 0, 0);
       const tomorrow = new Date(today);
@@ -170,9 +183,28 @@ const DashboardNutrition = ({  }) => {
       } catch (error) {
         console.error("Error fetching water intake: ", error);
       }
+
+      try {
+        const { data, error } = await supabase
+          .from('UserWorkouts')
+          .select('amount')
+          .eq('userId', userId)
+          .gte('created_at', todayStr)
+          .lt('created_at', tomorrowStr);
+  
+        if (error) throw error;
+  
+        const totalExerciseMinutes = data.reduce((total, record) => total + record.amount, 0);
+        setExerciseInfo((prevState) => ({
+          ...prevState,
+          ["current"]: totalExerciseMinutes,
+        }));
+      } catch (error) {
+        console.error("Error fetching exercise amount: ", error);
+      }
     };
   
-    fetchWaterIntake();
+    fetchDashboardData();
   }, [selectedDate]);
 
   const onDateChange = (selectedDate) => {
