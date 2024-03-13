@@ -76,37 +76,6 @@ const ExerciseListModal = ({ items, exerciseInfo, updateExerciseInfo, handleAddI
 
 export default ExerciseListModal;
 
-// const WaterIntakeCard = ({ waterInfo, setWaterInfo, updateWaterIntake }) => {
-
-//     return (
-//     <>
-//       <View style={styles.waterIntakeCard}>
-
-//         <Image source={waterIntakepng} style={styles.waterIntakeCardImage}></Image>
-
-//         <View style={styles.waterIntakeInfoContainer}>
-//             <View style={styles.waterIntakeInfo}>
-//                 <Text style={styles.waterIntakeInfoText}>Current</Text>
-//                 <Text style={styles.waterIntakeInfoSubText}>{waterInfo.current} {waterInfo.currentType}</Text>
-//             </View>
-//             <View style={styles.waterIntakeInfo}>
-//                 <Text style={styles.waterIntakeInfoText}>Daily Goal</Text>
-//                 <Text style={styles.waterIntakeInfoSubText}>{waterInfo.dailyGoal} {waterInfo.dailyGoalType}</Text>
-//             </View>
-//             <View style={styles.waterIntakeInfo}>
-//                 <AddModal waterInfo={waterInfo} setWaterInfo={setWaterInfo} updateWaterIntake={updateWaterIntake}/>
-                
-//             </View>
-
-//         </View>
-        
-//       </View>
-//     </>
-//     );
-//   };
-
-// export default WaterIntakeCard;
-
 const styles = StyleSheet.create({
     card: {
         backgroundColor: '#273646',

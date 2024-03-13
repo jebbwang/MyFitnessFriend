@@ -17,30 +17,10 @@ import ExerciseListModal from '../../modals/ExerciseListModal';
 
 
 const ExerciseCard = ({ items, handleAddItems, handleRemove, completedWorkouts, handleSetCompletedWorkouts, exerciseInfo, updateExerciseInfo }) => {
-    const [muscle, setMuscle] = useState('');
-
-    const handleSearch = () => {
-        
-      };
-  
     return (
       <View style={styles.exerciseCard}>
         <Image source={exerciseCardpng} style={styles.exerciseCardImage}></Image>
         <ExerciseListModal items={items} exerciseInfo={exerciseInfo} updateExerciseInfo={updateExerciseInfo} handleAddItems={handleAddItems} handleRemove={handleRemove} completedWorkouts={completedWorkouts} handleSetCompletedWorkouts={handleSetCompletedWorkouts}/>
-
-        {/* <View style={{width: 250, backgroundColor: '#596470', marginLeft: 15, height: 40, borderRadius: 20}}>
-            <View style={styles.searchBar}>
-                <Icon name="search" size={25} color="white" />
-                <TextInput
-                style={styles.searchInput}
-                placeholder="Search for a muscle (e.g. 'bicep')"
-                placeholderTextColor="lightgray"
-                value=''
-                // onChangeText={(newText) => handleSetMuscle(newText)} // allows it so that multiple args can be passed to callback
-                onSubmitEditing={handleSearch} 
-                />
-            </View>
-        </View> */}
       </View>
     );
   };
