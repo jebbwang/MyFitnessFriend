@@ -162,9 +162,6 @@ const ExerciseList = ({ handleClose, items, exerciseInfo, updateExerciseInfo, ha
     </View>
     <View style={{flexDirection:'row', justifyContent:'space-around'}}>
           <ViewPlanModal items={items} exerciseInfo={exerciseInfo} updateExerciseInfo={updateExerciseInfo} handleAddItems={handleAddItems} completedWorkouts={completedWorkouts} handleSetCompletedWorkouts={handleSetCompletedWorkouts}/>
-          {/* <TouchableOpacity style={styles.viewPlanButton} onPress={viewPlan}>
-            <Text style={styles.viewPlanText }>View Current Plan</Text>
-          </TouchableOpacity> */}
           <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
             <Text style={styles.viewPlanText }>Close</Text>
           </TouchableOpacity>

@@ -30,7 +30,7 @@ const fetchNutritionInfo = async (foodItem) => {
 }
 };
 
-function FoodLog() {
+function FoodLog( {handleClose}) {
   const [modalVisible, setModalVisible] = useState(false);
   const [mealName, setMealName] = useState('');
   const [mealDetails, setMealDetails] = useState(['']); 
@@ -88,6 +88,7 @@ function FoodLog() {
       >
         <Text style={styles.createMealHeader}>Create Meal</Text>
       </Pressable>
+
 
       <Modal
         animationType="slide"
@@ -174,24 +175,39 @@ function FoodLog() {
               </View>
           ))}
         </View>
-  )}
-/>
+        )}
+      />
+      <Pressable style={styles.closeLog} onPress={handleClose}>
+        <Text style={styles.createMealHeader} >Close Log</Text>
+      </Pressable>
 
   </View>
+  
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    
     padding: 20,
     backgroundColor: "#1A2633",
     justifyContent: 'center',
     flex: 1,
   },
   header: {
+    marginTop: 70,
     color: "#78ADFC",
     fontWeight: "bold",
     fontSize: 40,
+  },
+  closeLog: {
+    backgroundColor: "#78ADFC",
+    width: "100%",
+    borderRadius: 30,
+    padding: 20,
+    marginTop: 15,
+    alignItems: 'center',
+    
   },
   createMeal: {
     backgroundColor: "#78ADFC",

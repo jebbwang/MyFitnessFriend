@@ -13,8 +13,7 @@ import { ScrollView,
 
 
  import CircularProgress from 'react-native-circular-progress-indicator';
-import LogCard from './components/FoodLogCard/logCard';
-
+ import FoodCard from './components/FoodLogCard/FoodCard.js';
  import { useUserContext } from '../../components/UserContext/UserContext';
  import { supabase } from '../../supabase.js';
 
@@ -312,7 +311,7 @@ const DashboardNutrition = ({  }) => {
     {isToday(selectedDate) ? (
       <>
         <ExerciseCard items={workoutPlanItems} exerciseInfo={exerciseInfo} updateExerciseInfo={updateExerciseInfo}  handleAddItems={handleSetWorkoutPlanItems} handleRemove={removeItemFromList} completedWorkouts={completedWorkouts} handleSetCompletedWorkouts={handleSetCompletedWorkouts}/>
-        <LogCard />
+        <FoodCard />
         <WaterIntakeCard waterInfo={waterIntakeInfo} setWaterInfo={setWaterIntakeInfo} updateWaterIntake={updateWaterIntake}/>
         <NextWorkoutCard items={workoutPlanItems} exerciseInfo={exerciseInfo} updateExerciseInfo={updateExerciseInfo} handleAddItems={handleSetWorkoutPlanItems} handleRemove={removeItemFromList} completedWorkouts={completedWorkouts} handleSetCompletedWorkouts={handleSetCompletedWorkouts}/>
 
