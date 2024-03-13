@@ -1,17 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import TipsBanner from './TipsBanner';
 import ListItem from './RecommendationListItem';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useUserContext } from '../../components/UserContext/UserContext';
+import { supabase } from '../../supabase.js';
+
+//TODO:
+// 1. When recommendation is added, it should be added to the database
+// 2. When recommendation is deleted, it should be deleted from the database
+// 3. When recommendation is checked, it should be updated in the database
 
 const ItemSeparator = () => <View style={{ height: 5 }} />; // space out the list items
 
 const Recommendations = () => {
+  const { userId } = useUserContext();
+
+  const [sleepAmount, setSleepAmount] = useState();
+
+  const [sleepText, setSleepText] = useState('');
+
+  useEffect(() => {
+    const fetchSleepAmount = async () => {
+      const { data, error } = await supabase
+        .from('User')
+        .select('sleepAmount')
+        .eq('authUserID', userId);
+
+      if (error) {
+        console.error('Error fetching sleep amount:', error);
+        return;
+      }
+
+      if (data && data.length > 0) {
+        setSleepAmount(data[0].sleepAmount);
+        console.log('user id:', userId);
+        console.log('Sleep amount:', sleepAmount);
+
+        setSleepText(`Sleep at ${12 + (6 - sleepAmount)}PM to wake up at 6AM and get ${sleepAmount} hours of sleep!`);
+        setItems([{ id: '1', text: `Sleep from ${12 + (6 - sleepAmount)}PM-6AM to get ${sleepAmount} hours!`, completed: false }]);      }
+    };
+
+    fetchSleepAmount();
+  }, [userId, sleepText]);
+  
   const [items, setItems] = useState([
-    { id: '1', text: 'Drink 2L of water', completed: false },
-    { id: '2', text: 'Consume 300 more calories', completed: false },
-    { id: '3', text: 'Sleep from 10pm - 6am', completed: false },
+    { id: '1', text: sleepText, completed: false },
   ]);
 
   const handleToggleCheckbox = (id) => {
@@ -42,7 +76,44 @@ const Recommendations = () => {
     </View>
   );
 
-  const { userId } = useUserContext();
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const { data, error } = await supabase
+  //       .from('User')
+  //       .select('sleepAmount')
+  //       .eq('authUserID', userId);
+
+  //     if (error) throw error;
+
+  //     if (data.length > 0) {
+  //       setSleepAmount(data[0].sleepAmount);
+  //       console.log('Sleep amount:', data[0].sleepAmount);
+  //       const wakeUpTime = 6; // 6AM
+  //       const sleepTime = wakeUpTime - sleepAmount;
+  //       const sleepTimeText = sleepTime >= 0
+  //         ? `Sleep at ${sleepTime}PM to wake up at ${wakeUpTime}AM and get ${sleepAmount} hours of sleep`
+  //         : `Sleep at ${12 + sleepTime}AM to wake up at ${wakeUpTime}AM and get ${sleepAmount} hours of sleep`;
+
+  //       const { data: insertData, error: insertError } = await supabase
+  //         .from('UserRecommendation')
+  //         .insert([{ recommendation: sleepTimeText, userId: userId}])
+  //         .single();
+  
+  //       if (insertError) throw insertError;
+  //       // TODO: INSERDATA IS RETURNING NULL
+
+  //       console.log("marker");
+  //       console.log(insertData);
+
+  //       setItems((prevItems) => [
+  //         ...prevItems,
+  //         { id: insertData.id, text: sleepTimeText, completed: false },
+  //       ]);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

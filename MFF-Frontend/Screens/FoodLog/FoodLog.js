@@ -15,7 +15,7 @@ const fetchNutritionInfo = async (foodItem) => {
       {
         method: 'GET',
         headers: {
-          'X-Api-Key': API_KEY
+          'X-Api-Key': "50Y/9uaDfwp9o6fY4IBaPA==1gCstnMSO4fTY7QJ"
         }
       }
     );
