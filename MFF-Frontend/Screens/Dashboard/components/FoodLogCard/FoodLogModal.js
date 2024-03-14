@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Modal, View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import FoodLog from '../../../FoodLog/FoodLog'; // Import the FoodLog component
 
-const FoodLogModal = ({ /* props if any */ }) => {
+const FoodLogModal = ({ onModalClose }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleOpen = () => {
@@ -11,6 +11,7 @@ const FoodLogModal = ({ /* props if any */ }) => {
 
   const handleClose = () => {
     setModalVisible(false);
+    onModalClose();
   };
 
   return (

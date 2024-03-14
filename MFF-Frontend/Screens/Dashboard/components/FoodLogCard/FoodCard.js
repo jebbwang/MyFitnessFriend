@@ -8,11 +8,11 @@ import { ScrollView,
     from 'react-native';
 import FoodPng from '../../../../assets/foodPng.png';
 import FoodLogModal from './FoodLogModal';
-const FoodCard = ({  }) => {
+const FoodCard = ({ onModalClose }) => {
     return (
       <View style={styles.exerciseCard}>
         <Image source={FoodPng} style={styles.exerciseCardImage}></Image>
-        <FoodLogModal />
+        <FoodLogModal onModalClose={onModalClose}/>
       </View>
     );
   };

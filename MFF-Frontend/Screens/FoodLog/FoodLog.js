@@ -5,6 +5,8 @@ import { Alert, Modal,
    ScrollView, FlatList } 
 from 'react-native';
 import { API_KEY } from '@env';
+import { useUserContext } from '../../components/UserContext/UserContext';
+import { supabase } from '../../supabase';
 
 
 // API CALL, returns an array of nutrional data
@@ -33,7 +35,9 @@ const fetchNutritionInfo = async (foodItem) => {
 function FoodLog( {handleClose}) {
   const [modalVisible, setModalVisible] = useState(false);
   const [mealName, setMealName] = useState('');
-  const [mealDetails, setMealDetails] = useState(['']); 
+  const [mealDetails, setMealDetails] = useState(['']);
+  const { userId } = useUserContext();
+ 
 
   // meals is an array of {mealName, mealDetails} objects
   const [meals, setMeals] = useState([]); 
@@ -66,6 +70,16 @@ function FoodLog( {handleClose}) {
     for (const detail of mealDetails.filter(detail => detail.trim())) {
       const nutritionData = await fetchNutritionInfo(detail);
       processedDetails.push(nutritionData ? { detail, nutritionData } : { detail, error: "Error fetching nutrition data" });
+      // Insert into Supabase
+      const { error } = await supabase
+      .from('UserFoodLog')
+      .insert([
+        {amount: parseInt(nutritionData[0].calories), userId: userId },
+      ]);
+
+      if (error) {
+        console.error('Error inserting data: ', error);
+      }
     }
   
     setMeals(currentMeals => [...currentMeals, { mealName, mealDetails: processedDetails }]);

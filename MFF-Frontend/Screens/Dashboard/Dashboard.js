@@ -60,6 +60,14 @@ const DashboardNutrition = ({  }) => {
 
   // -------------------
 
+  // this is to trigger useEffect so that the foodInfo is updated in realtime
+  const [modalClosed, setModalClosed] = useState(false);
+
+  const handleModalClose = () => {
+    setModalClosed(true);
+  }
+
+
   const props = {
     activeStrokeWidth: 20,
     inActiveStrokeWidth: 20,
@@ -94,6 +102,11 @@ const DashboardNutrition = ({  }) => {
     dailyGoalType: 'hour',
     dailyGoal: 1,
     currentType: 'min',
+    current: 0
+  });
+
+  const [foodInfo, setFoodInfo] = useState({
+    recommended: 2000,
     current: 0
   });
 
@@ -201,10 +214,57 @@ const DashboardNutrition = ({  }) => {
       } catch (error) {
         console.error("Error fetching exercise amount: ", error);
       }
+
+
     };
   
     fetchDashboardData();
   }, [selectedDate]);
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      const today = selectedDate;
+      today.setHours(0, 0, 0, 0);
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+  
+      // Convert to ISO strings
+      const todayStr = today.toISOString();
+      const tomorrowStr = tomorrow.toISOString();
+
+      if (modalClosed) {
+        // Do something when the modal is closed
+        console.log('Modal has been closed');
+  
+        // Reset the state
+        setModalClosed(false);
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from('UserFoodLog')
+          .select('amount')
+          .eq('userId', userId)
+          .gte('created_at', todayStr)
+          .lt('created_at', tomorrowStr);
+  
+        if (error) throw error;
+  
+        const totalCalories = data.reduce((total, record) => total + record.amount, 0);
+        setFoodInfo((prevState) => ({
+          ...prevState,
+          ["current"]: totalCalories,
+        }));
+      } catch (error) {
+        console.error("Error fetching food calories: ", error);
+      }
+
+    };
+
+    fetchDashboardData();
+  }, [selectedDate, modalClosed]);
+
+  
 
   const onDateChange = (selectedDate) => {
     const currentDate = selectedDate;
@@ -250,7 +310,7 @@ const DashboardNutrition = ({  }) => {
           <View style={{marginHorizontal: 5}}>
             <CircularProgress
               {...props}
-              value={(dashboardFakeData.caloricInfo.current / dashboardFakeData.caloricInfo.recommended) * 100}
+              value={(foodInfo.current / foodInfo.recommended) * 100}
               radius={50}
               activeStrokeColor={'#F1A81B'}
               inActiveStrokeColor={'#F1A81A'}
@@ -260,7 +320,7 @@ const DashboardNutrition = ({  }) => {
                 Calories
               </Text>
               <Text style={[styles.sampleDataProgressText, {color: '#F1A81B'}]}>
-               {dashboardFakeData.caloricInfo.current} / {dashboardFakeData.caloricInfo.recommended}
+               {foodInfo.current} / {foodInfo.recommended}
               </Text>
             </View>
           </View>
@@ -311,7 +371,7 @@ const DashboardNutrition = ({  }) => {
     {isToday(selectedDate) ? (
       <>
         <ExerciseCard items={workoutPlanItems} exerciseInfo={exerciseInfo} updateExerciseInfo={updateExerciseInfo}  handleAddItems={handleSetWorkoutPlanItems} handleRemove={removeItemFromList} completedWorkouts={completedWorkouts} handleSetCompletedWorkouts={handleSetCompletedWorkouts}/>
-        <FoodCard />
+        <FoodCard onModalClose={handleModalClose}/>
         <WaterIntakeCard waterInfo={waterIntakeInfo} setWaterInfo={setWaterIntakeInfo} updateWaterIntake={updateWaterIntake}/>
         <NextWorkoutCard items={workoutPlanItems} exerciseInfo={exerciseInfo} updateExerciseInfo={updateExerciseInfo} handleAddItems={handleSetWorkoutPlanItems} handleRemove={removeItemFromList} completedWorkouts={completedWorkouts} handleSetCompletedWorkouts={handleSetCompletedWorkouts}/>
 
