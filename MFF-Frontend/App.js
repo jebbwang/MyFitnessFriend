@@ -48,13 +48,13 @@ function LandingPage({ navigation }) {
         <Text style={styles.buttonText}>Sign in</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Exercise')}>
+      {/* <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Exercise')}>
         <Text style={styles.buttonText}>Exercise</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('FoodLog')}>
         <Text style={styles.buttonText}>FoodLog</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       
       <Text style={styles.noAcc}>Don't have an account? Get started!</Text>
       

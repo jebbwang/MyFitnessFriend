@@ -20,7 +20,22 @@ const Recommendations = () => {
 
   const [sleepText, setSleepText] = useState('');
 
+  const [waterText, setWaterText] = useState('');
+
+  const [foodText, setFoodText] = useState('');
+
+  const [exerciseText, setExerciseText] = useState('');
+
   useEffect(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    // Convert to ISO strings
+    const todayStr = today.toISOString();
+    const tomorrowStr = tomorrow.toISOString();
+
     const fetchSleepAmount = async () => {
       const { data, error } = await supabase
         .from('User')
@@ -38,15 +53,147 @@ const Recommendations = () => {
         console.log('Sleep amount:', sleepAmount);
 
         setSleepText(`Sleep at ${12 + (6 - sleepAmount)}PM to wake up at 6AM and get ${sleepAmount} hours of sleep!`);
-        setItems([{ id: '1', text: `Sleep from ${12 + (6 - sleepAmount)}PM-6AM to get ${sleepAmount} hours!`, completed: false }]);      }
+      }
     };
 
-    fetchSleepAmount();
-  }, [userId, sleepText]);
+    const fetchWaterData = async () => {
+      const { data, error } = await supabase
+          .from('UserWaterIntake')
+          .select('amount')
+          .eq('userId', userId)
+          .gte('created_at', todayStr)
+          .lt('created_at', tomorrowStr);
   
-  const [items, setItems] = useState([
-    { id: '1', text: sleepText, completed: false },
-  ]);
+          if (error) {
+            console.error('Error fetching water amount:', error);
+            return;
+          }
+  
+        if (data && data.length > 0) {
+          const totalWater = data.reduce((total, record) => total + record.amount, 0);
+          console.log('Total water:', totalWater);
+          if (totalWater < 128) {
+            setWaterText(`Drink ${(128 - totalWater)} more ounces to meet water goal!`);
+          }
+          else {
+            setWaterText('Water goal met!');
+          }
+        }
+        else {
+          setWaterText('Drink 128 more ounces to meet water goal!');
+        }
+    };
+
+    const fetchFoodData = async () => {
+      const { data, error } = await supabase
+          .from('UserFoodLog')
+          .select('amount')
+          .eq('userId', userId)
+          .gte('created_at', todayStr)
+          .lt('created_at', tomorrowStr);
+  
+          if (error) {
+            console.error('Error fetching food amount:', error);
+            return;
+          }
+  
+        if (data && data.length > 0) {
+          const totalCalories = data.reduce((total, record) => total + record.amount, 0);
+          console.log('Total calories:', totalCalories);
+          if (totalCalories < 2000) {
+            setFoodText(`Eat ${(2000 - totalCalories)} more calories to meet nutrition goal!`);
+          }
+          else {
+            setFoodText('Nutrition goal met!');
+          }
+        }
+        else {
+          setFoodText('Eat 2000 more calories to meet nutrition goal!');
+        }
+    };
+
+    const fetchExerciseData = async () => {
+      const { data, error } = await supabase
+          .from('UserWorkouts')
+          .select('amount')
+          .eq('userId', userId)
+          .gte('created_at', todayStr)
+          .lt('created_at', tomorrowStr);
+  
+          if (error) {
+            console.error('Error fetching exercise amount:', error);
+            return;
+          }
+  
+        if (data && data.length > 0) {
+          const totalExerciseMinutes = data.reduce((total, record) => total + record.amount, 0);
+          console.log('Total exercise minutes:', totalExerciseMinutes);
+          if (totalExerciseMinutes < 60) {
+            setExerciseText(`Workout ${(60 - totalExerciseMinutes)} more minutes to meet fitness goal!`);
+          }
+          else {
+            setExerciseText('Fitness goal met!');
+          }
+        }
+        else {
+          setExerciseText('Workout for an hour to meet fitness goal!');
+        }
+    };
+
+
+    fetchSleepAmount();
+    fetchWaterData();
+    fetchFoodData();
+    fetchExerciseData();
+  }, [userId, sleepText, waterText, foodText, exerciseText]);
+
+  // useEffect(() => {
+  //   const fetchFoodData = async () => {
+  //     const today = selectedDate;
+  //     today.setHours(0, 0, 0, 0);
+  //     const tomorrow = new Date(today);
+  //     tomorrow.setDate(tomorrow.getDate() + 1);
+  
+  //     // Convert to ISO strings
+  //     const todayStr = today.toISOString();
+  //     const tomorrowStr = tomorrow.toISOString();
+  
+  //     try {
+  //       const { data, error } = await supabase
+  //         .from('UserFoodLog')
+  //         .select('amount')
+  //         .eq('userId', userId)
+  //         .gte('created_at', todayStr)
+  //         .lt('created_at', tomorrowStr);
+  
+  //       if (error) throw error;
+  
+  //       const totalCalories = data.reduce((total, record) => total + record.amount, 0);
+  //       console.log("TEST")
+  //       console.log('Total calories:', totalCalories);
+  //       setFoodText(`Eat ${(2000 - totalCalories)} more calories to meet nutrition goal!`);
+  //       // setItems([{ id: '2', text: `Eat ${(2000 - totalCalories)} more calories to meet nutrition goal!`, completed: false }]);
+  //     } catch (error) {
+  //       console.error("Error fetching food calories: ", error);
+  //     }
+  //   };
+  
+  //   fetchFoodData();
+  // }, [userId, foodText]);
+  
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    console.log('sleepText:', sleepText);
+    console.log('waterText:', waterText);
+    console.log('foodText:', foodText);
+    setItems([
+      { id: '1', text: sleepText, completed: false },
+      { id: '2', text: waterText, completed: false },
+      { id: '3', text: foodText, completed: false },
+      { id: '4', text: exerciseText, completed: false },
+    ]);
+  }, [sleepText, foodText, waterText, exerciseText]);
 
   const handleToggleCheckbox = (id) => {
     setItems(
